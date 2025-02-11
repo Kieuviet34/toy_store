@@ -1,0 +1,17 @@
+{
+    "name": "dell/toy_store",
+    "autoload": {
+        "psr-4": {
+            "Dell\\ToyStore\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kieuviet34",
+            "email": "kieuviet34@gmail.com"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.24"
+    }
+}

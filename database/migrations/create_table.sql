@@ -1,3 +1,4 @@
+create database toy_store;
 use toy_store;
 create table categories(
 	cat_id int primary key not null,
@@ -24,7 +25,7 @@ create table customers(
     email varchar(255),
     street varchar(255),
     city varchar(255),
-    zip_code varchar(6)
+    zip_code varchar(20)
 );
 create table staffs(
 	staff_id int primary key,
@@ -85,4 +86,7 @@ create table staff_role(
     primary key(staff_id, role_id),
     foreign key (staff_id) references staffs(staff_id),
     foreign key(role_id) references roles(role_id)
-)
+);
+
+alter table stocks
+add primary key (store_id, prod_id);
