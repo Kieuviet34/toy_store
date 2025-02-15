@@ -10,8 +10,3 @@ if($conn->connect_error){
     die('Connection failed: '.$conn->connect_error);
 }
 
-/* // Kiểm tra session
-if(!isset($_SESSION['prod_id'])){
-    die("Product ID not set in session");
-}
- */
