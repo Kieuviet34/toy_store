@@ -1,3 +1,4 @@
+</div>
 <!-- footer.php -->
 <footer style="background-color: #f5f5f5; padding: 50px 20px; margin-top: 100px;">
     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px;">

@@ -14,9 +14,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// --------------------------
+
 // 1. Chèn dữ liệu vào bảng categories
-// --------------------------
 $conn->query("INSERT INTO categories (cat_id, cat_name) VALUES
     (1, 'Đồ chơi giáo dục'),
     (2, 'Đồ chơi vận động'),
@@ -25,9 +24,7 @@ $conn->query("INSERT INTO categories (cat_id, cat_name) VALUES
     (5, 'Xe mô hình')
 ");
 
-// --------------------------
 // 2. Chèn dữ liệu vào bảng brands
-// --------------------------
 $conn->query("INSERT INTO brands (brand_id, brand_name) VALUES
     (1, 'Lego'),
     (2, 'Hot Wheels'),
@@ -36,9 +33,7 @@ $conn->query("INSERT INTO brands (brand_id, brand_name) VALUES
     (5, 'Fisher-Price')
 ");
 
-// --------------------------
 // 3. Chèn dữ liệu vào bảng stores
-// --------------------------
 $stmt_store = $conn->prepare("
     INSERT INTO stores (store_id, store_name, phone, email, street, city, zip_code)
     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -65,9 +60,7 @@ for ($i = 1; $i <= 5; $i++) {
     $stmt_store->execute();
 }
 
-// --------------------------
-// 4. Chèn dữ liệu vào bảng staffs
-// --------------------------
+//chèn bảng staff
 $stmt_staff = $conn->prepare("
     INSERT INTO staffs (
         staff_id, staff_f_name, staff_l_name, 
@@ -96,9 +89,8 @@ for ($i = 1; $i <= 10; $i++) {
     $stmt_staff->execute();
 }
 
-// --------------------------
+
 // 5. Chèn dữ liệu vào bảng products
-// --------------------------
 $stmt_product = $conn->prepare("
     INSERT INTO products (
         prod_id, prod_name, brand_id, 
@@ -125,9 +117,8 @@ for ($i = 1; $i <= 100; $i++) {
     $stmt_product->execute();
 }
 
-// --------------------------
+
 // 6. Chèn dữ liệu vào bảng stocks
-// --------------------------
 $stmt_stock = $conn->prepare("
     INSERT INTO stocks (store_id, prod_id, quantity)
     VALUES (?, ?, ?)
@@ -141,9 +132,7 @@ for ($i = 1; $i <= 200; $i++) {
     $stmt_stock->execute();
 }
 
-// --------------------------
 // 7. Chèn dữ liệu vào bảng customers
-// --------------------------
 $stmt_customer = $conn->prepare("
     INSERT INTO customers (
         customer_id, f_name, l_name, 
