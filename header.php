@@ -8,6 +8,9 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/headers/">
     <link rel="stylesheet" href="template/css/style.css">
     <link rel="stylesheet" href="template/css/login.css">
+    <link rel="stylesheet" href="template/css/homepage.css">
+    <link rel="stylesheet" href="template/css/about.css">
+    <link rel="stylesheet" href="template/css/contact.css">
     <link rel="stylesheet" href="template/assets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="template/css/header.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -74,6 +77,7 @@
           <a href="index.php?page=login">
           <button type="button" class="btn btn-light text-dark me-2">Login</button>
           </a>
+
           <a href="index.php?page=register">
           <button type="button" class="btn btn-primary">Sign-up</button>
           </a>

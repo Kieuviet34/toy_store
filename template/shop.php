@@ -1,12 +1,12 @@
 <?php
-
 include ('inc/pagination.php');
 
-echo '<div class="total-products">' . number_format($result['total'], 0, ',', '.') . ' sản phẩm</div>';
+// Hiển thị tổng số sản phẩm sử dụng biến $totalProducts thay vì $result['total']
+echo '<div class="total-products">' . number_format($totalProducts, 0, ',', '.') . ' sản phẩm</div>';
 
 echo '<div class="product-grid">';
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         echo '<div class="product-card">';
         echo '<h3>' . htmlspecialchars($row['prod_name']) . '</h3>';
         echo '<div class="brand">Hãng: ' . htmlspecialchars($row['brand_name']) . '</div>';
@@ -22,4 +22,3 @@ echo '</div>';
 // Hiển thị phân trang
 echo "<div class='pagination'>$links</div>";
 ?>
-

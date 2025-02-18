@@ -14,7 +14,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 // 1. Chèn dữ liệu vào bảng categories
 $conn->query("INSERT INTO categories (cat_id, cat_name) VALUES
     (1, 'Đồ chơi giáo dục'),
@@ -48,39 +47,42 @@ for ($i = 1; $i <= 5; $i++) {
     $zip_code = $faker->numerify('######');
 
     $stmt_store->bind_param(
-    "issssss",
-    $store_id,
-    $store_name,
-    $phone,
-    $email, // Đã giới hạn độ dài
-    $street,
-    $city,
-    $zip_code // Đảm bảo 6 ký tự
-);
+        "issssss",
+        $store_id,
+        $store_name,
+        $phone,
+        $email,
+        $street,
+        $city,
+        $zip_code
+    );
     $stmt_store->execute();
 }
 
-//chèn bảng staff
+// 4. Chèn dữ liệu vào bảng staffs (có thêm cột staff_img)
 $stmt_staff = $conn->prepare("
     INSERT INTO staffs (
-        staff_id, staff_f_name, staff_l_name, 
+        staff_id, staff_f_name, staff_l_name, staff_img,
         email, phone, is_active, store_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
 ");
 for ($i = 1; $i <= 10; $i++) {
     $staff_id = $i;
     $staff_f_name = $faker->firstName;
     $staff_l_name = $faker->lastName;
+    // Với staff_img, ta có thể để NULL nếu chưa có dữ liệu ảnh
+    $staff_img = null;
     $email = $faker->email;
     $phone = $faker->numerify('09########');
     $is_active = 1;
-    $store_id = $faker->numberBetween(1, 5); // Tham chiếu đến stores
+    $store_id = $faker->numberBetween(1, 5);
 
     $stmt_staff->bind_param(
-        "issssii",
+        "issssiii",
         $staff_id,
         $staff_f_name,
         $staff_l_name,
+        $staff_img,
         $email,
         $phone,
         $is_active,
@@ -89,26 +91,28 @@ for ($i = 1; $i <= 10; $i++) {
     $stmt_staff->execute();
 }
 
-
-// 5. Chèn dữ liệu vào bảng products
+// 5. Chèn dữ liệu vào bảng products (có thêm cột prod_img)
 $stmt_product = $conn->prepare("
     INSERT INTO products (
-        prod_id, prod_name, brand_id, 
+        prod_id, prod_name, prod_img, brand_id, 
         cat_id, model_year, list_price
-    ) VALUES (?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?)
 ");
 for ($i = 1; $i <= 100; $i++) {
     $prod_id = $i;
     $prod_name = "Sản phẩm $i - " . $faker->word;
-    $brand_id = $faker->numberBetween(1, 5); // Tham chiếu đến brands
-    $cat_id = $faker->numberBetween(1, 5);    // Tham chiếu đến categories
+    // Với prod_img, đặt NULL nếu chưa có ảnh
+    $prod_img = null;
+    $brand_id = $faker->numberBetween(1, 5);
+    $cat_id = $faker->numberBetween(1, 5);
     $model_year = $faker->numberBetween(2010, 2023);
     $list_price = $faker->randomFloat(2, 10, 1000);
 
     $stmt_product->bind_param(
-        "isiiid",
+        "issiiid",
         $prod_id,
         $prod_name,
+        $prod_img,
         $brand_id,
         $cat_id,
         $model_year,
@@ -117,27 +121,26 @@ for ($i = 1; $i <= 100; $i++) {
     $stmt_product->execute();
 }
 
-
 // 6. Chèn dữ liệu vào bảng stocks
 $stmt_stock = $conn->prepare("
     INSERT INTO stocks (store_id, prod_id, quantity)
     VALUES (?, ?, ?)
 ");
 for ($i = 1; $i <= 200; $i++) {
-    $store_id = $faker->numberBetween(1, 5); // Tham chiếu đến stores
-    $prod_id = $faker->numberBetween(1, 100); // Tham chiếu đến products
+    $store_id = $faker->numberBetween(1, 5);
+    $prod_id = $faker->numberBetween(1, 100);
     $quantity = $faker->numberBetween(10, 100);
 
     $stmt_stock->bind_param("iii", $store_id, $prod_id, $quantity);
     $stmt_stock->execute();
 }
 
-// 7. Chèn dữ liệu vào bảng customers
+// 7. Chèn dữ liệu vào bảng customers (thêm cả customer_password)
 $stmt_customer = $conn->prepare("
     INSERT INTO customers (
         customer_id, f_name, l_name, 
-        phone, email, street, city, zip_code
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        phone, email, street, city, zip_code, customer_password
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
 for ($i = 1; $i <= 50; $i++) {
     $customer_id = $i;
@@ -148,9 +151,11 @@ for ($i = 1; $i <= 50; $i++) {
     $street = $faker->streetAddress;
     $city = $faker->city;
     $zip_code = $faker->postcode;
+    // Tạo mật khẩu ngẫu nhiên cho khách hàng
+    $customer_password = $faker->password;
 
     $stmt_customer->bind_param(
-        "isssssss",
+        "issssssss",
         $customer_id,
         $f_name,
         $l_name,
@@ -158,14 +163,13 @@ for ($i = 1; $i <= 50; $i++) {
         $email,
         $street,
         $city,
-        $zip_code
+        $zip_code,
+        $customer_password
     );
     $stmt_customer->execute();
 }
 
-// --------------------------
 // 8. Chèn dữ liệu vào bảng orders
-// --------------------------
 $stmt_order = $conn->prepare("
     INSERT INTO orders (
         order_id, customer_name, order_status, 
@@ -180,8 +184,8 @@ for ($i = 1; $i <= 30; $i++) {
     $order_date = $faker->date();
     $required_date = $faker->date();
     $shipped_date = $faker->date();
-    $store_id = $faker->numberBetween(1, 5);      // Tham chiếu đến stores
-    $staff_id = $faker->numberBetween(1, 10);     // Tham chiếu đến staffs
+    $store_id = $faker->numberBetween(1, 5);
+    $staff_id = $faker->numberBetween(1, 10);
 
     $stmt_order->bind_param(
         "isssssii",
@@ -197,9 +201,7 @@ for ($i = 1; $i <= 30; $i++) {
     $stmt_order->execute();
 }
 
-// --------------------------
 // 9. Chèn dữ liệu vào bảng order_items
-// --------------------------
 $stmt_order_item = $conn->prepare("
     INSERT INTO order_items (
         order_id, item_id, prod_id, 
@@ -207,9 +209,9 @@ $stmt_order_item = $conn->prepare("
     ) VALUES (?, ?, ?, ?, ?, ?)
 ");
 for ($i = 1; $i <= 100; $i++) {
-    $order_id = $faker->numberBetween(1, 30);     // Tham chiếu đến orders
+    $order_id = $faker->numberBetween(1, 30);
     $item_id = $i;
-    $prod_id = $faker->numberBetween(1, 100);    // Tham chiếu đến products
+    $prod_id = $faker->numberBetween(1, 100);
     $quantity = $faker->numberBetween(1, 5);
     $list_price = $faker->randomFloat(2, 10, 100);
     $discount = $faker->randomFloat(2, 0, 0.5);
@@ -226,9 +228,7 @@ for ($i = 1; $i <= 100; $i++) {
     $stmt_order_item->execute();
 }
 
-// --------------------------
 // 10. Chèn dữ liệu vào bảng roles và staff_role
-// --------------------------
 // Chèn roles
 $conn->query("INSERT INTO roles (role_id, role_name) VALUES
     (1, 'Quản lý'),
@@ -243,7 +243,7 @@ $stmt_staff_role = $conn->prepare("
 ");
 for ($i = 1; $i <= 10; $i++) {
     $staff_id = $i;
-    $role_id = $faker->numberBetween(1, 3); // Tham chiếu đến roles
+    $role_id = $faker->numberBetween(1, 3);
     $stmt_staff_role->bind_param("ii", $staff_id, $role_id);
     $stmt_staff_role->execute();
 }

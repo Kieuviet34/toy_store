@@ -16,10 +16,10 @@
         <div style="flex: 1 1 200px;">
             <h4 style="margin-bottom: 15px; color: #333;">Links</h4>
             <ul style="list-style: none; padding: 0;">
-                <li style="margin-bottom: 10px;"><a href="/" style="text-decoration: none; color: #666;">Home</a></li>
-                <li style="margin-bottom: 10px;"><a href="/shop" style="text-decoration: none; color: #666;">Shop</a></li>
-                <li style="margin-bottom: 10px;"><a href="/about" style="text-decoration: none; color: #666;">About</a></li>
-                <li style="margin-bottom: 10px;"><a href="/contact" style="text-decoration: none; color: #666;">Contact</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=home" style="text-decoration: none; color: #666;">Home</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=shop" style="text-decoration: none; color: #666;">Shop</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=about" style="text-decoration: none; color: #666;">About</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=contact" style="text-decoration: none; color: #666;">Contact</a></li>
             </ul>
         </div>
 
@@ -27,9 +27,9 @@
         <div style="flex: 1 1 200px;">
             <h4 style="margin-bottom: 15px; color: #333;">Help</h4>
             <ul style="list-style: none; padding: 0;">
-                <li style="margin-bottom: 10px;"><a href="/payment" style="text-decoration: none; color: #666;">Payment Options</a></li>
-                <li style="margin-bottom: 10px;"><a href="/returns" style="text-decoration: none; color: #666;">Returns</a></li>
-                <li style="margin-bottom: 10px;"><a href="/privacy" style="text-decoration: none; color: #666;">Privacy Policies</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=payment" style="text-decoration: none; color: #666;">Payment Options</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=home" style="text-decoration: none; color: #666;">Returns</a></li>
+                <li style="margin-bottom: 10px;"><a href="index.php?page=privacy" style="text-decoration: none; color: #666;">Privacy Policies</a></li>
             </ul>
         </div>
 

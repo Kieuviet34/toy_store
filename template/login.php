@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-md-4 offset-md-4">
         <h2 class="text-center text-dark mt-5"></h2>
-        <div class="text-center mb-5 text-dark">Made with bootstrap</div>
+        <div class="text-center mb-5 text-dark">Welcome Back</div>
         <div class="card my-5">
 
           <form class="card-body cardbody-color p-lg-5">
