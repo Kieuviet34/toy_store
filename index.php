@@ -3,7 +3,7 @@
 $base_dir = __DIR__;
 
 // Xử lý routing
-$allowed_pages = ['home', 'shop', 'about', 'contact', 'login'];
+$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin'];
 $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages) 
         ? $_GET['page'] 
         : 'home';
@@ -22,11 +22,20 @@ switch ($page) {
     case 'about':
         include 'template/about.php';
         break;
+    case 'cart':
+        include 'template/cart.php';
+        break;
     case 'contact':
         include 'template/contact.php';
         break;
     case 'login':
         include 'template/login.php';
+        break;
+    case 'register':
+        include 'template/register.php';
+        break;
+    case 'admin':
+        include 'template/Admin';
         break;
     default:
         include 'template/404.php';

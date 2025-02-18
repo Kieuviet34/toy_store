@@ -1,61 +1,32 @@
+<div class="container">
+    <div class="row">
+      <div class="col-md-4 offset-md-4">
+        <h2 class="text-center text-dark mt-5"></h2>
+        <div class="text-center mb-5 text-dark">Made with bootstrap</div>
+        <div class="card my-5">
 
-<div class="d-flex justify-content-center align-items-center mt-5" id="login-page">
+          <form class="card-body cardbody-color p-lg-5">
 
+            <div class="text-center">
+              <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                width="200px" alt="profile">
+            </div>
 
-        <div class="card">
-
-            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="nav-item text-center">
-                  <a class="nav-link active btl" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Login</a>
-                </li>
-                <li class="nav-item text-center">
-                  <a class="nav-link btr" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Signup</a>
-                </li>
-               
-              </ul>
-              <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                  
-                  <div class="form px-4 pt-5">
-
-                    <input type="text" name="" class="form-control" placeholder="Email or Phone">
-
-                    <input type="text" name="" class="form-control" placeholder="Password">
-                    <button class="btn btn-dark btn-block">Login</button>
-
-                  </div>
-
-
-
-                </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                  
-
-                  <div class="form px-4">
-
-                    <input type="text" name="" class="form-control" placeholder="Name">
-
-                    <input type="text" name="" class="form-control" placeholder="Email">
-
-                    <input type="text" name="" class="form-control" placeholder="Phone">
-
-                    <input type="text" name="" class="form-control" placeholder="Password">
-
-                    <button class="btn btn-dark btn-block">Signup</button>
-                    
-
-                  </div>
-
-
-
-                </div>
-                
-               </div>
-            
-          
-          
-
+            <div class="mb-3">
+              <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
+                placeholder="User Name">
+            </div>
+            <div class="mb-3">
+              <input type="password" class="form-control" id="password" placeholder="password">
+            </div>
+            <div class="text-center"><button type="submit" class="btn btn-color px-5 mb-5 w-100">Login</button></div>
+            <div id="emailHelp" class="form-text text-center mb-5 text-dark">Not
+              Registered? <a href="index.php?page=register" class="text-dark fw-bold"> Create an
+                Account</a>
+            </div>
+          </form>
         </div>
-        
 
       </div>
+    </div>
+  </div>

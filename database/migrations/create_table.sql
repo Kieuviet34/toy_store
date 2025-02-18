@@ -25,12 +25,14 @@ create table customers(
     email varchar(255),
     street varchar(255),
     city varchar(255),
-    zip_code varchar(20)
+    zip_code varchar(20),
+    customer_password varchar(255)
 );
 create table staffs(
 	staff_id int primary key,
     staff_f_name nvarchar(255),
     staff_l_name nvarchar(255),
+    staff_img blob,
     email nvarchar(255),
     phone varchar(255),
     is_active tinyint,
@@ -40,6 +42,7 @@ create table staffs(
 create table products(
 	prod_id int primary key,
     prod_name nvarchar(255),
+    prod_img blob,
     brand_id int,
     cat_id int ,
     model_year smallint,
@@ -52,7 +55,8 @@ create table stocks(
     prod_id int,
     quantity int,
     foreign key (store_id) references stores(store_id),
-    foreign key (prod_id) references products(prod_id)
+    foreign key (prod_id) references products(prod_id),
+    primary key(store_id, prod_id)
 );
 create table orders(
 	order_id int primary key,
@@ -88,5 +92,4 @@ create table staff_role(
     foreign key(role_id) references roles(role_id)
 );
 
-alter table stocks
-add primary key (store_id, prod_id);
+
