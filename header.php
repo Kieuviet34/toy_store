@@ -27,7 +27,7 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="index.php?page=home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-          <img src="template/img/allainstore.jpg" class="img-fluid profile-image-pic img-thumbnail rounded-circle "
+          <img src="template/img/allainstore.jpg" class="img-fluid  img-thumbnail rounded-circle "
           width="50px"> Allain Store
           </a>
 
@@ -58,7 +58,7 @@
               </a>
             </li>
             <li>
-              <a href="index.php?page=#" class="nav-link text-white">
+              <a href="index.php?page=about" class="nav-link text-white">
                 <i class="bi bi-info-circle d-block mx-auto mb-1" width="24" height="24"></i>
                 About Us
               </a>
