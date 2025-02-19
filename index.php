@@ -9,7 +9,9 @@ $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages)
         : 'home';
 
 // Include header
-include 'header.php';
+if($page  != 'admin'){
+    include 'header.php';
+}
 
 // Include nội dung trang
 switch ($page) {
@@ -44,7 +46,7 @@ switch ($page) {
         include 'template/payment.php';
         break;
     case 'admin':
-        include 'template/Admin';
+        include 'template/Admin/index.php';
         break;
     default:
         include 'template/404.php';
@@ -52,4 +54,6 @@ switch ($page) {
 }
 
 // Include footer
-include 'footer.php';
+if($page!='admin'){
+    include 'footer.php';
+}
