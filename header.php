@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="template/css/homepage.css">
     <link rel="stylesheet" href="template/css/about.css">
     <link rel="stylesheet" href="template/css/contact.css">
+    <link rel="stylesheet" href="template/css/product_grid.css">
     <link rel="stylesheet" href="template/assets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="template/css/header.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
