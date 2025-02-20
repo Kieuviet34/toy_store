@@ -35,7 +35,19 @@ $totalProducts = $rowProducts['total_products'];
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
     <style>
-      /* Một số style cơ bản cho bảng và các nút */
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
       .badge { font-size: 0.9rem; }
       .btn { font-size: 0.8rem; }
     </style>
