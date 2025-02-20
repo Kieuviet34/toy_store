@@ -1,5 +1,5 @@
 <?php
-include '../inc/database.php';
+include 'inc/database.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "Sản phẩm không tồn tại.";
