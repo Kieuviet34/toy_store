@@ -2,28 +2,33 @@
 // admin.php
 include 'inc/database.php';
 
-// Lấy số liệu thống kê cho Dashboard
-$queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders";
+// Lấy số liệu thống kê cho Dashboard (chỉ lấy những dòng chưa bị xóa nếu có)
+$queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders WHERE is_deleted = 0";
 $resultOrders = $conn->query($queryTotalOrders);
 $rowOrders = $resultOrders->fetch_assoc();
 $totalOrders = $rowOrders['total_orders'];
 
-$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers";
+$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers"; // Giả sử customers không dùng soft delete
 $resultCustomers = $conn->query($queryTotalCustomers);
 $rowCustomers = $resultCustomers->fetch_assoc();
 $totalCustomers = $rowCustomers['total_customers'];
 
-$queryTotalStaffs = "SELECT COUNT(*) as total_staffs FROM staffs";
+$queryTotalStaffs = "SELECT COUNT(*) as total_staffs FROM staffs WHERE is_deleted = 0";
 $resultStaffs = $conn->query($queryTotalStaffs);
 $rowStaffs = $resultStaffs->fetch_assoc();
 $totalStaffs = $rowStaffs['total_staffs'];
 
-$queryTotalProducts = "SELECT COUNT(*) as total_products FROM products";
+$queryTotalProducts = "SELECT COUNT(*) as total_products FROM products WHERE is_deleted = 0";
 $resultProducts = $conn->query($queryTotalProducts);
 $rowProducts = $resultProducts->fetch_assoc();
 $totalProducts = $rowProducts['total_products'];
+
+$queryTotalCategories = "SELECT COUNT(*) as total_categories FROM categories";
+$resultCategories = $conn->query($queryTotalCategories);
+$rowCategories = $resultCategories->fetch_assoc();
+$totalCategories = $rowCategories['total_categories'];
 ?>
-<!Doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -33,7 +38,7 @@ $totalProducts = $rowProducts['total_products'];
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <!-- Custom styles for this template -->
-    <link href="dashboard.css" rel="stylesheet">
+    <link href="template/Admin/dashboard.css" rel="stylesheet">
     <style>
       .bd-placeholder-img {
         font-size: 1.125rem;
@@ -42,7 +47,6 @@ $totalProducts = $rowProducts['total_products'];
         -moz-user-select: none;
         user-select: none;
       }
-
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
@@ -101,6 +105,13 @@ $totalProducts = $rowProducts['total_products'];
                   Sản phẩm
                 </a>
               </li>
+              <!-- Thêm mục Categories -->
+              <li class="nav-item">
+                <a class="nav-link" href="#categories" data-bs-toggle="tab">
+                  <span data-feather="list"></span>
+                  Danh mục
+                </a>
+              </li>
             </ul>
           </div>
         </nav>
@@ -150,6 +161,15 @@ $totalProducts = $rowProducts['total_products'];
                     </div>
                   </div>
                 </div>
+                <!-- Thống kê danh mục -->
+                <div class="col-md-3">
+                  <div class="card text-white bg-info mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title">Danh mục</h5>
+                      <p class="card-text"><?php echo number_format($totalCategories, 0, ',', '.'); ?></p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -180,7 +200,7 @@ $totalProducts = $rowProducts['total_products'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryOrdersList = "SELECT * FROM orders ORDER BY order_date ASC";
+                    $queryOrdersList = "SELECT * FROM orders WHERE is_deleted = 0 ORDER BY order_date ASC";
                     $resultOrdersList = $conn->query($queryOrdersList);
                     if ($resultOrdersList && $resultOrdersList->num_rows > 0) {
                       while ($order = $resultOrdersList->fetch_assoc()) {
@@ -298,7 +318,7 @@ $totalProducts = $rowProducts['total_products'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryStaffList = "SELECT * FROM staffs ORDER BY staff_id ASC";
+                    $queryStaffList = "SELECT * FROM staffs WHERE is_deleted = 0 ORDER BY staff_id ASC";
                     $resultStaffList = $conn->query($queryStaffList);
                     if ($resultStaffList && $resultStaffList->num_rows > 0) {
                       while ($staff = $resultStaffList->fetch_assoc()) {
@@ -360,7 +380,7 @@ $totalProducts = $rowProducts['total_products'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryProductsList = "SELECT * FROM products ORDER BY prod_id ASC";
+                    $queryProductsList = "SELECT * FROM products WHERE is_deleted = 0 ORDER BY prod_id ASC";
                     $resultProductsList = $conn->query($queryProductsList);
                     if ($resultProductsList && $resultProductsList->num_rows > 0) {
                       while ($product = $resultProductsList->fetch_assoc()) {
@@ -382,6 +402,56 @@ $totalProducts = $rowProducts['total_products'];
                       }
                     } else {
                       echo "<tr><td colspan='6'>Không có sản phẩm nào.</td></tr>";
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Categories Tab -->
+            <div class="tab-pane fade" id="categories">
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Quản lý danh mục</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                    <span data-feather="plus"></span> Thêm danh mục
+                  </button>
+                </div>
+              </div>
+              <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Tìm kiếm danh mục...">
+              </div>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tên danh mục</th>
+                      <th>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $queryCategoriesList = "SELECT * FROM categories ORDER BY cat_id ASC";
+                    $resultCategoriesList = $conn->query($queryCategoriesList);
+                    if ($resultCategoriesList && $resultCategoriesList->num_rows > 0) {
+                      while ($category = $resultCategoriesList->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . htmlspecialchars($category['cat_id']) . "</td>";
+                        echo "<td>" . htmlspecialchars($category['cat_name']) . "</td>";
+                        echo "<td>
+                                <button class='btn btn-sm btn-warning'>
+                                  <span data-feather='edit'></span> Sửa
+                                </button>
+                                <button class='btn btn-sm btn-danger btn-delete' data-type='category' data-id='" . $category['cat_id'] . "'>
+                                  <span data-feather='trash-2'></span> Xóa
+                                </button>
+                              </td>";
+                        echo "</tr>";
+                      }
+                    } else {
+                      echo "<tr><td colspan='3'>Không có danh mục nào.</td></tr>";
                     }
                     ?>
                   </tbody>
@@ -416,7 +486,7 @@ $totalProducts = $rowProducts['total_products'];
       </div>
     </div>
 
-    <!-- Các modal khác (Thêm khách hàng, Thêm nhân viên, Thêm sản phẩm) cũng có thể được thêm tương tự -->
+    <!-- Các modal khác (Thêm khách hàng, Thêm nhân viên, Thêm sản phẩm, Thêm danh mục) cũng có thể được thêm tương tự -->
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -425,32 +495,30 @@ $totalProducts = $rowProducts['total_products'];
       feather.replace();
     </script>
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll('.btn-delete').forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      if(confirm("Bạn có chắc chắn muốn xóa?")) {
-        var type = this.getAttribute('data-type');
-        var id = this.getAttribute('data-id');
-        fetch("template/Admin/admindelete.php?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id))
-          .then(response => response.json())
-          .then(data => {
-            if(data.status === "success") {
-              var row = this.closest("tr");
-              if(row) row.remove();
-            } else {
-              alert("Xóa không thành công: " + data.error);
+      document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('.btn-delete').forEach(function(btn) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if(confirm("Bạn có chắc chắn muốn xóa?")) {
+              var type = this.getAttribute('data-type');
+              var id = this.getAttribute('data-id');
+              fetch("template/Admin/admindelete.php?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id))
+                .then(response => response.json())
+                .then(data => {
+                  if(data.status === "success") {
+                    var row = this.closest("tr");
+                    if(row) row.remove();
+                  } else {
+                    alert("Xóa không thành công: " + data.error);
+                  }
+                })
+                .catch(err => {
+                  alert("Có lỗi xảy ra: " + err);
+                });
             }
-          })
-          .catch(err => {
-            alert("Có lỗi xảy ra: " + err);
           });
-      }
-    });
-  });
-});
-
-</script>
-
+        });
+      });
+    </script>
   </body>
 </html>

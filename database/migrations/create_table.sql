@@ -91,5 +91,9 @@ create table staff_role(
     foreign key (staff_id) references staffs(staff_id),
     foreign key(role_id) references roles(role_id)
 );
+ALTER TABLE products ADD COLUMN is_deleted TINYINT DEFAULT 0;
 
+use toy_store;
+alter table orders add column is_deleted tinyint default 0;
+alter table staffs add column is_deleted tinyint default 0;
 

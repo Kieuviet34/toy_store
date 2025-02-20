@@ -3,13 +3,14 @@
     <div class="auto-scroll-banner mb-5">
         <div class="banner-container">
             <div class="banner-slide">
-                <img src="banner1.jpg" alt="Banner 1" class="img-fluid">
+                <img src="template/img/banner1.jpg" alt="Banner 1" class="img-fluid"
+                height="100px">
             </div>
             <div class="banner-slide">
-                <img src="banner2.jpg" alt="Banner 2" class="img-fluid">
+                <img src="template/img/banner2.jpg" alt="Banner 2" class="img-fluid" height="100px">
             </div>
             <div class="banner-slide">
-                <img src="banner3.jpg" alt="Banner 3" class="img-fluid">
+                <img src="template/img/banner3.jpg" alt="Banner 3" class="img-fluid" height="100px">
             </div>
         </div>
     </div>

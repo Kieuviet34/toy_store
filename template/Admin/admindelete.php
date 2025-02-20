@@ -1,7 +1,7 @@
 <?php
-ob_start();  // Bắt đầu bộ đệm output
-include 'inc/database.php';
-ob_end_clean();  // Xóa mọi output đã được lưu trữ
+ob_start();
+include '../../inc/database.php';
+ob_clean();
 
 header("Content-Type: application/json");
 
@@ -9,19 +9,21 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
     $type = $_GET['type'];
     $id = (int)$_GET['id'];
 
-    // Xác định bảng cần xóa dựa trên type
     switch ($type) {
         case 'order':
-            $stmt = $conn->prepare("DELETE FROM orders WHERE order_id = ?");
+            $stmt = $conn->prepare("UPDATE orders SET is_deleted = 1 WHERE order_id = ?");
             break;
         case 'customer':
             $stmt = $conn->prepare("DELETE FROM customers WHERE customer_id = ?");
             break;
         case 'staff':
-            $stmt = $conn->prepare("DELETE FROM staffs WHERE staff_id = ?");
+            $stmt = $conn->prepare("UPDATE staffs SET is_deleted = 1 WHERE staff_id = ?");
             break;
         case 'product':
-            $stmt = $conn->prepare("DELETE FROM products WHERE prod_id = ?");
+            $stmt = $conn->prepare("UPDATE products SET is_deleted = 1 WHERE prod_id = ?");
+            break;
+        case 'category':
+            $stmt = $conn->prepare("DELETE FROM categories WHERE cat_id = ?");
             break;
         default:
             echo json_encode(["status" => "error", "error" => "Invalid type."]);
@@ -45,4 +47,4 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
     echo json_encode(["status" => "error", "error" => "Missing parameters."]);
     exit;
 }
-
+?>
