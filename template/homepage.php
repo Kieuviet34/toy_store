@@ -33,7 +33,7 @@
 
 .banner-container {
     display: flex;
-    animation: slide 15s infinite;
+    animation: slide 5s infinite;
 }
 
 .banner-slide {

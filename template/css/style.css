@@ -1,19 +1,28 @@
-
-/* css của shop */
+/* Grid container cho sản phẩm */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
-    margin-top: 100px; 
+    margin-top: 100px;
+}
+
+.product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .product-card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
-    transition: transform 0.3s ease;
-    background: white;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    height: 350px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
 }
 
 .product-card:hover {
@@ -21,21 +30,57 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.product-image {
+    width: 100%;
+    height: 200px; 
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.brand-category {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
 .price {
     color: #e91e63;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     font-weight: bold;
     margin-top: 10px;
 }
 
+/* Tổng số sản phẩm */
 .total-products {
-    font-size: 1.5em;
+    font-size: 1.5rem;
     margin: 20px 0;
     color: #333;
-    grid-column: 1 / -1;
     text-align: center;
 }
 
+/* Phân trang */
 .pagination {
     margin: 40px 0;
     text-align: center;

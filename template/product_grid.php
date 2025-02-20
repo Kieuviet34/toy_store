@@ -74,6 +74,7 @@ echo "<style>
     display: flex;
     gap: 20px;
     transition: transform 0.5s ease-in-out;
+    height: 280px;
 }
 .product-grid {
     display: grid;
