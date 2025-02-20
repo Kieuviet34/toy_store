@@ -100,7 +100,6 @@
 </div>
 <div class="product-related">
     <h2>Sản phẩm liên quan</h2>
-    <br>
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -109,4 +108,8 @@
                     <h5 class="card-title">Mô hình action figure Silicone 1/6 King of Fighters Mai Shiranui hãng Ninja Cat</h5>
                     <p class="card-text">Giá: 3,500,000 VND</p>
                     <a href="index.php?page=product" class="btn btn-primary">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
