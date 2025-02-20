@@ -1,0 +1,29 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.product-left {
+    flex: 1;
+}
+
+.product-right {
+    flex: 1;
+    padding-left: 20px;
+    text-align: left;
+    margin-right: 100px;
+}
+
+.product-right h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: rgba(248, 86, 57, 1);
+}
+
+.product-right button {
+    flex-grow: 1;
+    margin-bottom: 8px;
+    margin-left: 8px;
+}
