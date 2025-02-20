@@ -1,5 +1,5 @@
 <?php
-include 'database.php'; // Kết nối cơ sở dữ liệu
+include 'database.php';
 
 // PHÂN TRANG
 $limit = 12;

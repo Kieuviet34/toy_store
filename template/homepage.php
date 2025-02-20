@@ -17,7 +17,7 @@
     <!-- Phần hiển thị sản phẩm -->
     <div class="home-products">
         <h2 class="section-title mb-4">Sản phẩm nổi bật</h2>
-        <?php include 'product_grid.php'; // Include phần hiển thị sản phẩm từ shop.php ?>
+        <?php include 'product_grid.php';  ?>
     </div>
 </div>
 
@@ -66,7 +66,6 @@
 </style>
 
 <script>
-// Thêm hiệu ứng pause khi hover (tùy chọn)
 document.querySelector('.banner-container').addEventListener('mouseenter', () => {
     document.querySelector('.banner-container').style.animationPlayState = 'paused';
 });

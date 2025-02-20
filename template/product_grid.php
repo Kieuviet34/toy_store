@@ -55,8 +55,6 @@ echo '</div></div>';
 echo '<div class="slider-nav next" onclick="loadNext()"><i class="bi bi-chevron-right"></i></div>';
 echo '</div>';
 
-// CSS (giữ nguyên như trước)
-// ...
 echo "<style>
 .product-slider-container {
     position: relative;
@@ -177,7 +175,7 @@ async function loadProducts(page, direction) {
     slider.parentElement.appendChild(loader);
 
     try {
-        const response = await fetch(`product_grid.php?page=${page}`);
+        const response = await fetch(`index.php?page=${page}`);
         if(!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const data = await response.text();
@@ -232,7 +230,6 @@ function loadPrevious() {
     if(currentPage > 1) loadProducts(currentPage - 1, "prev");
 }
 
-// Initial button state
 updateNavButtons();
 </script>
 

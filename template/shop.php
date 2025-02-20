@@ -1,7 +1,6 @@
 <?php
 include ('inc/pagination.php');
 
-// Hiển thị tổng số sản phẩm sử dụng biến $totalProducts thay vì $result['total']
 echo '<div class="total-products">' . number_format($totalProducts, 0, ',', '.') . ' sản phẩm</div>';
 
 echo '<div class="product-grid">';
