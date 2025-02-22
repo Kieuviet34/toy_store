@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-      <div class="col-6 offset-md-4 ">
+      <div class="col-md-4 offset-md-4 ">
         <div class="card my-5">
           <div class="card-body px-lg-8">
             <h2 class="text-center mb-4">Tạo tài khoản</h2>

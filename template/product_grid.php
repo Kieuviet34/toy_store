@@ -75,6 +75,7 @@ echo "<style>
     gap: 20px;
     transition: transform 0.5s ease-in-out;
     height: 280px;
+    padding-top: 10px;
 }
 .product-grid {
     display: grid;
