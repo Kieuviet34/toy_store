@@ -1,6 +1,61 @@
 <?php
 // product_grid.php
 include 'inc/database.php';
+// Xử lý tìm kiếm
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$price_min = isset($_GET['price_min']) ? $_GET['price_min'] : '';
+$price_max = isset($_GET['price_max']) ? $_GET['price_max'] : '';
+$brand = isset($_GET['brand']) ? $_GET['brand'] : '';
+
+$query = "SELECT * FROM products WHERE 1=1";
+if ($search) {
+    $query .= " AND name LIKE '%$search%'";
+}
+if ($price_min) {
+    $query .= " AND price >= $price_min";
+}
+if ($price_max) {
+    $query .= " AND price <= $price_max";
+}
+if ($brand) {
+    $query .= " AND brand = '$brand'";
+}
+
+$result = mysqli_query($conn, $query);
+?>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+</head>
+<body>
+    <h2>Bộ lọc tìm kiếm</h2>
+    <form method="GET">
+        <input type="text" name="search" placeholder="Tìm theo tên" value="<?php echo $search; ?>">
+        <input type="number" name="price_min" placeholder="Giá từ" value="<?php echo $price_min; ?>">
+        <input type="number" name="price_max" placeholder="Giá đến" value="<?php echo $price_max; ?>">
+        <select name="brand">
+            <option value="">Chọn hãng</option>
+            <option value="Brand A" <?php if($brand == 'Brand A') echo 'selected'; ?>>Brand A</option>
+            <option value="Brand B" <?php if($brand == 'Brand B') echo 'selected'; ?>>Brand B</option>
+        </select>
+        <button type="submit">Tìm kiếm</button>
+    </form>
+    
+    <h2>Danh sách sản phẩm</h2>
+    <div class="product-grid">
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+            <div class="product-item">
+                <h3><?php echo $row['name']; ?></h3>
+                <p>Giá: <?php echo number_format($row['price']); ?>đ</p>
+                <p>Hãng: <?php echo $row['brand']; ?></p>
+            </div>
+        <?php } ?>
+    </div>
+</body>
+</html>
+<?php
 
 // Xử lý phân trang
 $limit = 5;
