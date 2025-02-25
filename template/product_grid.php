@@ -69,6 +69,7 @@ $query = "SELECT p.prod_id, p.prod_img, p.prod_name, p.list_price,
           FROM products p
           JOIN brands b ON p.brand_id = b.brand_id
           JOIN categories c ON p.cat_id = c.cat_id
+          WHERE p.is_deleted = 0
           LIMIT ? OFFSET ?";
 
 $stmt = $conn->prepare($query);
@@ -85,6 +86,7 @@ echo '<div class="product-slider" data-current-page="'.$currentPage.'">';
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '
+        <a href="index.php?page=product&id=' . $row['prod_id'] . '" class="product-link" style="text-decoration: none; color: inherit;">
         <div class="product-card">
             <div class="product-image">
                 <img src="'.$row['prod_img'].'" alt="'.$row['prod_name'].'">
@@ -100,7 +102,8 @@ if ($result->num_rows > 0) {
                     <span class="discount-price">'.number_format($row['list_price'], 0, ',', '.').'₫</span>
                 </div>
             </div>
-        </div>';
+        </div>
+        </a>';
     }
 } else {
     echo '<div class="no-results">Không tìm thấy sản phẩm nào</div>';
@@ -110,8 +113,6 @@ echo '</div></div>';
 echo '<div class="slider-nav next" onclick="loadNext()"><i class="bi bi-chevron-right"></i></div>';
 echo '</div>';
 
-// CSS (giữ nguyên như trước)
-// ...
 echo "<style>
 .product-slider-container {
     position: relative;
@@ -128,34 +129,54 @@ echo "<style>
     display: flex;
     gap: 20px;
     transition: transform 0.5s ease-in-out;
+    height: 280px;
+    padding-top: 10px;
 }
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
     padding: 2rem 0;
 }
+.product-link {
+    display: block;
+    flex: 0 0 235px;
+    box-sizing: border-box;
+}
 
 .product-card {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
+    box-sizing: border-box;
 }
 
 .product-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
+}
+
+.product-image {
+    width: 100%;
+    height: 200px; 
+    overflow: hidden;
 }
 
 .product-image img {
     width: 100%;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
 }
 
 .product-details {
-    padding: 1.5rem;
+    flex-grow: 1;
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
 .product-title {
@@ -163,7 +184,6 @@ echo "<style>
     margin-bottom: 0.5rem;
     color: #333;
 }
-
 .brand-category {
     display: flex;
     justify-content: space-between;
@@ -232,7 +252,7 @@ async function loadProducts(page, direction) {
     slider.parentElement.appendChild(loader);
 
     try {
-        const response = await fetch(`product_grid.php?page=${page}`);
+        const response = await fetch(`index.php?page=${page}`);
         if(!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const data = await response.text();
@@ -287,7 +307,6 @@ function loadPrevious() {
     if(currentPage > 1) loadProducts(currentPage - 1, "prev");
 }
 
-// Initial button state
 updateNavButtons();
 </script>
 

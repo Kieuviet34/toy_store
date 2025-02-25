@@ -1,5 +1,5 @@
 <?php
-include 'database.php'; // Kết nối cơ sở dữ liệu
+include 'database.php';
 
 // PHÂN TRANG
 $limit = 12;
@@ -19,6 +19,7 @@ $query = "SELECT p.prod_id,p.prod_img, p.prod_name, p.list_price, b.brand_name, 
           FROM products p
           JOIN brands b ON p.brand_id = b.brand_id
           JOIN categories c ON p.cat_id = c.cat_id
+          WHERE p.is_deleted = 0
           LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $limit, $startAt);

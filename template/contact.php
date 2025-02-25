@@ -2,6 +2,7 @@
     <h1 class="display-4">Contact Us</h1>
     <p class="lead">
       Nếu sản phẩm có bất kỳ vấn đề nào, làm ơn đừng liên hệ với chúng tôi !!!
+      <br>
       <a href="mailto:contact@toystore.com">3anhemninhthan@saygex.com</a> hoặc gọi ngay <strong>(123) 456-7890</strong>.
     </p>
     
@@ -15,8 +16,8 @@
               <h5>Độ Mixue</h5>
             </div>
             <div class="right-section text-left">
-              <p>Mã sinh viên: 123456</p>
-              <p>Chức vụ: Frontend Developer</p>
+              <p>Mã sinh viên: 20222541</p>
+              <p>NameTag: LiuRyan</p>
             </div>
           </div>
         </div>
@@ -31,8 +32,8 @@
               <h5>Độ Skibidi</h5>
             </div>
             <div class="right-section text-left">
-              <p>Mã sinh viên: 234567</p>
-              <p>Chức vụ: Backend Developer</p>
+              <p>Mã sinh viên: 20221604</p>
+              <p>NameTag: ThoSanTreEm</p>
             </div>
           </div>
         </div>
@@ -47,8 +48,8 @@
               <h5>Độ Jolibee</h5>
             </div>
             <div class="right-section text-left">
-              <p>Mã sinh viên: 345678</p>
-              <p>Chức vụ: UI/UX Designer</p>
+              <p>Mã sinh viên: 20221683</p>
+              <p>NameTag: Quả trứng vô ơn</p>
             </div>
           </div>
         </div>
