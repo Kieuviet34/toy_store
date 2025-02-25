@@ -26,27 +26,6 @@ if ($result->num_rows == 0) {
 $product = $result->fetch_assoc();
 ?>
 
-    <style>
-        .product-container {
-            display: flex;
-            padding: 2rem;
-            gap: 2rem;
-        }
-        .product-left, .product-right {
-            flex: 1;
-        }
-        .product-left img {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border: 1px solid #ccc;
-        }
-        .product-right h2 {
-            margin-top: 0;
-        }
-    </style>
-
-
     <div class="product-container">
         <div class="product-left">
             <?php 
@@ -64,6 +43,6 @@ $product = $result->fetch_assoc();
             <p><strong>Giá:</strong> <?php echo number_format($product['list_price'], 0, ',', '.'); ?>₫</p>
             <p><strong>Năm sản xuất:</strong> <?php echo htmlspecialchars($product['model_year']); ?></p>
             <button type="button">THÊM VÀO GIỎ HÀNG</button>
-            <button type="button">MUA NGAY</button>
+            <a href="index.php?page=cart"><button type="button">MUA NGAY</button></a>
         </div>
     </div>
