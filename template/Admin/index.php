@@ -191,7 +191,7 @@ $totalCategories = $rowCategories['total_categories'];
                   <thead>
                     <tr>
                       <th>Mã đơn</th>
-                      <th>Khách hàng</th>
+                      <th>Mã Khách hàng</th>
                       <th>Ngày đặt</th>
                       <th>Tổng tiền</th>
                       <th>Trạng thái</th>
@@ -206,7 +206,7 @@ $totalCategories = $rowCategories['total_categories'];
                       while ($order = $resultOrdersList->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>#" . htmlspecialchars($order['order_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($order['customer_name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($order['customer_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
                         echo "<td>" . number_format($order['order_status'] ? $order['order_status'] : 0, 0, ',', '.') . "₫</td>";
                         echo "<td>";
@@ -318,34 +318,42 @@ $totalCategories = $rowCategories['total_categories'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryStaffList = "SELECT * FROM staffs WHERE is_deleted = 0 ORDER BY staff_id ASC";
+                    $queryStaffList = "SELECT s.staff_id, s.staff_f_name, s.staff_l_name, s.email, s.is_active, 
+                    GROUP_CONCAT(r.role_name SEPARATOR ', ') AS role_names
+                    FROM staffs s
+                    LEFT JOIN staff_role sr ON s.staff_id = sr.staff_id
+                    LEFT JOIN roles r ON sr.role_id = r.role_id
+                    WHERE s.is_deleted = 0
+                    GROUP BY s.staff_id
+                    ORDER BY s.staff_id ASC";
+                    
                     $resultStaffList = $conn->query($queryStaffList);
                     if ($resultStaffList && $resultStaffList->num_rows > 0) {
-                      while ($staff = $resultStaffList->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($staff['staff_id']) . "</td>";
-                        echo "<td>" . htmlspecialchars($staff['staff_f_name'] . ' ' . $staff['staff_l_name']) . "</td>";
-                        echo "<td>" . "Quản lý" . "</td>";  // Placeholder cho vai trò
-                        echo "<td>" . htmlspecialchars($staff['email']) . "</td>";
-                        echo "<td>";
-                        if ($staff['is_active'] == 1) {
-                          echo '<span class="badge bg-success">Hoạt động</span>';
-                        } else {
-                          echo '<span class="badge bg-secondary">Không hoạt động</span>';
+                        while ($staff = $resultStaffList->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($staff['staff_id']) . "</td>";
+                            echo "<td>" . htmlspecialchars($staff['staff_f_name'] . ' ' . $staff['staff_l_name']) . "</td>";
+                            echo "<td>" . htmlspecialchars($staff['role_names']) . "</td>";  // In ra danh sách chức vụ
+                            echo "<td>" . htmlspecialchars($staff['email']) . "</td>";
+                            echo "<td>";
+                            if ($staff['is_active'] == 1) {
+                                echo '<span class="badge bg-success">Hoạt động</span>';
+                            } else {
+                                echo '<span class="badge bg-secondary">Không hoạt động</span>';
+                            }
+                            echo "</td>";
+                            echo "<td>
+                                    <button class='btn btn-sm btn-warning'>
+                                      <span data-feather='edit'></span> Sửa
+                                    </button>
+                                    <button class='btn btn-sm btn-danger btn-delete' data-type='staff' data-id='" . $staff['staff_id'] . "'>
+                                      <span data-feather='trash-2'></span> Xóa
+                                    </button>
+                                  </td>";
+                            echo "</tr>";
                         }
-                        echo "</td>";
-                        echo "<td>
-                                <button class='btn btn-sm btn-warning'>
-                                  <span data-feather='edit'></span> Sửa
-                                </button>
-                                <button class='btn btn-sm btn-danger btn-delete' data-type='staff' data-id='" . $staff['staff_id'] . "'>
-                                  <span data-feather='trash-2'></span> Xóa
-                                </button>
-                              </td>";
-                        echo "</tr>";
-                      }
                     } else {
-                      echo "<tr><td colspan='6'>Không có nhân viên nào.</td></tr>";
+                        echo "<tr><td colspan='6'>Không có nhân viên nào.</td></tr>";
                     }
                     ?>
                   </tbody>

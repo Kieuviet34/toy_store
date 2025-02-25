@@ -60,7 +60,7 @@ create table stocks(
 );
 create table orders(
 	order_id int primary key,
-    customer_name nvarchar(255),
+    customer_id int,
     order_status tinyint,
     order_date date,
     required_date date,
@@ -68,7 +68,8 @@ create table orders(
     store_id int,
     staff_id int,
     foreign key (store_id) references stores(store_id),
-    foreign key(staff_id) references staffs(staff_id)
+    foreign key(staff_id) references staffs(staff_id),
+    foreign key(customer_id) references customer(customer_id);
 );
 create table order_items(
 	order_id int,
