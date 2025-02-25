@@ -5,7 +5,7 @@
         <div class="text-center mb-5 text-dark">Chào mừng quay lại!</div>
         <div class="card my-5">
 
-          <form class="card-body cardbody-color p-lg-5">
+          <form class="card-body cardbody-color p-lg-5" id="loginForm">
 
             <div class="text-center">
               <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
@@ -28,3 +28,32 @@
       </div>
     </div>
   </div>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit",function(e){
+          e.preventDefault();
+
+          const username = document.getElementById("Username").value;
+          const password = document.getElementById("Password").value;
+
+          const loginData = {username, password};
+
+          fetch("../src/login_handle.php",{
+            method:"POST",
+            header:{
+              "Content-Type":"application/json"
+            },
+            body: JSON.stringify(loginData)
+          })
+          .then(response => response.json())
+          .then(data=>{
+              if(data.success){
+                window.location.href="index.php?page=home";
+              }else{
+                alert("Đăng nhập thất bại " + data.error);
+              }
+          })
+          .catch(err=>{
+            alert(err);
+          })
+    })
+  </script>
