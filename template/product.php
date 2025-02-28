@@ -26,6 +26,27 @@ if ($result->num_rows == 0) {
 $product = $result->fetch_assoc();
 ?>
 
+    <style>
+        .product-container {
+            display: flex;
+            padding: 2rem;
+            gap: 2rem;
+        }
+        .product-left, .product-right {
+            flex: 1;
+        }
+        .product-left img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border: 1px solid #ccc;
+        }
+        .product-right h2 {
+            margin-top: 0;
+        }
+    </style>
+
+
     <div class="product-container">
         <div class="product-left">
             <?php 
