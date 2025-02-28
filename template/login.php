@@ -14,7 +14,7 @@
 
             <div class="mb-3">
               <input type="text" class="form-control" id="Username" aria-describedby="emailHelp"
-                placeholder="Tài khoản (Email)">
+                placeholder="Tài khoản (Username)">
             </div>
             <div class="mb-3">
               <input type="password" class="form-control" id="password" placeholder="Mặt khẩu">
@@ -33,13 +33,13 @@
           e.preventDefault();
 
           const username = document.getElementById("Username").value;
-          const password = document.getElementById("Password").value;
+          const password = document.getElementById("password").value;
 
           const loginData = {username, password};
 
-          fetch("../src/login_handle.php",{
+          fetch("src/login_handle.php",{
             method:"POST",
-            header:{
+            headers:{
               "Content-Type":"application/json"
             },
             body: JSON.stringify(loginData)
@@ -48,6 +48,8 @@
           .then(data=>{
               if(data.success){
                 window.location.href="index.php?page=home";
+              }else if (data.admin){
+                window.location.href="index.php?page=admin";
               }else{
                 alert("Đăng nhập thất bại " + data.error);
               }

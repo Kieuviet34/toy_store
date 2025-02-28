@@ -37,6 +37,7 @@ create table staffs(
     phone varchar(255),
     is_active tinyint,
     store_id int,
+    staff_password varchar(255),
     foreign key (store_id) references stores(store_id) 
 );
 create table products(
