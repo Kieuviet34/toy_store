@@ -1,7 +1,6 @@
 
 <?php
 include 'inc/database.php';
-include 'filter.php'; 
 // Xử lý phân trang
 $limit = 5;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;

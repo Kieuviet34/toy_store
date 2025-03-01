@@ -80,13 +80,26 @@
         </form>
 
         <div class="text-end">
-          <a href="index.php?page=login">
-          <button type="button" class="btn btn-light text-dark me-2">Đăng nhập</button>
-          </a>
-
-          <a href="index.php?page=register">
-          <button type="button" class="btn btn-primary">Đăng ký</button>
-          </a>
+          <?php if (isset($_SESSION['user'])): ?>
+            <!-- Nút Tài khoản với dropdown -->
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Tài khoản
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="index.php?page=info">Thông tin tài khoản</a></li>
+                <li><a class="dropdown-item" href="index.php?page=logout">Đăng xuất</a></li>
+              </ul>
+            </div>
+          <?php else: ?>
+            <!-- Nút Đăng nhập và Đăng ký -->
+            <a href="index.php?page=login">
+              <button type="button" class="btn btn-light text-dark me-2">Đăng nhập</button>
+            </a>
+            <a href="index.php?page=register">
+              <button type="button" class="btn btn-primary">Đăng ký</button>
+            </a>
+          <?php endif; ?>
         </div>
       </div>
     </div>

@@ -1,13 +1,19 @@
 <?php
 // index.php
+session_start();
 $base_dir = __DIR__;
 
 // Xử lý routing
-$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout'];
+$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout', 'logout', 'info'];
 $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages) 
         ? $_GET['page'] 
         : 'home';
-
+if ($page === 'logout') {
+    session_unset();
+    session_destroy();
+    header("Location: index.php?page=home");
+    exit();
+}
 // Include header
 if($page  != 'admin'){
     include 'header.php';
@@ -50,6 +56,9 @@ switch ($page) {
         break;
     case 'admin':
         include 'template/Admin/index.php';
+        break;
+    case 'info':
+        include 'template/info.php';
         break;
     default:
         include 'template/404.php';

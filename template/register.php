@@ -135,7 +135,7 @@
     .then(data => {
       if(data.success){
         alert("Tạo tài khoản thành công");
-        window.location.href = "index.php?page=home";
+        window.location.href = "index.php?page=login";
       } else {
         alert("Tạo tài khoản thất bại: " + data.error);
       }
