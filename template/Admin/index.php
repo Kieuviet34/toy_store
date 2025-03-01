@@ -8,7 +8,7 @@ $resultOrders = $conn->query($queryTotalOrders);
 $rowOrders = $resultOrders->fetch_assoc();
 $totalOrders = $rowOrders['total_orders'];
 
-$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers"; // Giả sử customers không dùng soft delete
+$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers where is_deleted = 0";
 $resultCustomers = $conn->query($queryTotalCustomers);
 $rowCustomers = $resultCustomers->fetch_assoc();
 $totalCustomers = $rowCustomers['total_customers'];
@@ -262,7 +262,7 @@ $totalCategories = $rowCategories['total_categories'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryCustomersList = "SELECT * FROM customers ORDER BY customer_id ASC";
+                    $queryCustomersList = "SELECT * FROM customers where is_deleted = 0 ORDER BY customer_id ASC";
                     $resultCustomersList = $conn->query($queryCustomersList);
                     if ($resultCustomersList && $resultCustomersList->num_rows > 0) {
                       while ($customer = $resultCustomersList->fetch_assoc()) {

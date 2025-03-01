@@ -1,11 +1,11 @@
 create database toy_store;
 use toy_store;
 create table categories(
-	cat_id int primary key not null,
+	cat_id int primary key not null auto_increment,
     cat_name nvarchar(255)
 );
 create table brands(
-	brand_id int primary key,
+	brand_id int primary key auto_increment,
     brand_name nvarchar(255)
 );
 create table stores(
@@ -18,7 +18,7 @@ create table stores(
     zip_code varchar(6)
 );
 create table customers(
-	customer_id int primary key,
+	customer_id int primary key auto_increment,
     f_name nvarchar(255),
     l_name nvarchar(255),
     phone varchar(255),
@@ -26,28 +26,32 @@ create table customers(
     street varchar(255),
     city varchar(255),
     zip_code varchar(20),
-    customer_password varchar(255)
+    is_deleted tinyint default 0,
+    customer_password varchar(255),
+    customer_username varchar(255)
 );
 create table staffs(
-	staff_id int primary key,
+	staff_id int primary key auto_increment,
     staff_f_name nvarchar(255),
     staff_l_name nvarchar(255),
     staff_img blob,
     email nvarchar(255),
     phone varchar(255),
     is_active tinyint,
+    is_deleted tinyint default 0,
     store_id int,
     staff_password varchar(255),
     foreign key (store_id) references stores(store_id) 
 );
 create table products(
-	prod_id int primary key,
+	prod_id int primary key auto_increment,
     prod_name nvarchar(255),
     prod_img blob,
     brand_id int,
     cat_id int ,
     model_year smallint,
     list_price decimal(10,2),
+    is_deleted tinyint default 0,
     foreign key (brand_id) references brands(brand_id),
 	foreign key (cat_id) references categories(cat_id)
 );
@@ -68,9 +72,10 @@ create table orders(
     shipped_date date,
     store_id int,
     staff_id int,
+    is_deleted tinyint default 0,
     foreign key (store_id) references stores(store_id),
     foreign key(staff_id) references staffs(staff_id),
-    foreign key(customer_id) references customer(customer_id);
+    foreign key(customer_id) references customers(customer_id)
 );
 create table order_items(
 	order_id int,
@@ -93,9 +98,17 @@ create table staff_role(
     foreign key (staff_id) references staffs(staff_id),
     foreign key(role_id) references roles(role_id)
 );
-ALTER TABLE products ADD COLUMN is_deleted TINYINT DEFAULT 0;
+create table transactions(
+	transaction_id int primary key auto_increment,
+    order_id INT,
+    customer_id INT,
+    stripe_charge_id VARCHAR(255),
+    amount DECIMAL(10,2),
+    currency VARCHAR(3),
+    status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
 
-use toy_store;
-alter table orders add column is_deleted tinyint default 0;
-alter table staffs add column is_deleted tinyint default 0;
 

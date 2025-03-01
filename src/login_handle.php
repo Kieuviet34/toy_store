@@ -23,7 +23,7 @@
     }
 
     // Nếu không phải admin, tiến hành đăng nhập khách hàng
-    $stmt = $conn->prepare("SELECT customer_id, f_name, l_name, email, customer_password FROM customers WHERE email = ?");
+    $stmt = $conn->prepare("SELECT customer_id, f_name, l_name, email, customer_password FROM customers WHERE customer_username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();

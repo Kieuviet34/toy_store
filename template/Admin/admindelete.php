@@ -14,7 +14,7 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
             $stmt = $conn->prepare("UPDATE orders SET is_deleted = 1 WHERE order_id = ?");
             break;
         case 'customer':
-            $stmt = $conn->prepare("DELETE FROM customers WHERE customer_id = ?");
+            $stmt = $conn->prepare("UPDATE customers SET is_deleted = 1 WHERE customer_id = ?");
             break;
         case 'staff':
             $stmt = $conn->prepare("UPDATE staffs SET is_deleted = 1 WHERE staff_id = ?");

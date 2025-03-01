@@ -48,6 +48,7 @@
           .then(data=>{
               if(data.success){
                 window.location.href="index.php?page=home";
+                alert("Đăng nhập thành công");
               }else if (data.admin){
                 window.location.href="index.php?page=admin";
               }else{
