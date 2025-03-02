@@ -1,7 +1,92 @@
 <?php
 include('inc/pagination.php');
 
-echo '<div class="total-products">' . number_format($totalProducts, 0, ',', '.') . ' sản phẩm</div>';
+// Lấy các giá trị lọc và sắp xếp từ GET (nếu có)
+$sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prod_name'; 
+$sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC'; 
+$filter_brand = isset($_GET['brand']) ? $_GET['brand'] : '';
+$filter_category = isset($_GET['category']) ? $_GET['category'] : '';
+$filter_price_min = isset($_GET['price_min']) && $_GET['price_min'] !== '' ? (float)$_GET['price_min'] : '';
+$filter_price_max = isset($_GET['price_max']) && $_GET['price_max'] !== '' ? (float)$_GET['price_max'] : '';
+
+echo '<div class="filter-container">';
+echo '  <div class="dropdown">';
+echo '      <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">';
+echo '          Bộ lọc';
+echo '      </button>';
+echo '      <div class="dropdown-menu p-3" aria-labelledby="filterDropdown" style="min-width: 300px;">';
+echo '          <form method="GET" action="index.php">';
+echo '              <input type="hidden" name="page" value="shop">';
+echo '              <input type="hidden" name="p" value="' . $currentPage . '">'; // Giữ trang hiện tại
+
+// Lọc theo hãng
+echo '              <div class="mb-3">';
+echo '                  <label for="filterBrand" class="form-label">Hãng</label>';
+echo '                  <select class="form-select" id="filterBrand" name="brand">';
+echo '                      <option value="">Tất cả</option>';
+$query = "SELECT brand_name FROM brands";
+$result_brands = $conn->query($query);
+while ($brand = $result_brands->fetch_assoc()) {
+    $selected = $filter_brand === $brand['brand_name'] ? 'selected' : '';
+    echo '                      <option value="' . htmlspecialchars($brand['brand_name']) . '" ' . $selected . '>' . htmlspecialchars($brand['brand_name']) . '</option>';
+}
+echo '                  </select>';
+echo '              </div>';
+
+// Lọc theo danh mục
+echo '              <div class="mb-3">';
+echo '                  <label for="filterCategory" class="form-label">Danh mục</label>';
+echo '                  <select class="form-select" id="filterCategory" name="category">';
+echo '                      <option value="">Tất cả</option>';
+$query = "SELECT cat_name FROM categories";
+$result_categories = $conn->query($query);
+while ($cat = $result_categories->fetch_assoc()) {
+    $selected = $filter_category === $cat['cat_name'] ? 'selected' : '';
+    echo '                      <option value="' . htmlspecialchars($cat['cat_name']) . '" ' . $selected . '>' . htmlspecialchars($cat['cat_name']) . '</option>';
+}
+echo '                  </select>';
+echo '              </div>';
+
+// Lọc theo giá
+echo '              <div class="mb-3">';
+echo '                  <label class="form-label">Khoảng giá</label>';
+echo '                  <div class="input-group">';
+echo '                      <input type="number" class="form-control" name="price_min" placeholder="Tối thiểu" value="' . ($filter_price_min !== '' ? $filter_price_min : '') . '" min="0">';
+echo '                      <span class="input-group-text">-</span>';
+echo '                      <input type="number" class="form-control" name="price_max" placeholder="Tối đa" value="' . ($filter_price_max !== '' ? $filter_price_max : '') . '" min="0">';
+echo '                  </div>';
+echo '              </div>';
+
+// Sắp xếp
+echo '              <div class="mb-3">';
+echo '                  <label for="sortBy" class="form-label">Sắp xếp theo</label>';
+echo '                  <select class="form-select" id="sortBy" name="sort_by">';
+$sort_options = [
+    'prod_name' => 'Tên sản phẩm',
+    'list_price' => 'Giá',
+    'brand_name' => 'Hãng',
+    'cat_name' => 'Danh mục'
+];
+foreach ($sort_options as $value => $label) {
+    $selected = $sort_by === $value ? 'selected' : '';
+    echo '                      <option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
+}
+echo '                  </select>';
+echo '              </div>';
+echo '              <div class="mb-3">';
+echo '                  <label for="sortOrder" class="form-label">Thứ tự</label>';
+echo '                  <select class="form-select" id="sortOrder" name="sort_order">';
+echo '                      <option value="ASC" ' . ($sort_order === 'ASC' ? 'selected' : '') . '>Tăng dần</option>';
+echo '                      <option value="DESC" ' . ($sort_order === 'DESC' ? 'selected' : '') . '>Giảm dần</option>';
+echo '                  </select>';
+echo '              </div>';
+
+// Nút áp dụng
+echo '              <button type="submit" class="btn btn-primary w-100">Áp dụng</button>';
+echo '          </form>';
+echo '      </div>';
+echo '  </div>';
+echo '</div>';
 
 echo '<div class="product-grid">';
 if ($result->num_rows > 0) {
@@ -28,6 +113,7 @@ if ($result->num_rows > 0) {
     echo '<div class="no-results">Không tìm thấy sản phẩm nào</div>';
 }
 echo '</div>';
+
 echo "<style>
     /* Grid container cho sản phẩm */
 .product-grid {
@@ -35,7 +121,7 @@ echo "<style>
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
-    margin-top: 100px;
+    margin-top: 20px;
 }
 
 .product-link {
@@ -51,7 +137,7 @@ echo "<style>
     background: #fff;
     display: flex;
     flex-direction: column;
-    height: 350px; 
+    height: 350px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-sizing: border-box;
 }
@@ -63,7 +149,7 @@ echo "<style>
 
 .product-image {
     width: 100%;
-    height: 200px; 
+    height: 200px;
     overflow: hidden;
     border-radius: 4px;
     margin-bottom: 10px;
@@ -88,9 +174,7 @@ echo "<style>
     color: #333;
 }
 
-.brand-category {
-    display: flex;
-    justify-content: space-between;
+.brand, .category {
     font-size: 0.9rem;
     color: #666;
     margin-bottom: 8px;
@@ -103,12 +187,11 @@ echo "<style>
     margin-top: 10px;
 }
 
-/* Tổng số sản phẩm */
-.total-products {
-    font-size: 1.5rem;
+/* Bộ lọc */
+.filter-container {
     margin: 20px 0;
-    color: #333;
-    text-align: center;
+    text-align: left;
+    padding: 30px;
 }
 
 /* Phân trang */
@@ -135,7 +218,6 @@ echo "<style>
     border-radius: 4px;
     display: inline-block;
 }
-
 </style>";
 
 echo "<div class='pagination'>$links</div>";

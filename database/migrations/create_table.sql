@@ -9,7 +9,7 @@ create table brands(
     brand_name nvarchar(255)
 );
 create table stores(
-	store_id int primary key,
+	store_id int primary key auto_increment,
     store_name nvarchar(255),
     phone varchar(15),
     email varchar(30),
@@ -34,7 +34,7 @@ create table staffs(
 	staff_id int primary key auto_increment,
     staff_f_name nvarchar(255),
     staff_l_name nvarchar(255),
-    staff_img blob,
+    staff_img longblob,
     email nvarchar(255),
     phone varchar(255),
     is_active tinyint,
@@ -46,7 +46,7 @@ create table staffs(
 create table products(
 	prod_id int primary key auto_increment,
     prod_name nvarchar(255),
-    prod_img blob,
+    prod_img longblob,
     brand_id int,
     cat_id int ,
     model_year smallint,
@@ -64,7 +64,7 @@ create table stocks(
     primary key(store_id, prod_id)
 );
 create table orders(
-	order_id int primary key,
+	order_id int primary key auto_increment,
     customer_id int,
     order_status tinyint,
     order_date date,
@@ -79,7 +79,7 @@ create table orders(
 );
 create table order_items(
 	order_id int,
-    item_id int primary key,
+    item_id int primary key auto_increment,
     prod_id int,
     quantity int,
     list_price decimal(10,2),

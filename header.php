@@ -96,6 +96,7 @@
             <a href="index.php?page=login">
               <button type="button" class="btn btn-light text-dark me-2">Đăng nhập</button>
             </a>
+            
             <a href="index.php?page=register">
               <button type="button" class="btn btn-primary">Đăng ký</button>
             </a>

@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
+
     <style>
         .checkout-container {
             background: white;
@@ -121,8 +116,6 @@
             document.getElementById("qrPopup").style.display = "none";
         }
     </script>
-</head>
-<body>
     <div class="checkout-container">
         <h2>Thanh toán</h2>
         <form onsubmit="return validateForm()">
@@ -150,5 +143,3 @@
         <p>Vui lòng ghi nội dung chuyển khoản là họ tên + số điện thoại người nhận</p>
         <button onclick="closeQR()">Đóng</button>
     </div>
-</body>
-</html>
