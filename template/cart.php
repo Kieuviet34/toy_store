@@ -36,6 +36,7 @@ $stmt->execute();
 $items = $stmt->get_result();
 
 $total = 0;
+$item_count = $items->num_rows; // Đếm số sản phẩm trong giỏ
 ?>
 
 <div class="container mt-5">
@@ -72,7 +73,7 @@ $total = 0;
     
     <div class="text-right mt-4">
         <h4>Tổng Cộng: <span id="cart-total"><?php echo number_format($total, 0, ',', '.'); ?>₫</span></h4>
-        <a href="index.php?page=checkout" class="btn btn-success">Tiến Hành Thanh Toán</a>
+        <button class="btn btn-success" onclick="proceedToCheckout(<?php echo $item_count; ?>)">Tiến Hành Thanh Toán</button>
     </div>
 </div>
 
@@ -98,6 +99,14 @@ function removeFromCart(itemId) {
             console.error('Error:', error);
             alert('Đã xảy ra lỗi khi xóa sản phẩm.');
         });
+    }
+}
+
+function proceedToCheckout(itemCount) {
+    if (itemCount > 0) {
+        window.location.href = 'index.php?page=checkout';
+    } else {
+        alert('Giỏ hàng của bạn đang trống, vui lòng thêm sản phẩm.');
     }
 }
 </script>

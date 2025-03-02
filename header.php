@@ -26,6 +26,28 @@
     <link rel="stylesheet" href="OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css">
     <script src="jquery.min.js"></script>
     <script src="OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
+    <style>
+        .search-suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        .search-suggestions a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+        }
+        .search-suggestions a:hover {
+            background: #f5f5f5;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -33,18 +55,16 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="index.php?page=home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-          <img src="template/img/allainstore.jpg" class="img-fluid  img-thumbnail rounded-circle "
-          width="50px"> Allain Store
+            <img src="template/img/allainstore.jpg" class="img-fluid img-thumbnail rounded-circle" width="50px"> Allain Store
           </a>
 
           <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
             <li>
               <a href="index.php?page=home" class="nav-link text-secondary">
-                <i class="bi bi-house d-block mx-auto mb-1" width="24" height="24" ></i>
+                <i class="bi bi-house d-block mx-auto mb-1" width="24" height="24"></i>
                 Home
               </a>
             </li>
-            
             <li>
               <a href="index.php?page=cart" class="nav-link text-white">
                 <i class="bi bi-cart d-block mx-auto mb-1" width="24" height="24"></i>
@@ -53,7 +73,7 @@
             </li>
             <li>
               <a href="index.php?page=shop" class="nav-link text-white">
-                <i class="bi bi-shop  d-block mx-auto mb-1" width="24" height="24"></i>
+                <i class="bi bi-shop d-block mx-auto mb-1" width="24" height="24"></i>
                 Products
               </a>
             </li>
@@ -74,9 +94,10 @@
       </div>
     </div>
     <div class="px-3 py-2 border-bottom mb-3">
-      <div class="container d-flex flex-wrap justify-content-center">
-        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Tìm kiếm..." aria-label="Search">
+      <div class="container d-flex flex-wrap justify-content-center position-relative">
+        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto position-relative">
+          <input type="search" class="form-control" id="searchInput" placeholder="Tìm kiếm..." aria-label="Search">
+          <div id="searchSuggestions" class="search-suggestions"></div>
         </form>
 
         <div class="text-end">
@@ -96,7 +117,6 @@
             <a href="index.php?page=login">
               <button type="button" class="btn btn-light text-dark me-2">Đăng nhập</button>
             </a>
-            
             <a href="index.php?page=register">
               <button type="button" class="btn btn-primary">Đăng ký</button>
             </a>
@@ -105,4 +125,53 @@
       </div>
     </div>
   </header>
-    <div class="main-content">
+  <div class="main-content">
+
+<script>
+document.getElementById('searchInput').addEventListener('input', function() {
+    const query = this.value.trim();
+    const suggestionsDiv = document.getElementById('searchSuggestions');
+
+    if (query.length < 1) {
+        suggestionsDiv.style.display = 'none';
+        return;
+    }
+
+    fetch('src/search.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: query })
+    })
+    .then(response => response.json())
+    .then(data => {
+        suggestionsDiv.innerHTML = '';
+        if (data.length > 0) {
+            data.forEach(item => {
+                const link = document.createElement('a');
+                link.href = 'index.php?page=product&id=' + item.prod_id;
+                link.textContent = `${item.prod_name} (${item.brand_name})`;
+                suggestionsDiv.appendChild(link);
+            });
+            suggestionsDiv.style.display = 'block';
+        } else {
+            suggestionsDiv.style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        suggestionsDiv.style.display = 'none';
+    });
+});
+
+document.addEventListener('click', function(event) {
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsDiv = document.getElementById('searchSuggestions');
+    if (!searchInput.contains(event.target) && !suggestionsDiv.contains(event.target)) {
+        suggestionsDiv.style.display = 'none';
+    }
+});
+</script>
+</body>
+</html>
