@@ -52,7 +52,7 @@
               }else if (data.admin){
                 window.location.href="index.php?page=admin";
               }else{
-                alert("Đăng nhập thất bại " + data.error);
+                alert(data.error);
               }
           })
           .catch(err=>{

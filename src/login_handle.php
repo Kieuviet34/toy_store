@@ -28,7 +28,7 @@ if ($username === "admin" && $password === "12345") {
 }
 
 // Nếu không phải admin, tiến hành đăng nhập khách hàng
-$stmt = $conn->prepare("SELECT customer_id, f_name, l_name, email, customer_password FROM customers WHERE customer_username = ?");
+$stmt = $conn->prepare("SELECT customer_id, f_name, l_name, email, phone, street, customer_password FROM customers WHERE customer_username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -50,7 +50,9 @@ if (password_verify($password, $customer['customer_password'])) {
         'username'    => $username,
         'f_name'      => $customer['f_name'],
         'l_name'      => $customer['l_name'],
-        'email'       => $customer['email']
+        'email'       => $customer['email'],
+        'phone'      => $customer['phone'], 
+        'street'      => $customer['street']
     ];
     echo json_encode([
         "success" => true,

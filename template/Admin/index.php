@@ -1,14 +1,37 @@
 <?php
-// admin.php
 include 'inc/database.php';
 
-// Lấy số liệu thống kê cho Dashboard (chỉ lấy những dòng chưa bị xóa nếu có)
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
+    header('Location: index.php?page=login');
+    exit;
+}
+
+// Xử lý tham số action
+$action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
+switch ($action) {
+    case 'update_product':
+        include 'src/update_product.php';
+        exit;
+    case 'update_order':
+        include 'src/update_order.php';
+        exit;
+    case 'update_customer':
+        include 'src/update_customer.php';
+        exit;
+    case 'update_staff':
+        include 'src/update_staff.php';
+        exit;
+    case 'update_category':
+        include 'src/update_category.php';
+        exit;
+}
+
 $queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders WHERE is_deleted = 0";
 $resultOrders = $conn->query($queryTotalOrders);
 $rowOrders = $resultOrders->fetch_assoc();
 $totalOrders = $rowOrders['total_orders'];
 
-$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers where is_deleted = 0";
+$queryTotalCustomers = "SELECT COUNT(*) as total_customers FROM customers WHERE is_deleted = 0";
 $resultCustomers = $conn->query($queryTotalCustomers);
 $rowCustomers = $resultCustomers->fetch_assoc();
 $totalCustomers = $rowCustomers['total_customers'];
@@ -105,7 +128,6 @@ $totalCategories = $rowCategories['total_categories'];
                   Sản phẩm
                 </a>
               </li>
-              <!-- Thêm mục Categories -->
               <li class="nav-item">
                 <a class="nav-link" href="#categories" data-bs-toggle="tab">
                   <span data-feather="list"></span>
@@ -125,7 +147,6 @@ $totalCategories = $rowCategories['total_categories'];
                 <h1 class="h2">Tổng quan</h1>
               </div>
               <div class="row">
-                <!-- Thống kê đơn hàng -->
                 <div class="col-md-3">
                   <div class="card text-white bg-primary mb-3">
                     <div class="card-body">
@@ -134,7 +155,6 @@ $totalCategories = $rowCategories['total_categories'];
                     </div>
                   </div>
                 </div>
-                <!-- Thống kê khách hàng -->
                 <div class="col-md-3">
                   <div class="card text-white bg-success mb-3">
                     <div class="card-body">
@@ -143,7 +163,6 @@ $totalCategories = $rowCategories['total_categories'];
                     </div>
                   </div>
                 </div>
-                <!-- Thống kê nhân viên -->
                 <div class="col-md-3">
                   <div class="card text-white bg-warning mb-3">
                     <div class="card-body">
@@ -152,7 +171,6 @@ $totalCategories = $rowCategories['total_categories'];
                     </div>
                   </div>
                 </div>
-                <!-- Thống kê sản phẩm -->
                 <div class="col-md-3">
                   <div class="card text-white bg-danger mb-3">
                     <div class="card-body">
@@ -161,7 +179,6 @@ $totalCategories = $rowCategories['total_categories'];
                     </div>
                   </div>
                 </div>
-                <!-- Thống kê danh mục -->
                 <div class="col-md-3">
                   <div class="card text-white bg-info mb-3">
                     <div class="card-body">
@@ -200,7 +217,20 @@ $totalCategories = $rowCategories['total_categories'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryOrdersList = "SELECT * FROM orders WHERE is_deleted = 0 ORDER BY order_date ASC";
+                    // Truy vấn mới: Join với order_items để tính tổng tiền
+                    $queryOrdersList = "
+                      SELECT 
+                        o.order_id, 
+                        o.customer_id, 
+                        o.order_date, 
+                        o.order_status, 
+                        COALESCE(SUM(oi.list_price * oi.quantity * (1 - oi.discount)), 0) AS total_amount
+                      FROM orders o
+                      LEFT JOIN order_items oi ON o.order_id = oi.order_id
+                      WHERE o.is_deleted = 0
+                      GROUP BY o.order_id, o.customer_id, o.order_date, o.order_status
+                      ORDER BY o.order_date ASC";
+                    
                     $resultOrdersList = $conn->query($queryOrdersList);
                     if ($resultOrdersList && $resultOrdersList->num_rows > 0) {
                       while ($order = $resultOrdersList->fetch_assoc()) {
@@ -208,18 +238,19 @@ $totalCategories = $rowCategories['total_categories'];
                         echo "<td>#" . htmlspecialchars($order['order_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($order['customer_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
-                        echo "<td>" . number_format($order['order_status'] ? $order['order_status'] : 0, 0, ',', '.') . "₫</td>";
+                        // Hiển thị tổng tiền thực tế từ order_items
+                        echo "<td>" . number_format($order['total_amount'], 0, ',', '.') . "₫</td>";
                         echo "<td>";
                         if ($order['order_status'] == 1) {
-                          echo '<span class="badge bg-success">Đã giao</span>';
+                          echo '<span class="badge bg-warning">Đang chờ xử lý</span>';
                         } else {
-                          echo '<span class="badge bg-warning">Chưa giao</span>';
+                          echo '<span class="badge bg-success">Đã giao</span>';
                         }
                         echo "</td>";
                         echo "<td>
-                                <button class='btn btn-sm btn-warning' data-bs-toggle='modal' data-bs-target='#editOrderModal'>
+                                <a href='index.php?page=admin&action=update_order&id=" . $order['order_id'] . "' class='btn btn-sm btn-warning'>
                                   <span data-feather='edit'></span> Sửa
-                                </button>
+                                </a>
                                 <button class='btn btn-sm btn-danger btn-delete' data-type='order' data-id='" . $order['order_id'] . "'>
                                   <span data-feather='trash-2'></span> Xóa
                                 </button>
@@ -262,7 +293,7 @@ $totalCategories = $rowCategories['total_categories'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryCustomersList = "SELECT * FROM customers where is_deleted = 0 ORDER BY customer_id ASC";
+                    $queryCustomersList = "SELECT * FROM customers WHERE is_deleted = 0 ORDER BY customer_id ASC";
                     $resultCustomersList = $conn->query($queryCustomersList);
                     if ($resultCustomersList && $resultCustomersList->num_rows > 0) {
                       while ($customer = $resultCustomersList->fetch_assoc()) {
@@ -273,9 +304,9 @@ $totalCategories = $rowCategories['total_categories'];
                         echo "<td>" . htmlspecialchars($customer['phone']) . "</td>";
                         echo "<td>" . htmlspecialchars($customer['city']) . "</td>";
                         echo "<td>
-                                <button class='btn btn-sm btn-warning'>
+                                <a href='index.php?page=admin&action=update_customer&id=" . $customer['customer_id'] . "' class='btn btn-sm btn-warning'>
                                   <span data-feather='edit'></span> Sửa
-                                </button>
+                                </a>
                                 <button class='btn btn-sm btn-danger btn-delete' data-type='customer' data-id='" . $customer['customer_id'] . "'>
                                   <span data-feather='trash-2'></span> Xóa
                                 </button>
@@ -319,13 +350,13 @@ $totalCategories = $rowCategories['total_categories'];
                   <tbody>
                     <?php
                     $queryStaffList = "SELECT s.staff_id, s.staff_f_name, s.staff_l_name, s.email, s.is_active, 
-                    GROUP_CONCAT(r.role_name SEPARATOR ', ') AS role_names
-                    FROM staffs s
-                    LEFT JOIN staff_role sr ON s.staff_id = sr.staff_id
-                    LEFT JOIN roles r ON sr.role_id = r.role_id
-                    WHERE s.is_deleted = 0
-                    GROUP BY s.staff_id
-                    ORDER BY s.staff_id ASC";
+                                      GROUP_CONCAT(r.role_name SEPARATOR ', ') AS role_names
+                                      FROM staffs s
+                                      LEFT JOIN staff_role sr ON s.staff_id = sr.staff_id
+                                      LEFT JOIN roles r ON sr.role_id = r.role_id
+                                      WHERE s.is_deleted = 0
+                                      GROUP BY s.staff_id
+                                      ORDER BY s.staff_id ASC";
                     
                     $resultStaffList = $conn->query($queryStaffList);
                     if ($resultStaffList && $resultStaffList->num_rows > 0) {
@@ -333,7 +364,7 @@ $totalCategories = $rowCategories['total_categories'];
                             echo "<tr>";
                             echo "<td>" . htmlspecialchars($staff['staff_id']) . "</td>";
                             echo "<td>" . htmlspecialchars($staff['staff_f_name'] . ' ' . $staff['staff_l_name']) . "</td>";
-                            echo "<td>" . htmlspecialchars($staff['role_names']) . "</td>";  // In ra danh sách chức vụ
+                            echo "<td>" . htmlspecialchars($staff['role_names']) . "</td>";
                             echo "<td>" . htmlspecialchars($staff['email']) . "</td>";
                             echo "<td>";
                             if ($staff['is_active'] == 1) {
@@ -343,9 +374,9 @@ $totalCategories = $rowCategories['total_categories'];
                             }
                             echo "</td>";
                             echo "<td>
-                                    <button class='btn btn-sm btn-warning'>
+                                    <a href='index.php?page=admin&action=update_staff&id=" . $staff['staff_id'] . "' class='btn btn-sm btn-warning'>
                                       <span data-feather='edit'></span> Sửa
-                                    </button>
+                                    </a>
                                     <button class='btn btn-sm btn-danger btn-delete' data-type='staff' data-id='" . $staff['staff_id'] . "'>
                                       <span data-feather='trash-2'></span> Xóa
                                     </button>
@@ -388,20 +419,25 @@ $totalCategories = $rowCategories['total_categories'];
                   </thead>
                   <tbody>
                     <?php
-                    $queryProductsList = "SELECT * FROM products WHERE is_deleted = 0 ORDER BY prod_id ASC";
+                    $queryProductsList = "
+                      SELECT p.*, b.brand_name 
+                      FROM products p 
+                      JOIN brands b ON p.brand_id = b.brand_id 
+                      WHERE p.is_deleted = 0 
+                      ORDER BY p.prod_id ASC";
                     $resultProductsList = $conn->query($queryProductsList);
                     if ($resultProductsList && $resultProductsList->num_rows > 0) {
                       while ($product = $resultProductsList->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($product['prod_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($product['prod_name']) . "</td>";
-                        echo "<td>" . "Placeholder" . "</td>"; // Nếu cần join bảng brands để lấy tên hãng
+                        echo "<td>" . htmlspecialchars($product['brand_name']) . "</td>";
                         echo "<td>" . htmlspecialchars($product['model_year']) . "</td>";
                         echo "<td>" . number_format($product['list_price'], 0, ',', '.') . "₫</td>";
                         echo "<td>
-                                <button class='btn btn-sm btn-warning'>
+                                <a href='index.php?page=admin&action=update_product&prod_id=" . $product['prod_id'] . "' class='btn btn-sm btn-warning'>
                                   <span data-feather='edit'></span> Sửa
-                                </button>
+                                </a>
                                 <button class='btn btn-sm btn-danger btn-delete' data-type='product' data-id='" . $product['prod_id'] . "'>
                                   <span data-feather='trash-2'></span> Xóa
                                 </button>
@@ -449,9 +485,9 @@ $totalCategories = $rowCategories['total_categories'];
                         echo "<td>" . htmlspecialchars($category['cat_id']) . "</td>";
                         echo "<td>" . htmlspecialchars($category['cat_name']) . "</td>";
                         echo "<td>
-                                <button class='btn btn-sm btn-warning'>
+                                <a href='index.php?page=admin&action=update_category&id=" . $category['cat_id'] . "' class='btn btn-sm btn-warning'>
                                   <span data-feather='edit'></span> Sửa
-                                </button>
+                                </a>
                                 <button class='btn btn-sm btn-danger btn-delete' data-type='category' data-id='" . $category['cat_id'] . "'>
                                   <span data-feather='trash-2'></span> Xóa
                                 </button>
@@ -486,15 +522,12 @@ $totalCategories = $rowCategories['total_categories'];
                 <label for="orderCustomer" class="form-label">Tên khách hàng</label>
                 <input type="text" class="form-control" id="orderCustomer">
               </div>
-              <!-- Các trường khác nếu cần -->
               <button type="submit" class="btn btn-primary">Lưu</button>
             </form>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Các modal khác (Thêm khách hàng, Thêm nhân viên, Thêm sản phẩm, Thêm danh mục) cũng có thể được thêm tương tự -->
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

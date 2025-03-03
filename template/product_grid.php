@@ -1,6 +1,6 @@
-
 <?php
 include 'inc/database.php';
+
 // Xử lý phân trang
 $limit = 5;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -15,7 +15,6 @@ $query = "SELECT p.prod_id, p.prod_img, p.prod_name, p.list_price,
           JOIN categories c ON p.cat_id = c.cat_id
           WHERE p.is_deleted = 0
           LIMIT ? OFFSET ?";
-
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $limit, $startAt);
 $stmt->execute();
@@ -25,28 +24,29 @@ $result = $stmt->get_result();
 echo '<div class="product-slider-container">';
 echo '<div class="slider-nav prev" onclick="loadPrevious()"><i class="bi bi-chevron-left"></i></div>';
 echo '<div class="product-slider-wrapper">';
-echo '<div class="product-slider" data-current-page="'.$currentPage.'">';
+echo '<div class="product-slider" data-current-page="' . $currentPage . '">';
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
+        $img_src = $row['prod_img'] ? 'data:image/jpeg;base64,' . base64_encode($row['prod_img']) : 'path/to/placeholder.jpg';
         echo '
         <a href="index.php?page=product&id=' . $row['prod_id'] . '" class="product-link" style="text-decoration: none; color: inherit;">
-        <div class="product-card">
-            <div class="product-image">
-                <img src="'.$row['prod_img'].'" alt="'.$row['prod_name'].'">
-            </div>
-            <div class="product-details">
-                <h3 class="product-title">'.htmlspecialchars($row['prod_name']).'</h3>
-                <div class="brand-category">
-                    <span class="brand">'.htmlspecialchars($row['brand_name']).'</span>
-                    <span class="category">'.htmlspecialchars($row['cat_name']).'</span>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="' . $img_src . '" alt="' . htmlspecialchars($row['prod_name']) . '">
                 </div>
-                <div class="price-container">
-                    <span class="original-price">'.number_format($row['list_price'] * 1.5, 0, ',', '.').'₫</span>
-                    <span class="discount-price">'.number_format($row['list_price'], 0, ',', '.').'₫</span>
+                <div class="product-details">
+                    <h3 class="product-title">' . htmlspecialchars($row['prod_name']) . '</h3>
+                    <div class="brand-category">
+                        <span class="brand">' . htmlspecialchars($row['brand_name']) . '</span>
+                        <span class="category">' . htmlspecialchars($row['cat_name']) . '</span>
+                    </div>
+                    <div class="price-container">
+                        <span class="original-price">' . number_format($row['list_price'] * 1.5, 0, ',', '.') . '₫</span>
+                        <span class="discount-price">' . number_format($row['list_price'], 0, ',', '.') . '₫</span>
+                    </div>
                 </div>
             </div>
-        </div>
         </a>';
     }
 } else {
@@ -61,27 +61,24 @@ echo "<style>
 .product-slider-container {
     position: relative;
     margin: 2rem 0;
-    padding: 0 40px;
+    padding: 0px 29px;
     display: flex;
+    align-items: center;
 }
 
 .product-slider-wrapper {
     overflow: hidden;
+    flex-grow: 1;
 }
 
 .product-slider {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     transition: transform 0.5s ease-in-out;
     height: 280px;
     padding-top: 10px;
 }
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem 0;
-}
+
 .product-link {
     display: block;
     flex: 0 0 235px;
@@ -89,7 +86,7 @@ echo "<style>
 }
 
 .product-card {
-    width: 100%;
+    width: 235px;
     height: 250px;
     display: flex;
     flex-direction: column;
@@ -107,69 +104,74 @@ echo "<style>
 
 .product-image {
     width: 100%;
-    height: 200px; 
+    height: 150px; 
     overflow: hidden;
+    background: #f8f9fa;
 }
 
 .product-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    display: block;
 }
 
 .product-details {
     flex-grow: 1;
-    padding: 1rem;
+    padding: 0.75rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .product-title {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
     color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
 .brand-category {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #666;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .price-container {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .original-price {
     text-decoration: line-through;
     color: #999;
+    font-size: 0.9rem;
 }
 
 .discount-price {
     color: #e74c3c;
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 
-.load-more-container {
-    text-align: center;
-    margin: 3rem 0;
-}
-
-.load-more-btn {
-    padding: 1rem 3rem;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 25px;
+.slider-nav {
     cursor: pointer;
-    transition: background 0.3s ease;
+    padding: 10px;
+    font-size: 1.5rem;
+    color: #333;
+    transition: opacity 0.3s ease;
+    user-select: none;
 }
 
-.load-more-btn:hover {
-    background: #2980b9;
+.slider-nav:hover {
+    opacity: 0.7;
 }
 
 .no-results {
@@ -178,12 +180,51 @@ echo "<style>
     color: #666;
 }
 
+/* Các style khác giữ nguyên */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    display: grid;
+    place-items: center;
+    z-index: 100;
+}
+
+.loading-overlay::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 3px solid #ddd;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e74c3c;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
 </style>";
-// JavaScript cập nhật
+
+// JavaScript cập nhật (giữ nguyên)
 echo '<script>
-let currentPage = '.$currentPage.';
-const totalProducts = '.$conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0].';
-const totalPages = Math.ceil(totalProducts / '.$limit.');
+let currentPage = ' . $currentPage . ';
+const totalProducts = ' . $conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0] . ';
+const totalPages = Math.ceil(totalProducts / ' . $limit . ');
 let isLoading = false;
 
 async function loadProducts(page, direction) {
@@ -204,7 +245,6 @@ async function loadProducts(page, direction) {
         const newContent = parser.parseFromString(data, "text/html");
         const newSlider = newContent.querySelector(".product-slider");
 
-        // Animation transition
         slider.style.transform = `translateX(${direction === "next" ? "-100%" : "100%"})`;
         slider.style.opacity = "0";
 
@@ -252,45 +292,5 @@ function loadPrevious() {
 }
 
 updateNavButtons();
-</script>
-
-<style>
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255,255,255,0.8);
-    display: grid;
-    place-items: center;
-    z-index: 100;
-}
-
-.loading-overlay::after {
-    content: "";
-    width: 40px;
-    height: 40px;
-    border: 3px solid #ddd;
-    border-top-color: #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-.error-message {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e74c3c;
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-}
-</style>';
+</script>';
 ?>

@@ -93,7 +93,6 @@
 <script>
   document.getElementById("registerForm").addEventListener("submit", e => {
     e.preventDefault();
-    // Lấy dữ liệu từ form, chuyển đổi về snake_case nếu cần
     const first_name = document.getElementById("fname").value;
     const last_name  = document.getElementById("lname").value;
     const username  = document.getElementById("username").value;
@@ -137,7 +136,7 @@
         alert("Tạo tài khoản thành công");
         window.location.href = "index.php?page=login";
       } else {
-        alert("Tạo tài khoản thất bại: " + data.error);
+        alert(data.error);
       }
     })
     .catch(err => {
