@@ -66,7 +66,26 @@ $product = $result->fetch_assoc();
     background-color: rgba(248, 86, 57, 0.8);
     transform: scale(1.05);
 }
+.product-related {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 0;
+}
 
+.product-related .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: rgb(0, 116, 211);
+}
+
+.product-related .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
 </style>
 
 <div class="product-container">
@@ -93,6 +112,10 @@ $product = $result->fetch_assoc();
         MUA NGAY</button></a>
     </div>
 </div>
+<div class="product-related">
+        <h2 class="section-title mb-4">Sản phẩm nổi bật</h2>
+        <?php include 'product_grid.php';  ?>
+    </div>
 
 <script>
 function addToCart(productId) {
