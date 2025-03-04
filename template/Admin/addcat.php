@@ -1,49 +1,26 @@
 <?php
 include 'inc/database.php';
 
-// Kiểm tra quyền admin
 if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     header('Location: index.php?page=login');
     exit;
 }
 
-// Lấy danh sách vai trò từ bảng roles
-$roles_query = "SELECT role_id, role_name FROM roles";
-$roles_result = $conn->query($roles_query);
-
-// Xử lý thêm nhân viên khi form được gửi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $staff_f_name = trim($_POST['staff_f_name']);
-    $staff_l_name = trim($_POST['staff_l_name']);
-    $email = trim($_POST['email']);
-    $is_active = (int)$_POST['is_active'];
-    $roles = isset($_POST['roles']) && is_array($_POST['roles']) ? $_POST['roles'] : [];
+    $cat_name = trim($_POST['cat_name']);
 
-    if (empty($staff_f_name) || empty($staff_l_name) || empty($email)) {
-        $error = "Vui lòng điền đầy đủ thông tin cơ bản.";
+    if (empty($cat_name)) {
+        $error = "Vui lòng điền tên danh mục.";
     } else {
-        // Thêm nhân viên mới
-        $insert_query = "INSERT INTO staffs (staff_f_name, staff_l_name, email, is_active, is_deleted) VALUES (?, ?, ?, ?, 0)";
+        $insert_query = "INSERT INTO categories (cat_name) VALUES (?)";
         $stmt = $conn->prepare($insert_query);
-        $stmt->bind_param('sssi', $staff_f_name, $staff_l_name, $email, $is_active);
+        $stmt->bind_param('s', $cat_name);
 
         if ($stmt->execute()) {
-            $new_staff_id = $conn->insert_id;
-
-            // Thêm vai trò cho nhân viên (nếu có)
-            if (!empty($roles)) {
-                $insert_role_query = "INSERT INTO staff_role (staff_id, role_id) VALUES (?, ?)";
-                $stmt = $conn->prepare($insert_role_query);
-                foreach ($roles as $role_id) {
-                    $stmt->bind_param('ii', $new_staff_id, $role_id);
-                    $stmt->execute();
-                }
-            }
-
-            header('Location: index.php?page=admin#staff');
+            header('Location: index.php?page=admin#categories');
             exit;
         } else {
-            $error = "Không thể thêm nhân viên: " . $stmt->error;
+            $error = "Không thể thêm danh mục: " . $stmt->error;
         }
     }
 }
@@ -54,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm nhân viên</title>
+    <title>Thêm danh mục</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="../dashboard.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -113,13 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .d-flex.justify-content-end.gap-2 {
             margin-top: 20px;
         }
-        .form-check {
-            margin-bottom: 0.5rem;
-        }
-        .form-check-label {
-            margin-left: 0.5rem;
-            color: #333;
-        }
     </style>
 </head>
 <body>
@@ -145,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="index.php?page=admin#staff">
+                            <a class="nav-link" href="index.php?page=admin#staff">
                                 <i class="bi bi-person-check me-2"></i> Nhân viên
                             </a>
                         </li>
@@ -155,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="index.php?page=admin#categories">
+                            <a class="nav-link active" href="index.php?page=admin#categories">
                                 <i class="bi bi-list-ul me-2"></i> Danh mục
                             </a>
                         </li>
@@ -168,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-container">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="mb-0"><i class="bi bi-plus-square me-2"></i>Thêm nhân viên</h3>
+                            <h3 class="mb-0"><i class="bi bi-plus-square me-2"></i>Thêm danh mục</h3>
                         </div>
                         <div class="card-body">
                             <?php if (isset($error)): ?>
@@ -176,48 +146,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endif; ?>
                             <form method="POST">
                                 <div class="row mb-3">
-                                    <label for="staff_f_name" class="col-sm-3 col-form-label">Tên</label>
+                                    <label for="cat_name" class="col-sm-3 col-form-label">Tên danh mục</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="staff_f_name" name="staff_f_name" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="staff_l_name" class="col-sm-3 col-form-label">Họ</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="staff_l_name" name="staff_l_name" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="email" class="col-sm-3 col-form-label">Email</label>
-                                    <div class="col-sm-9">
-                                        <input type="email" class="form-control" id="email" name="email" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="is_active" class="col-sm-3 col-form-label">Trạng thái</label>
-                                    <div class="col-sm-9">
-                                        <select class="form-select" id="is_active" name="is_active" required>
-                                            <option value="1">Hoạt động</option>
-                                            <option value="0">Không hoạt động</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label class="col-sm-3 col-form-label">Vai trò (Phân quyền)</label>
-                                    <div class="col-sm-9">
-                                        <?php while ($role = $roles_result->fetch_assoc()): ?>
-                                            <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="roles[]" value="<?php echo $role['role_id']; ?>">
-                                                <label class="form-check-label" for="role_<?php echo $role['role_id']; ?>">
-                                                    <?php echo htmlspecialchars($role['role_name']); ?>
-                                                </label>
-                                            </div>
-                                        <?php endwhile; ?>
+                                        <input type="text" class="form-control" id="cat_name" name="cat_name" required>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end gap-2">
                                     <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Thêm</button>
-                                    <a href="index.php?page=admin#staff" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
+                                    <a href="index.php?page=admin#categories" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
                                 </div>
                             </form>
                         </div>

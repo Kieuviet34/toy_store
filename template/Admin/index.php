@@ -27,6 +27,15 @@ switch ($action) {
     case 'add_product':
         include 'addproduct.php';
         exit;
+    case 'add_staff':
+        include 'addstaff.php';
+        exit;
+    case 'add_customer':
+        include 'addcustomer.php';
+        exit;
+    case 'add_category':
+        include 'addcat.php';
+        exit;
 }
 
 $queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders WHERE is_deleted = 0";
@@ -274,9 +283,9 @@ $totalCategories = $rowCategories['total_categories'];
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Quản lý khách hàng</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
-                    <span data-feather="plus"></span> Thêm khách hàng
-                  </button>
+                <a href="index.php?page=admin&action=add_customer" class="btn btn-primary">
+                  <span data-feather="plus"></span> Thêm khách hàng
+                </a>
                 </div>
               </div>
               <div class="mb-3">
@@ -330,9 +339,9 @@ $totalCategories = $rowCategories['total_categories'];
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Quản lý nhân viên</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-                    <span data-feather="plus"></span> Thêm nhân viên
-                  </button>
+                <a href="index.php?page=admin&action=add_staff" class="btn btn-primary">
+                  <span data-feather="plus"></span> Thêm nhân viên
+                </a>
                 </div>
               </div>
               <div class="mb-3">
@@ -461,9 +470,9 @@ $totalCategories = $rowCategories['total_categories'];
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Quản lý danh mục</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                    <span data-feather="plus"></span> Thêm danh mục
-                  </button>
+                <a href="index.php?page=admin&action=add_category" class="btn btn-primary">
+                  <span data-feather="plus"></span> Thêm danh mục
+                </a>
                 </div>
               </div>
               <div class="mb-3">
