@@ -97,6 +97,32 @@ $product = $result->fetch_assoc();
             echo '<img src="path/to/placeholder.jpg" alt="No Image">';
         }
         ?>
+        <button onclick="openFullscreen()" style="background: none; border: none; cursor: pointer; position: relative; top: 200px; right: 0px;"><i class="bi bi-zoom-in"></i></button>
+        <script>
+        function openFullscreen() {
+            var img = document.querySelector('.product-left img');
+            var fullscreenDiv = document.createElement('div');
+            fullscreenDiv.style.position = 'fixed';
+            fullscreenDiv.style.top = '0';
+            fullscreenDiv.style.left = '0';
+            fullscreenDiv.style.width = '100%';
+            fullscreenDiv.style.height = '100%';
+            fullscreenDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            fullscreenDiv.style.display = 'flex';
+            fullscreenDiv.style.justifyContent = 'center';
+            fullscreenDiv.style.alignItems = 'center';
+            fullscreenDiv.style.zIndex = '1000';
+            fullscreenDiv.onclick = function() {
+            document.body.removeChild(fullscreenDiv);
+            };
+            var fullscreenImg = document.createElement('img');
+            fullscreenImg.src = img.src;
+            fullscreenImg.style.maxWidth = '90%';
+            fullscreenImg.style.maxHeight = '90%';
+            fullscreenDiv.appendChild(fullscreenImg);
+            document.body.appendChild(fullscreenDiv);
+        }
+        </script>
     </div>
     <div class="product-right">
         <h2><?php echo htmlspecialchars($product['prod_name']); ?></h2>
