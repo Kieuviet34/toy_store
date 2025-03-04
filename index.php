@@ -4,7 +4,7 @@ session_start();
 $base_dir = __DIR__;
 
 // Xử lý routing
-$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout', 'logout', 'info'];
+$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout', 'logout', 'info','reset_password','forgot_password'];
 $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages) 
         ? $_GET['page'] 
         : 'home';
@@ -44,6 +44,12 @@ switch ($page) {
         break;
     case 'register':
         include 'template/register.php';
+        break;
+    case 'forgot_password':
+        include 'template/forgot_password.php';
+        break;
+    case 'reset_password':
+        include 'template/reset_password.php';
         break;
     case 'product':
         include 'template/product.php';
