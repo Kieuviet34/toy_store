@@ -66,7 +66,26 @@ $product = $result->fetch_assoc();
     background-color: rgba(248, 86, 57, 0.8);
     transform: scale(1.05);
 }
+.product-related {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 0;
+}
 
+.product-related .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: rgb(0, 116, 211);
+}
+
+.product-related .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
 </style>
 
 <div class="product-container">
@@ -78,6 +97,32 @@ $product = $result->fetch_assoc();
             echo '<img src="path/to/placeholder.jpg" alt="No Image">';
         }
         ?>
+        <button onclick="openFullscreen()" style="background: none; border: none; cursor: pointer; position: relative; top: 200px; right: 0px;"><i class="bi bi-zoom-in"></i></button>
+        <script>
+        function openFullscreen() {
+            var img = document.querySelector('.product-left img');
+            var fullscreenDiv = document.createElement('div');
+            fullscreenDiv.style.position = 'fixed';
+            fullscreenDiv.style.top = '0';
+            fullscreenDiv.style.left = '0';
+            fullscreenDiv.style.width = '100%';
+            fullscreenDiv.style.height = '100%';
+            fullscreenDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+            fullscreenDiv.style.display = 'flex';
+            fullscreenDiv.style.justifyContent = 'center';
+            fullscreenDiv.style.alignItems = 'center';
+            fullscreenDiv.style.zIndex = '1000';
+            fullscreenDiv.onclick = function() {
+            document.body.removeChild(fullscreenDiv);
+            };
+            var fullscreenImg = document.createElement('img');
+            fullscreenImg.src = img.src;
+            fullscreenImg.style.maxWidth = '90%';
+            fullscreenImg.style.maxHeight = '90%';
+            fullscreenDiv.appendChild(fullscreenImg);
+            document.body.appendChild(fullscreenDiv);
+        }
+        </script>
     </div>
     <div class="product-right">
         <h2><?php echo htmlspecialchars($product['prod_name']); ?></h2>
@@ -93,6 +138,10 @@ $product = $result->fetch_assoc();
         MUA NGAY</button></a>
     </div>
 </div>
+<div class="product-related">
+        <h2 class="section-title mb-4">Sản phẩm nổi bật</h2>
+        <?php include 'product_grid.php';  ?>
+    </div>
 
 <script>
 function addToCart(productId) {
