@@ -1,14 +1,9 @@
-.content {
+.product-container {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     padding: 40px 0;
-}
-
-.product-left,
-.product-right {
-    flex: 1;
 }
 
 .thumbnail-images {
@@ -73,6 +68,6 @@
     padding: 40px 0;
 }
 
-.product-related h2 {
+.product-related h3 {
     margin-bottom: 20px;
 }

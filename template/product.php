@@ -28,22 +28,45 @@ $product = $result->fetch_assoc();
 
 <style>
     .product-container {
-        display: flex;
-        padding: 2rem;
-        gap: 2rem;
-    }
-    .product-left, .product-right {
-        flex: 1;
-    }
-    .product-left img {
-        width: 100%;
-        max-width: 300px;
-        height: auto;
-        border: 1px solid #ccc;
-    }
-    .product-right h2 {
-        margin-top: 0;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.product-left img {
+    width: 300px;
+    height: auto;
+    border: 2px solid #f85639;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.product-right {
+    padding-left: 20px;
+    text-align: left;
+    margin-right: 100px;
+}
+
+.product-right h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: rgb(0, 116, 211);
+}
+
+.product-right button {
+    flex-grow: 1;
+    margin: 0 0 8px 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.product-right button:hover {
+    background-color: rgba(248, 86, 57, 0.8);
+    transform: scale(1.05);
+}
+
 </style>
 
 <div class="product-container">
@@ -62,8 +85,12 @@ $product = $result->fetch_assoc();
         <p><strong>Danh mục:</strong> <?php echo htmlspecialchars($product['cat_name']); ?></p>
         <p><strong>Giá:</strong> <?php echo number_format($product['list_price'], 0, ',', '.'); ?>₫</p>
         <p><strong>Năm sản xuất:</strong> <?php echo htmlspecialchars($product['model_year']); ?></p>
-        <button type="button" class="btn btn-primary" onclick="addToCart(<?php echo $product['prod_id']; ?>)">THÊM VÀO GIỎ HÀNG</button>
-        <a href="index.php?page=cart"><button type="button" class="btn btn-success">MUA NGAY</button></a>
+        <button type="button" class="btn btn-primary" onclick="addToCart(<?php echo $product['prod_id']; ?>)">
+        <i class="bi bi-cart d-inline-block mx-1" style="position: relative; top: -2px;"></i>
+        THÊM VÀO GIỎ HÀNG</button>
+        <a href="index.php?page=cart"><button type="button" class="btn btn-success">
+        <i class="bi bi-wallet2" style="position: relative; top: -2px;"></i>
+        MUA NGAY</button></a>
     </div>
 </div>
 
