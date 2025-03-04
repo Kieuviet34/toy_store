@@ -24,6 +24,9 @@ switch ($action) {
     case 'update_category':
         include 'src/update_category.php';
         exit;
+    case 'add_product':
+        include 'addproduct.php';
+        exit;
 }
 
 $queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders WHERE is_deleted = 0";
@@ -397,9 +400,9 @@ $totalCategories = $rowCategories['total_categories'];
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Quản lý sản phẩm</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                    <span data-feather="plus"></span> Thêm sản phẩm
-                  </button>
+                <a href="index.php?page=admin&action=add_product" class="btn btn-primary">
+                  <span data-feather="plus"></span> Thêm sản phẩm
+                </a>
                 </div>
               </div>
               <div class="mb-3">
