@@ -8,14 +8,12 @@
         <div class="item">
         <img src="template/img/banner2.jpg" alt="" >
         </div>
-        <div class="item">
-        <img src="template/img/banner3.jpg" alt="" >
-        </div>
+        
 </div>
     <!-- Phần hiển thị sản phẩm -->
     <div class="home-products">
         <h2 class="section-title mb-4">Sản phẩm nổi bật</h2>
-        <?php include 'product_grid.php';  ?>
+        <?php include 'inc/product_grid.php';  ?>
     </div>
 </div>
 
@@ -30,16 +28,12 @@
 
 .owl-carousel .item img {
     width: 100%;
-    height: 500px; 
+    height: 100%; 
     object-fit:contain;
     display: block;
 }
 /* Responsive design */
 @media (max-width: 768px) {
-    .banner-container {
-        animation-duration: 12s;
-    }
-    
     .section-title {
         font-size: 1.5rem;
     }
@@ -53,12 +47,12 @@
 
 <script>
     var owl = $('.owl-carousel');
-owl.owlCarousel({
-    items:1,
-    loop:true,
-    margin:10,
-    autoplay:true,
-    autoplayTimeout:1000,
-    autoplayHoverPause:true
-});
+    owl.owlCarousel({
+        items:1,
+        loop:true,
+        margin:10,
+        autoplay:true,
+        autoplayTimeout:1000,
+        autoplayHoverPause:true
+    });
 </script>

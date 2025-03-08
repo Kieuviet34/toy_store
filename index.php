@@ -6,7 +6,7 @@ $base_dir = __DIR__;
 $allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout', 'logout', 'info','reset_password','forgot_password'];
 $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages) 
         ? $_GET['page'] 
-        : 'home';
+        : '404';
 if ($page === 'logout') {
     session_unset();
     session_destroy();

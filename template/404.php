@@ -1,9 +1,9 @@
 <?php
 // 404.php - Trang báo lỗi không tìm thấy
-http_response_code(404); // Gửi mã trạng thái HTTP 404
+http_response_code(404);
 ?>
 
-<?php include '../header.php'; // Include header từ thư mục cha ?>
+<?php ?>
 
 <div class="error-container" style="text-align: center; padding: 100px 20px; min-height: 60vh;">
     <h1 style="font-size: 120px; color: #007bff; margin-bottom: 20px;">404</h1>
@@ -13,7 +13,7 @@ http_response_code(404); // Gửi mã trạng thái HTTP 404
     </p>
     
     <div class="action-buttons" style="display: flex; gap: 15px; justify-content: center;">
-        <a href="/toy_store/template/homepage.php" 
+        <a href="index.php?page=home" 
            class="cta-button" 
            style="background-color: #007bff; color: white; padding: 12px 30px; 
                   text-decoration: none; border-radius: 5px; transition: 0.3s;">
@@ -29,4 +29,4 @@ http_response_code(404); // Gửi mã trạng thái HTTP 404
     </div>
 </div>
 
-<?php include '../footer.php'; // Include footer từ thư mục cha ?>
+<?php ?>
