@@ -74,6 +74,6 @@ if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
         <span><?php echo htmlspecialchars($user['street'] ?? 'Chưa cập nhật'); ?></span>
     </div>
     <?php if (!$is_admin): ?>
-        <a href="update_info.php" class="btn btn-primary update-btn">Cập nhật thông tin</a>
+        <a href="index.php?page=update_info" class="btn btn-primary update-btn">Cập nhật thông tin</a>
     <?php endif; ?>
 </div>

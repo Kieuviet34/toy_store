@@ -1,5 +1,4 @@
 <?php
-// 404.php - Trang báo lỗi không tìm thấy
 http_response_code(404);
 ?>
 

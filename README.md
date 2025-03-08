@@ -23,6 +23,7 @@ Sau khi cài xong thì chạy
 ```sh
 php insert_data.php
 ```
+Nếu có báo lỗi khi install package thì cop lỗi lên stackoverflow tìm file cần tải rồi chèn vào php.ini 
 ## Database Setup
 
 Để tạo table, chèn file create_table.sql trong `database/migration` vào mysql hoặc phpadmin

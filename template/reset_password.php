@@ -1,9 +1,10 @@
 <?php
 include 'inc/database.php';
+
 $email = $_SESSION['reset_email'] ?? (isset($_GET['email']) ? trim($_GET['email']) : '');
 
 if (empty($email)) {
-    header('Location: index.php?page=forgot_password');
+    echo "Không tìm thấy email để reset mật khẩu. Vui lòng quay lại trang forgot password.";
     exit;
 }
 
@@ -81,7 +82,7 @@ if (isset($_GET['status'])) {
             return;
         }
 
-        fetch('../src/reset_pass.php', {
+        fetch('src/reset_pass.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
