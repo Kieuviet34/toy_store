@@ -1,5 +1,4 @@
 <?php
-// index.php
 session_start();
 $base_dir = __DIR__;
 

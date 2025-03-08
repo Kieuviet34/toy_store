@@ -7,7 +7,6 @@ $currentPage = isset($_GET['p']) ? (int)$_GET['p'] : 1;
 $currentPage = max(1, $currentPage);
 $startAt = $limit * ($currentPage - 1);
 
-// Lấy tham số lọc và sắp xếp từ GET
 $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : 'prod_name';
 $sort_order = isset($_GET['sort_order']) ? $_GET['sort_order'] : 'ASC';
 $filter_brand = isset($_GET['brand']) ? $_GET['brand'] : '';
@@ -82,13 +81,11 @@ if ($filter_price_max !== null) {
     $types .= 'd';
 }
 
-// Thêm sắp xếp
 $allowed_sort_columns = ['prod_name', 'list_price', 'brand_name', 'cat_name'];
 $sort_by = in_array($sort_by, $allowed_sort_columns) ? $sort_by : 'prod_name';
 $sort_order = strtoupper($sort_order) === 'DESC' ? 'DESC' : 'ASC';
 $query .= " ORDER BY " . $conn->real_escape_string($sort_by) . " " . $sort_order;
 
-// Thêm phân trang
 $query .= " LIMIT ? OFFSET ?";
 $params[] = $limit;
 $params[] = $startAt;
@@ -101,7 +98,6 @@ if ($params) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Tạo links phân trang
 $links = "";
 for ($i = 1; $i <= $totalPages; $i++) {
     $url = "index.php?page=shop&p=$i" .

@@ -8,7 +8,6 @@ if (!isset($_SESSION['user'])) {
 
 $customer_id = $_SESSION['user']['customer_id'];
 
-// Lấy đơn hàng đang chờ của khách hàng
 $query = "SELECT o.order_id 
           FROM orders o 
           WHERE o.customer_id = ? AND o.order_status = 1 AND o.is_deleted = 0";
@@ -25,7 +24,6 @@ if ($result->num_rows == 0) {
 $order = $result->fetch_assoc();
 $order_id = $order['order_id'];
 
-// Lấy danh sách sản phẩm trong giỏ
 $query = "SELECT oi.*, p.prod_name, p.list_price 
           FROM order_items oi 
           JOIN products p ON oi.prod_id = p.prod_id 
@@ -36,7 +34,7 @@ $stmt->execute();
 $items = $stmt->get_result();
 
 $total = 0;
-$item_count = $items->num_rows; // Đếm số sản phẩm trong giỏ
+$item_count = $items->num_rows; 
 ?>
 
 <div class="container mt-5">
@@ -90,7 +88,7 @@ function removeFromCart(itemId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload(); // Tải lại trang để cập nhật giỏ hàng
+                location.reload();
             } else {
                 alert('Có lỗi xảy ra: ' + data.error);
             }

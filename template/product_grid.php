@@ -1,13 +1,11 @@
 <?php
 include 'inc/database.php';
 
-// Xử lý phân trang
 $limit = 5;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $currentPage = max(1, $currentPage);
 $startAt = $limit * ($currentPage - 1);
 
-// Truy vấn sản phẩm
 $query = "SELECT p.prod_id, p.prod_img, p.prod_name, p.list_price, 
             b.brand_name, c.cat_name 
           FROM products p
@@ -20,44 +18,47 @@ $stmt->bind_param("ii", $limit, $startAt);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Hiển thị sản phẩm
-echo '<div class="product-slider-container">';
-echo '<div class="slider-nav prev" onclick="loadPrevious()"><i class="bi bi-chevron-left"></i></div>';
-echo '<div class="product-slider-wrapper">';
-echo '<div class="product-slider" data-current-page="' . $currentPage . '">';
+$totalProducts = $conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0];
+$totalPages = ceil($totalProducts / $limit);
+?>
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $img_src = $row['prod_img'] ? 'data:image/jpeg;base64,' . base64_encode($row['prod_img']) : 'path/to/placeholder.jpg';
-        echo '
-        <a href="index.php?page=product&id=' . $row['prod_id'] . '" class="product-link" style="text-decoration: none; color: inherit;">
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="' . $img_src . '" alt="' . htmlspecialchars($row['prod_name']) . '">
-                </div>
-                <div class="product-details">
-                    <h3 class="product-title">' . htmlspecialchars($row['prod_name']) . '</h3>
-                    <div class="brand-category">
-                        <span class="brand">' . htmlspecialchars($row['brand_name']) . '</span>
-                        <span class="category">' . htmlspecialchars($row['cat_name']) . '</span>
-                    </div>
-                    <div class="price-container">
-                        <span class="original-price">' . number_format($row['list_price'] * 1.5, 0, ',', '.') . '₫</span>
-                        <span class="discount-price">' . number_format($row['list_price'], 0, ',', '.') . '₫</span>
-                    </div>
-                </div>
-            </div>
-        </a>';
-    }
-} else {
-    echo '<div class="no-results">Không tìm thấy sản phẩm nào</div>';
-}
+<div class="product-slider-container">
+    <div class="slider-nav prev" onclick="loadPrevious()"><i class="bi bi-chevron-left"></i></div>
+    <div class="product-slider-wrapper">
+        <div class="product-slider" data-current-page="<?php echo $currentPage; ?>">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <?php 
+                    $img_src = $row['prod_img'] ? 'data:image/jpeg;base64,' . base64_encode($row['prod_img']) : 'path/to/placeholder.jpg';
+                    ?>
+                    <a href="index.php?page=product&id=<?php echo $row['prod_id']; ?>" class="product-link" style="text-decoration: none; color: inherit;">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <img src="<?php echo $img_src; ?>" alt="<?php echo htmlspecialchars($row['prod_name']); ?>">
+                            </div>
+                            <div class="product-details">
+                                <h3 class="product-title"><?php echo htmlspecialchars($row['prod_name']); ?></h3>
+                                <div class="brand-category">
+                                    <span class="brand"><?php echo htmlspecialchars($row['brand_name']); ?></span>
+                                    <span class="category"><?php echo htmlspecialchars($row['cat_name']); ?></span>
+                                </div>
+                                <div class="price-container">
+                                    <span class="original-price"><?php echo number_format($row['list_price'] * 1.5, 0, ',', '.'); ?>₫</span>
+                                    <span class="discount-price"><?php echo number_format($row['list_price'], 0, ',', '.'); ?>₫</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="no-results">Không tìm thấy sản phẩm nào</div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="slider-nav next" onclick="loadNext()"><i class="bi bi-chevron-right"></i></div>
+</div>
 
-echo '</div></div>';
-echo '<div class="slider-nav next" onclick="loadNext()"><i class="bi bi-chevron-right"></i></div>';
-echo '</div>';
-
-echo "<style>
+<style>
 .product-slider-container {
     position: relative;
     margin: 2rem 0;
@@ -99,12 +100,13 @@ echo "<style>
 }
 
 .product-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    border: 3px solid #007bff;
 }
 
 .product-image {
     width: 100%;
-    height: 150px; 
+    height: 150px;
     overflow: hidden;
     background: #f8f9fa;
 }
@@ -180,7 +182,6 @@ echo "<style>
     color: #666;
 }
 
-/* Các style khác giữ nguyên */
 .loading-overlay {
     position: absolute;
     top: 0;
@@ -218,17 +219,16 @@ echo "<style>
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
-</style>";
+</style>
 
-// JavaScript cập nhật (giữ nguyên)
-echo '<script>
-let currentPage = ' . $currentPage . ';
-const totalProducts = ' . $conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0] . ';
-const totalPages = Math.ceil(totalProducts / ' . $limit . ');
+<script>
+let currentPage = <?php echo $currentPage; ?>;
+const totalProducts = <?php echo $totalProducts; ?>;
+const totalPages = Math.ceil(totalProducts / <?php echo $limit; ?>);
 let isLoading = false;
 
 async function loadProducts(page, direction) {
-    if(isLoading) return;
+    if (isLoading) return;
     
     isLoading = true;
     const slider = document.querySelector(".product-slider");
@@ -238,7 +238,7 @@ async function loadProducts(page, direction) {
 
     try {
         const response = await fetch(`index.php?page=${page}`);
-        if(!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const data = await response.text();
         const parser = new DOMParser();
@@ -260,7 +260,6 @@ async function loadProducts(page, direction) {
         
         currentPage = page;
         updateNavButtons();
-
     } catch (error) {
         console.error("Fetch error:", error);
         showError("Có lỗi xảy ra khi tải dữ liệu");
@@ -284,13 +283,12 @@ function showError(message) {
 }
 
 function loadNext() {
-    if(currentPage < totalPages) loadProducts(currentPage + 1, "next");
+    if (currentPage < totalPages) loadProducts(currentPage + 1, "next");
 }
 
 function loadPrevious() {
-    if(currentPage > 1) loadProducts(currentPage - 1, "prev");
+    if (currentPage > 1) loadProducts(currentPage - 1, "prev");
 }
 
 updateNavButtons();
-</script>';
-?>
+</script>

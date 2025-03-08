@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="template/css/homepage.css">
     <link rel="stylesheet" href="template/css/about.css">
     <link rel="stylesheet" href="template/css/contact.css">
-    <link rel="stylesheet" href="template/css/product_grid.css">
+    <link rel="stylesheet" href="template/css/checkout.css">
+    <link rel="stylesheet" href=template/css/shop.css>
+    <link rel="stylesheet" href=template/css/info.css>
     <link rel="stylesheet" href="template/assets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="template/css/header.css">
     <link rel="stylesheet" href="template/css/product.css">
@@ -24,7 +26,6 @@
     <script src="template/assets/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="OwlCarousel2-2.3.4/dist/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="OwlCarousel2-2.3.4/dist/assets/owl.theme.default.min.css">
-    <script src="jquery.min.js"></script>
     <script src="OwlCarousel2-2.3.4/dist/owl.carousel.min.js"></script>
     <style>
         .search-suggestions {
@@ -102,7 +103,6 @@
 
         <div class="text-end">
           <?php if (isset($_SESSION['user'])): ?>
-            <!-- Nút Tài khoản với dropdown -->
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 Tài khoản
@@ -113,7 +113,6 @@
               </ul>
             </div>
           <?php else: ?>
-            <!-- Nút Đăng nhập và Đăng ký -->
             <a href="index.php?page=login">
               <button type="button" class="btn btn-light text-dark me-2">Đăng nhập</button>
             </a>

@@ -1,0 +1,40 @@
+.user-info-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-info-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+.user-info-item {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.user-info-item label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.user-info-item span {
+    color: #555;
+}
+
+.update-btn {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.update-btn:hover {
+    background-color: #0056b3;
+}

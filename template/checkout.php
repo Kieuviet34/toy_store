@@ -1,8 +1,6 @@
 <?php
-session_start();
 include 'inc/database.php';
 
-// Kiểm tra đăng nhập
 if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     echo '<div class="container mt-5"><h1 class="display-4 text-center">Thanh Toán</h1><p class="text-center">Vui lòng đăng nhập để thanh toán.</p></div>';
     exit;
@@ -13,7 +11,6 @@ $user_email = $_SESSION['user']['email'];
 $user_phone = isset($_SESSION['user']['phone']) ? $_SESSION['user']['phone'] : '';
 $user_address = isset($_SESSION['user']['street']) ? $_SESSION['user']['street'] : '';
 
-// Lấy đơn hàng đang chờ xử lý (order_status = 1)
 $query = "SELECT order_id FROM orders WHERE customer_id = ? AND order_status = 1 AND is_deleted = 0";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $customer_id);
@@ -28,94 +25,6 @@ if ($result->num_rows == 0) {
 $order = $result->fetch_assoc();
 $order_id = $order['order_id'];
 ?>
-
-<style>
-    .checkout-container {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 400px;
-        text-align: center;
-        margin: 50px auto;
-    }
-    .checkout-container h2 {
-        color: #333;
-    }
-    .checkout-container label {
-        display: block;
-        text-align: left;
-        margin-top: 10px;
-        font-weight: bold;
-    }
-    .checkout-container input {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-    }
-    .button-container {
-        margin-top: 15px;
-        display: flex;
-        justify-content: space-between;
-    }
-    .checkout-container button {
-        width: 48%;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    .checkout-container .cash-btn {
-        background-color: #28a745;
-        color: white;
-    }
-    .checkout-container .qr-btn {
-        background-color: #007bff;
-        color: white;
-    }
-    .checkout-container button:hover {
-        opacity: 0.8;
-    }
-    .qr-popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        width: 250px;
-    }
-    .qr-popup img {
-        max-width: 200px;
-        border-radius: 10px;
-    }
-    .qr-popup p {
-        margin-top: 10px;
-        font-weight: bold;
-        color: #d9534f;
-        font-size: 14px;
-    }
-    .qr-popup button {
-        margin-top: 10px;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 5px;
-        background-color: #d9534f;
-        color: white;
-        cursor: pointer;
-    }
-    .qr-popup button:hover {
-        opacity: 0.8;
-    }
-</style>
 
 <div class="checkout-container">
     <h2>Thanh toán</h2>

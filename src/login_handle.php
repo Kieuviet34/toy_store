@@ -1,6 +1,6 @@
 <?php
 include("../inc/database.php");
-session_start(); // Khởi động session
+session_start(); 
 
 header("Content-type: application/json");
 
@@ -17,9 +17,8 @@ if (!isset($data['username']) || !isset($data['password'])) {
 $username = $data['username'];
 $password = $data['password'];
 
-// Kiểm tra nếu đăng nhập admin với username "admin" và password "12345"
 if ($username === "admin" && $password === "12345") {
-    $_SESSION['admin'] = true; // Lưu session cho admin
+    $_SESSION['admin'] = true; 
     echo json_encode([
         "admin"   => true,
         "message" => "Admin đăng nhập thành công"
@@ -27,7 +26,6 @@ if ($username === "admin" && $password === "12345") {
     exit;
 }
 
-// Nếu không phải admin, tiến hành đăng nhập khách hàng
 $stmt = $conn->prepare("SELECT customer_id, f_name, l_name, email, phone, street, customer_password FROM customers WHERE customer_username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
@@ -44,7 +42,7 @@ if ($result->num_rows === 0) {
 $customer = $result->fetch_assoc();
 
 if (password_verify($password, $customer['customer_password'])) {
-    // Lưu thông tin người dùng vào session
+    
     $_SESSION['user'] = [
         'customer_id' => $customer['customer_id'],
         'username'    => $username,
