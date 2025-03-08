@@ -62,16 +62,15 @@
               </div>
 
               <!-- Password Section -->
-              <div class="row mb-4">
-                <div class="col-md-6">
+                <div class="col-md">
                   <label class="form-label">Mật khẩu</label>
                   <input type="password" name="password" id="password" class="form-control" required>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md">
                   <label class="form-label">Xác nhận lại mật khẩu</label>
                   <input type="password" name="confirm_password" id="confirm_pass" class="form-control" required>
                 </div>
-              </div>
+              <br>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                 <label class="form-check-label" for="flexCheckDefault">
