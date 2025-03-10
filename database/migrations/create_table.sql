@@ -98,17 +98,18 @@ create table staff_role(
     foreign key (staff_id) references staffs(staff_id),
     foreign key(role_id) references roles(role_id)
 );
-create table transactions(
-	transaction_id int primary key auto_increment,
-    order_id INT,
-    customer_id INT,
-    stripe_charge_id VARCHAR(255),
-    amount DECIMAL(10,2),
-    currency VARCHAR(3),
-    status VARCHAR(50),
+CREATE TABLE transaction (
+    transaction_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    customer_id INT NOT NULL,
+    amount DECIMAL(15, 2) NOT NULL,
+    payment_method ENUM('vnpay', 'stripe', 'cash') NOT NULL,
+    payment_id VARCHAR(255),
+    payment_status VARCHAR(50),
+    payment_details TEXT,
+    status ENUM('pending', 'success', 'failed') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
-    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 

@@ -43,15 +43,10 @@ $order_id = $order['order_id'];
         
         <div class="button-container">
             <button type="button" class="cash-btn" onclick="confirmPayment(<?php echo $order_id; ?>)">Thanh toán tiền mặt</button>
-            <button type="button" class="qr-btn" onclick="showQR(<?php echo $order_id; ?>)">Thanh toán mã QR</button>
+            <button type="button" class="vnpay-btn" onclick="payWithVNPay(<?php echo $order_id; ?>)">Thanh toán với VNPay</button>
+            <button type="button" class="stripe-btn" onclick="payWithStripe(<?php echo $order_id; ?>)">Thanh toán với Stripe</button>
         </div>
     </form>
-</div>
-
-<div id="qrPopup" class="qr-popup">
-    <img src="template/img/qr.jpg" alt="Mã QR thanh toán">
-    <p>Vui lòng ghi nội dung chuyển khoản là họ tên + số điện thoại người nhận</p>
-    <button onclick="closeQR()">Đóng</button>
 </div>
 
 <script>
@@ -70,7 +65,6 @@ function validateForm() {
 
 function confirmPayment(orderId) {
     if (validateForm()) {
-        // So sánh thông tin nhập vào với thông tin mặc định từ session
         let defaultName = "<?php echo addslashes($_SESSION['user']['f_name'] . ' ' . $_SESSION['user']['l_name']); ?>";
         let defaultPhone = "<?php echo addslashes($user_phone); ?>";
         let defaultEmail = "<?php echo addslashes($user_email); ?>";
@@ -82,13 +76,11 @@ function confirmPayment(orderId) {
         let address = document.getElementById("address").value;
 
         if (name === defaultName && phone === defaultPhone && email === defaultEmail && address === defaultAddress) {
-
             if (confirm("Xác nhận thanh toán với thông tin hiện tại?")) {
                 completePayment(orderId);
             }
         } else {
             if (confirm("Thông tin đã thay đổi. Bạn có muốn cập nhật thông tin này không?")) {
-
                 completePayment(orderId);
             } else {
                 if (confirm("Xác nhận thanh toán với thông tin vừa nhập?")) {
@@ -122,36 +114,15 @@ function completePayment(orderId) {
     });
 }
 
-function showQR(orderId) {
+function payWithVNPay(orderId) {
     if (validateForm()) {
-        document.getElementById("qrPopup").style.display = "block";
-        document.querySelector('.qr-popup button').onclick = function() {
-            fetch('src/update_order_status.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ order_id: orderId, status: 2 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert("Bạn đã xác nhận thanh toán thành công!");
-                    window.location.href = 'index.php?page=home';
-                } else {
-                    alert("Có lỗi xảy ra: " + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("Đã xảy ra lỗi khi thanh toán.");
-            });
-            closeQR();
-        };
+        window.location.href = 'src/vnpay_pay.php?order_id=' + orderId;
     }
 }
 
-function closeQR() {
-    document.getElementById("qrPopup").style.display = "none";
+function payWithStripe(orderId) {
+    if (validateForm()) {
+        window.location.href = 'src/stripe_payment.php?order_id=' + orderId;
+    }
 }
 </script>
