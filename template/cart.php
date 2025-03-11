@@ -59,7 +59,13 @@ $item_count = $items->num_rows;
                 <tr>
                     <td><?php echo htmlspecialchars($item['prod_name']); ?></td>
                     <td><?php echo number_format($item['list_price'], 0, ',', '.'); ?>₫</td>
-                    <td><?php echo $item['quantity']; ?></td>
+                    <td>
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary btn-sm" onclick="updateQuantity(<?php echo $item['item_id']; ?>, -1)">-</button>
+                            <input type="text" class="form-control text-center" value="<?php echo $item['quantity']; ?>" readonly>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="updateQuantity(<?php echo $item['item_id']; ?>, 1)">+</button>
+                        </div>
+                    </td>
                     <td><?php echo number_format($item_total, 0, ',', '.'); ?>₫</td>
                     <td>
                         <button class="btn btn-danger btn-sm" onclick="removeFromCart(<?php echo $item['item_id']; ?>)">Xóa</button>
@@ -71,19 +77,58 @@ $item_count = $items->num_rows;
     
     <div class="text-right mt-4">
         <h4>Tổng Cộng: <span id="cart-total"><?php echo number_format($total, 0, ',', '.'); ?>₫</span></h4>
+        <button class="btn btn-danger" onclick="clearCart(<?php echo $order_id; ?>)">Xóa Giỏ Hàng</button>
         <button class="btn btn-success" onclick="proceedToCheckout(<?php echo $item_count; ?>)">Tiến Hành Thanh Toán</button>
     </div>
 </div>
 
 <script>
+function updateQuantity(itemId, change) {
+    fetch('src/update_quantity.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ item_id: itemId, change: change })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Có lỗi xảy ra: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi khi cập nhật số lượng.');
+    });
+}
+
 function removeFromCart(itemId) {
-    if (confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-        fetch('src/remove_from_cart.php', {
+    fetch('src/remove_from_cart.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item_id: itemId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Lỗi: ' + data.error);
+        }
+    });
+}
+
+function clearCart(orderId) {
+    if (confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) {
+        fetch('src/clear_cart.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ item_id: itemId })
+            body: JSON.stringify({ order_id: orderId })
         })
         .then(response => response.json())
         .then(data => {
@@ -95,7 +140,7 @@ function removeFromCart(itemId) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Đã xảy ra lỗi khi xóa sản phẩm.');
+            alert('Đã xảy ra lỗi khi xóa giỏ hàng.');
         });
     }
 }
