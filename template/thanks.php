@@ -45,16 +45,13 @@ if ($secureHash == $vnp_SecureHash) {
         $order = $res->fetch_assoc();
 
         if ($order != NULL) {
-            // Nếu đơn hàng đang "Chờ thanh toán" (order_status = 1)
             if ($order['order_status'] == 1) {
-                // Insert vào bảng transactions
                 $insert_transaction = "INSERT INTO transactions (order_id, customer_id, amount, payment_method, payment_id, payment_status, transaction_status, created_at) 
                                        VALUES (?, ?, ?, 'vnpay', ?, '00', 'success', NOW())";
                 $stmt = $conn->prepare($insert_transaction);
                 $stmt->bind_param('iids', $orderId, $order['customer_id'], $vnp_Amount, $vnpTranId);
                 $stmt->execute();
 
-                // Update trạng thái đơn hàng thành "Đã thanh toán" (order_status = 2)
                 $update_order = "UPDATE orders SET order_status = 2 WHERE order_id = ?";
                 $stmt = $conn->prepare($update_order);
                 $stmt->bind_param('i', $orderId);

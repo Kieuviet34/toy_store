@@ -1,0 +1,9 @@
+card: 9704198526191432198
+bank: NCB
+name: NGUYEN VAN A
+date: 07/15
+otp: 123456
+vnp_TmnCode: 8SOB2BPU
+vnp_HashSecret: VDY3DGIXQGDVEHNWEOWPWQ0OGU8RHYXD
+vnp_Url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+admin panel: https://sandbox.vnpayment.vn/merchantv2/

@@ -13,7 +13,6 @@
     require_once("config.php"); 
     include '../inc/database.php';
 
-    // Lấy order_id từ URL
     $order_id = isset($_GET['order_id']) ? $_GET['order_id'] : null;
     if (!$order_id) {
         echo "Không tìm thấy order_id.";
