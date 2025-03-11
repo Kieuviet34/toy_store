@@ -23,7 +23,14 @@ Sau khi cài xong thì chạy
 ```sh
 php insert_data.php
 ```
-Nếu có báo lỗi khi install package thì cop lỗi lên stackoverflow tìm file cần tải rồi chèn vào php.ini 
+nếu có lỗi thì mở php.ini uncomment những dòng sau (bỏ dấu ; ở trước dòng đó):
+```
+    extension=curl
+    extension=fileinfo
+    extension=gd
+    extension=mysqli
+    extension=openssl
+```
 ## Database Setup
 
 Để tạo table, chèn file create_table.sql trong `database/migration` vào mysql hoặc phpadmin
@@ -34,4 +41,11 @@ Nếu có báo lỗi khi install package thì cop lỗi lên stackoverflow tìm 
 
 ```
 http://localhost/path/to/clone/toy_store/index.php?page=home
+```
+## Note
+File csv muốn mass receive được nên nhập data dạng sau:
+
+```
+    prod_name,prod_img_path,brand_name,cat_name,model_year,list_price
+    "name","path_to_product_img", "brand name", "category name", year(number), price(number)
 ```
