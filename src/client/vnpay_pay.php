@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Thanh toán VNPay</title>
-    <link href="../template/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="../template/css/jumbotron-narrow.css" rel="stylesheet">  
-    <script src="../template/js/jquery-1.11.3.min.js"></script>
+    <link href="../../template/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../../template/css/jumbotron-narrow.css" rel="stylesheet">  
+    <script src="../../template/js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
     <?php 

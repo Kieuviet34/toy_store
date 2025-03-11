@@ -1,5 +1,5 @@
 <?php
-include '../../inc/database.php';
+include 'inc/database.php';
 
 if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     header('Location: index.php?page=login');

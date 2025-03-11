@@ -1,4 +1,6 @@
 <?php
+include 'inc/database.php';
+
 // Lấy customer_id từ URL
 $customer_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($customer_id <= 0) {
@@ -19,6 +21,9 @@ if ($result->num_rows == 0) {
 }
 
 $customer = $result->fetch_assoc();
+
+// Biến để đánh dấu thành công
+$updateSuccess = false;
 
 // Xử lý cập nhật khi form được gửi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,10 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('sssssssi', $f_name, $l_name, $email, $phone, $city, $street, $username, $customer_id);
 
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            echo '<script>
-                window.location.href = "index.php?page=admin#customers";
-            </script>';
-            exit;
+            $updateSuccess = true;
         } else {
             $error = "Không thể cập nhật khách hàng: " . $stmt->error;
         }
@@ -119,3 +121,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         color: white;
     }
 </style>
+
+<!-- Modal Cập nhật thành công -->
+<?php if ($updateSuccess): ?>
+<div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="updateSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: green;"></i>
+        <h4 class="mt-3">Cập nhật thành công!</h4>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var successModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
+  successModal.show();
+  setTimeout(function() {
+    window.location.href = "index.php?page=admin#customers";
+  }, 2000);
+</script>
+<?php endif; ?>

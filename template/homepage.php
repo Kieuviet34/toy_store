@@ -3,10 +3,14 @@
     
     <div class="owl-carousel owl-theme">
         <div class="item">
+            <a href="index.php?page=product&id=105">
             <img src="template/img/banner1.jpg" alt="" >
+            </a>
         </div>
         <div class="item">
-        <img src="template/img/banner2.jpg" alt="" >
+            <a href="index.php?page=product&id=106">
+            <img src="template/img/banner2.jpg" alt="" >
+            </a>
         </div>
         
 </div>

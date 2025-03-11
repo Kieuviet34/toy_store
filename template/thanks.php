@@ -1,5 +1,5 @@
 <?php
-require_once("src/config.php"); 
+require_once("src/client/config.php"); 
 include 'inc/database.php'; 
 
 // Lấy dữ liệu từ URL (GET)

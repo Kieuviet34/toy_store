@@ -3,7 +3,9 @@ session_start();
 $base_dir = __DIR__;
 
 // Xử lý routing
-$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 'product', 'checkout', 'logout', 'info','update_info','reset_password','forgot_password', 'vnpay', 'stripe', 'thanks'];
+$allowed_pages = ['home', 'shop', 'about','cart', 'contact', 'login', 'register', 'admin', 'privacy','payment', 
+                'product', 'checkout', 'logout', 'info','update_info','reset_password','forgot_password', 'vnpay', 'stripe',
+                'thanks','show_brand_prod'];
 $page = isset($_GET['page']) && in_array($_GET['page'], $allowed_pages) 
         ? $_GET['page'] 
         : '404';
@@ -76,6 +78,9 @@ switch ($page) {
         break;
     case 'thanks':
         include 'template/thanks.php';
+        break;
+    case 'show_brand_prod':
+        include 'template/show_brand_prod.php';
         break;
     default:
         include 'template/404.php';

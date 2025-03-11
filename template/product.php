@@ -40,12 +40,20 @@ $result_related = $stmt_related->get_result();
 ?>
 
 <style>
+    .main-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+    }
     .product-container {
         display: flex;
         justify-content: center;
         align-items: center;
         text-align: center;
         padding: 40px 0;
+        width: 75%;
     }
 
     .product-left img {
@@ -58,7 +66,7 @@ $result_related = $stmt_related->get_result();
     }
 
     .product-right {
-        padding-left: 20px;
+        padding-left: 30px;
         text-align: left;
         margin-right: 100px;
     }
@@ -192,16 +200,16 @@ $result_related = $stmt_related->get_result();
     }
 </style>
 
+<div class="main-container">
 <div class="product-container">
     <div class="product-left">
         <?php 
         if ($product['prod_img']) {
-            echo '<img src="data:image/jpeg;base64,' . base64_encode($product['prod_img']) . '" alt="' . htmlspecialchars($product['prod_name']) . '">';
+            echo '<img src="data:image/jpeg;base64, ' . base64_encode($product['prod_img']) . '" onclick="openFullscreen()" alt="' . htmlspecialchars($product['prod_name']) . '">';
         } else {
             echo '<img src="path/to/placeholder.jpg" alt="No Image">';
         }
         ?>
-        <button onclick="openFullscreen()" style="background: none; border: none; cursor: pointer; position: relative; top: 200px; right: 0px;"><i class="bi bi-zoom-in"></i></button>
     </div>
     <div class="product-right">
         <h2><?php echo htmlspecialchars($product['prod_name']); ?></h2>
@@ -226,7 +234,7 @@ $result_related = $stmt_related->get_result();
             <?php while ($row = $result_related->fetch_assoc()): ?>
                 <a href="index.php?page=product&id=<?php echo $row['prod_id']; ?>" class="product-link" style="text-decoration: none; color: inherit;">
                     <div class="product-card">
-                        <div class="product-image">
+                        <div class="product-image" >
                             <?php 
                             if ($row['prod_img']) {
                                 echo '<img src="data:image/jpeg;base64,' . base64_encode($row['prod_img']) . '" alt="' . htmlspecialchars($row['prod_name']) . '">';
@@ -255,6 +263,7 @@ $result_related = $stmt_related->get_result();
     </div>
 </div>
 
+</div>
 <script>
 function openFullscreen() {
     var img = document.querySelector('.product-left img');

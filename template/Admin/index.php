@@ -193,7 +193,8 @@ $totalCategories = $rowCategories['total_categories'];
                     'add_product',
                     'add_staff',
                     'add_customer',
-                    'add_category'
+                    'add_category',
+                    'mass_receiving'
                 ];
 
                 if (in_array($action, $specialActions)) {
@@ -216,6 +217,9 @@ $totalCategories = $rowCategories['total_categories'];
                         include 'src/admin/addcustomer.php';
                     } elseif ($action == 'add_category') {
                         include 'src/admin/addcat.php';
+                    }elseif ($action == 'mass_receiving')
+                    {
+                        include 'src/admin/mass_receiving.php';
                     }
                 } else {
                 ?>

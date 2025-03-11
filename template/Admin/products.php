@@ -14,6 +14,9 @@ $resultProductsList = $conn->query($queryProductsList);
         <a href="index.php?page=admin&action=add_product" class="btn btn-primary">
             <span data-feather="plus"></span> Thêm sản phẩm
         </a>
+        <a href="index.php?page=admin&action=mass_receiving" class="btn btn-primary ms-2">
+            <span data-feather="upload"></span> Mass Receiving
+        </a>
     </div>
 </div>
 <div class="mb-3">

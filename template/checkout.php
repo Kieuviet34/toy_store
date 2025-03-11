@@ -115,7 +115,7 @@ function completePayment(orderId) {
 
 function payWithVNPay(orderId) {
     if (validateForm()) {
-        window.location.href = 'src/vnpay_pay.php?order_id=' + orderId;
+        window.location.href = 'src/client/vnpay_pay.php?order_id=' + orderId;
     }
 }
 
