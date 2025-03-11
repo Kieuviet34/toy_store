@@ -6,14 +6,12 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit;
 }
 
-// Lấy staff_id từ URL
 $staff_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($staff_id <= 0) {
     echo '<div class="container mt-5"><h1 class="text-center text-danger">Nhân viên không hợp lệ.</h1></div>';
     exit;
 }
 
-// Truy vấn thông tin nhân viên, kết hợp lấy các role_ids của nhân viên đó
 $query = "SELECT s.*, GROUP_CONCAT(sr.role_id) as role_ids 
           FROM staffs s 
           LEFT JOIN staff_role sr ON s.staff_id = sr.staff_id 
@@ -31,14 +29,11 @@ if ($result->num_rows == 0) {
 $staff = $result->fetch_assoc();
 $stmt->close();
 
-// Tách các role_ids thành mảng
 $role_ids = explode(',', $staff['role_ids'] ?: '');
 
-// Lấy danh sách vai trò từ bảng roles
 $roles_query = "SELECT role_id, role_name FROM roles";
 $roles_result = $conn->query($roles_query);
 
-// Xử lý cập nhật khi form được gửi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $staff_f_name = trim($_POST['staff_f_name']);
     $staff_l_name = trim($_POST['staff_l_name']);
@@ -49,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($staff_f_name) || empty($staff_l_name) || empty($email)) {
         $error = "Vui lòng điền đầy đủ thông tin cơ bản.";
     } else {
-        // Cập nhật thông tin nhân viên
         $update_query = "UPDATE staffs 
                          SET staff_f_name = ?, staff_l_name = ?, email = ?, is_active = ?
                          WHERE staff_id = ?";
@@ -57,14 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('sssii', $staff_f_name, $staff_l_name, $email, $is_active, $staff_id);
 
         if ($stmt->execute()) {
-            // Xóa các vai trò cũ của nhân viên
             $delete_query = "DELETE FROM staff_role WHERE staff_id = ?";
             $stmt_delete = $conn->prepare($delete_query);
             $stmt_delete->bind_param('i', $staff_id);
             $stmt_delete->execute();
             $stmt_delete->close();
 
-            // Thêm các vai trò mới nếu có
             if (!empty($roles)) {
                 $insert_query = "INSERT INTO staff_role (staff_id, role_id) VALUES (?, ?)";
                 $stmt_insert = $conn->prepare($insert_query);

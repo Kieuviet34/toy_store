@@ -15,8 +15,6 @@ $name = isset($data['name']) ? trim($data['name']) : '';
 $phone = isset($data['phone']) ? trim($data['phone']) : '';
 $email = isset($data['email']) ? trim($data['email']) : '';
 $address = isset($data['address']) ? trim($data['address']) : '';
-
-// Tách tên thành f_name và l_name (giả định tên cuối cùng là l_name)
 $name_parts = explode(' ', $name);
 $l_name = array_pop($name_parts);
 $f_name = implode(' ', $name_parts);
@@ -26,13 +24,11 @@ if ($customer_id <= 0 || !$name || !$phone || !$email || !$address) {
     exit;
 }
 
-// Cập nhật thông tin khách hàng
 $query = "UPDATE customers SET f_name = ?, l_name = ?, email = ?, phone = ?, street = ? WHERE customer_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('sssssi', $f_name, $l_name, $email, $phone, $address, $customer_id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
-    // Cập nhật session với thông tin mới
     $_SESSION['user']['f_name'] = $f_name;
     $_SESSION['user']['l_name'] = $l_name;
     $_SESSION['user']['email'] = $email;

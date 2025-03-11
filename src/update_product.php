@@ -5,15 +5,12 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     header('Location: index.php?page=login');
     exit;
 }
-
-// Lấy prod_id từ URL
 $prod_id = isset($_GET['prod_id']) ? (int)$_GET['prod_id'] : 0;
 if ($prod_id <= 0) {
     echo '<div class="container mt-5"><h1 class="text-center text-danger">Sản phẩm không hợp lệ.</h1></div>';
     exit;
 }
 
-// Lấy thông tin sản phẩm hiện tại (chỉ lấy nếu chưa bị xóa)
 $query = "SELECT prod_id, prod_name, brand_id, cat_id, model_year, list_price, prod_img 
           FROM products 
           WHERE prod_id = ? AND is_deleted = 0";
@@ -30,14 +27,12 @@ if ($result->num_rows == 0) {
 $product = $result->fetch_assoc();
 $stmt->close();
 
-// Lấy danh sách hãng và danh mục cho dropdown
 $brands_query = "SELECT brand_id, brand_name FROM brands";
 $brands_result = $conn->query($brands_query);
 
 $categories_query = "SELECT cat_id, cat_name FROM categories";
 $categories_result = $conn->query($categories_query);
 
-// Xử lý cập nhật khi form được gửi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prod_name = trim($_POST['prod_name']);
     $brand_id = (int)$_POST['brand_id'];
@@ -45,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $model_year = (int)$_POST['model_year'];
     $list_price = (float)$_POST['list_price'];
 
-    // Giữ lại ảnh cũ nếu không có file mới
     $prod_img = $product['prod_img'];
     if (isset($_FILES['prod_img']) && $_FILES['prod_img']['error'] == UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['prod_img']['tmp_name'];

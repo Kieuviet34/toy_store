@@ -218,7 +218,6 @@ $totalCategories = $rowCategories['total_categories'];
                         include 'addcat.php';
                     }
                 } else {
-                    // Hiển thị các tab nếu không phải action đặc biệt
                 ?>
                     <div class="tab-content">
                         <!-- Dashboard Tab -->

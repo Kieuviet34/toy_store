@@ -6,7 +6,6 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit;
 }
 
-// Lấy danh sách vai trò từ bảng roles
 $roles_query = "SELECT role_id, role_name FROM roles";
 $roles_result = $conn->query($roles_query);
 
@@ -20,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($staff_f_name) || empty($staff_l_name) || empty($email)) {
         $error = "Vui lòng điền đầy đủ thông tin cơ bản.";
     } else {
-        // Thêm nhân viên mới
         $insert_query = "INSERT INTO staffs (staff_f_name, staff_l_name, email, is_active, is_deleted) VALUES (?, ?, ?, ?, 0)";
         $stmt = $conn->prepare($insert_query);
         $stmt->bind_param('sssi', $staff_f_name, $staff_l_name, $email, $is_active);
@@ -28,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $new_staff_id = $conn->insert_id;
 
-            // Thêm vai trò cho nhân viên (nếu có)
             if (!empty($roles)) {
                 $insert_role_query = "INSERT INTO staff_role (staff_id, role_id) VALUES (?, ?)";
                 $stmt_role = $conn->prepare($insert_role_query);

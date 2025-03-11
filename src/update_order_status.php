@@ -18,7 +18,6 @@ if ($order_id <= 0 || $status <= 0) {
     exit;
 }
 
-// Cập nhật trạng thái đơn hàng
 $query = "UPDATE orders SET order_status = ? WHERE order_id = ? AND customer_id = ? AND is_deleted = 0";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('iii', $status, $order_id, $_SESSION['user']['customer_id']);

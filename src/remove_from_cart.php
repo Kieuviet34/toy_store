@@ -4,7 +4,6 @@ include '../inc/database.php';
 
 header('Content-Type: application/json');
 
-// Kiểm tra đăng nhập
 if (!isset($_SESSION['user'])) {
     echo json_encode(['success' => false, 'error' => 'Vui lòng đăng nhập.']);
     exit;
@@ -20,7 +19,6 @@ if ($item_id <= 0) {
 
 $customer_id = $_SESSION['user']['customer_id'];
 
-// Truy vấn để lấy số lượng hiện tại của mục đó, đảm bảo rằng mục thuộc về đơn hàng của khách hàng hiện tại
 $query = "SELECT oi.quantity 
           FROM order_items oi
           JOIN orders o ON oi.order_id = o.order_id
