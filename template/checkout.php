@@ -43,9 +43,8 @@ $order_id = $order['order_id'];
         
         <div class="button-container">
             <button type="button" class="cash-btn" onclick="confirmPayment(<?php echo $order_id; ?>)">Thanh toán tiền mặt</button>
-            <button type="button" class="vnpay-btn" onclick="payWithVNPay(<?php echo $order_id; ?>)">Thanh toán với VNPay</button>
-            <button type="button" class="stripe-btn" onclick="payWithStripe(<?php echo $order_id; ?>)">Thanh toán với Stripe</button>
-        </div>
+            <button type="button" class="btn-primary" onclick="payWithVNPay(<?php echo $order_id; ?>)">Thanh toán với VNPay</button>
+         </div>
     </form>
 </div>
 
@@ -120,9 +119,5 @@ function payWithVNPay(orderId) {
     }
 }
 
-function payWithStripe(orderId) {
-    if (validateForm()) {
-        window.location.href = 'src/stripe_payment.php?order_id=' + orderId;
-    }
-}
+
 </script>

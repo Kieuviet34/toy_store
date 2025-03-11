@@ -20,7 +20,6 @@
         exit;
     }
 
-    // Tính tổng số tiền từ bảng order_items
     $query = "SELECT SUM(list_price * quantity * (1 - discount)) AS total_amount 
               FROM order_items 
               WHERE order_id = ?";
@@ -29,7 +28,7 @@
     $stmt->execute();
     $result = $stmt->get_result();
     $order_data = $result->fetch_assoc();
-    $total_amount = $order_data['total_amount'] ?? 0; // Tổng số tiền tính được
+    $total_amount = $order_data['total_amount'] ?? 0; 
     ?>
     <div class="container">
         <h3>Thanh toán đơn hàng</h3>

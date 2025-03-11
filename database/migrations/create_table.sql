@@ -98,7 +98,7 @@ create table staff_role(
     foreign key (staff_id) references staffs(staff_id),
     foreign key(role_id) references roles(role_id)
 );
-CREATE TABLE transaction (
+CREATE TABLE transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     customer_id INT NOT NULL,
@@ -107,9 +107,11 @@ CREATE TABLE transaction (
     payment_id VARCHAR(255),
     payment_status VARCHAR(50),
     payment_details TEXT,
-    status ENUM('pending', 'success', 'failed') NOT NULL,
+    transaction_status ENUM('pending', 'success', 'failed') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    foreign key (order_id) references orders(order_id),
+    foreign key(customer_id) references customers(customer_id)
 );
 
 

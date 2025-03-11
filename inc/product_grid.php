@@ -2,7 +2,7 @@
 include 'inc/database.php';
 
 $limit = 5;
-$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$currentPage = isset($_GET['pg']) ? (int)$_GET['pg'] : 1; // Lấy số trang từ 'pg'
 $currentPage = max(1, $currentPage);
 $startAt = $limit * ($currentPage - 1);
 
@@ -21,6 +21,7 @@ $result = $stmt->get_result();
 $totalProducts = $conn->query("SELECT COUNT(*) FROM products")->fetch_row()[0];
 $totalPages = ceil($totalProducts / $limit);
 ?>
+
 
 <div class="product-slider-container">
     <div class="slider-nav prev" onclick="loadPrevious()"><i class="bi bi-chevron-left"></i></div>
@@ -237,13 +238,20 @@ async function loadProducts(page, direction) {
     slider.parentElement.appendChild(loader);
 
     try {
-        const response = await fetch(`index.php?page=${page}`);
+        // Gọi URL với định tuyến page=home và phân trang thông qua 'pg'
+        const response = await fetch(`index.php?page=home&pg=${page}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const data = await response.text();
         const parser = new DOMParser();
         const newContent = parser.parseFromString(data, "text/html");
         const newSlider = newContent.querySelector(".product-slider");
+
+        if (!newSlider) {
+            console.error("Không tìm thấy phần tử .product-slider trong nội dung trả về.");
+            showError("Không tìm thấy nội dung sản phẩm");
+            return;
+        }
 
         slider.style.transform = `translateX(${direction === "next" ? "-100%" : "100%"})`;
         slider.style.opacity = "0";
@@ -291,4 +299,5 @@ function loadPrevious() {
 }
 
 updateNavButtons();
+
 </script>
