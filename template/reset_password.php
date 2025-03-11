@@ -61,7 +61,7 @@
           return;
       }
       
-      fetch('src/reset_pass.php', {
+      fetch('src/client/reset_pass.php', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'

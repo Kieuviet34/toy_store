@@ -91,7 +91,7 @@ function confirmPayment(orderId) {
 }
 
 function completePayment(orderId) {
-    fetch('src/update_order_status.php', {
+    fetch('src/client/update_order_status.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

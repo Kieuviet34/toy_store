@@ -133,7 +133,7 @@
       confirm_password
     };
 
-    fetch("src/create_account.php", {
+    fetch("src/client/create_account.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

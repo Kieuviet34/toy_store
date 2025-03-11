@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("config.php");
-include '../inc/database.php';
+include '../../inc/database.php';
 //đkm vi en pây trôn tao (mất mẹ 2 ngày fix ipn)
 
 if (!isset($_SESSION['user'])) {

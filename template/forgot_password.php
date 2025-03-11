@@ -27,7 +27,7 @@
         const email = document.getElementById('email').value;
         const messageDiv = document.getElementById('message');
 
-        fetch("src/check_mail.php", {
+        fetch("src/client/check_mail.php", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

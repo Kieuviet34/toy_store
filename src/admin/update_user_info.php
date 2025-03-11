@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../inc/database.php';
+include '../../inc/database.php';
 
 if (!isset($_SESSION['user'])) {
     echo json_encode(['success' => false, 'error' => 'Bạn chưa đăng nhập']);

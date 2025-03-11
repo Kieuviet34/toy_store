@@ -84,7 +84,7 @@ $item_count = $items->num_rows;
 
 <script>
 function updateQuantity(itemId, change) {
-    fetch('src/update_quantity.php', {
+    fetch('src/client/update_quantity.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -106,7 +106,7 @@ function updateQuantity(itemId, change) {
 }
 
 function removeFromCart(itemId) {
-    fetch('src/remove_from_cart.php', {
+    fetch('src/client/remove_from_cart.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ item_id: itemId })
@@ -123,7 +123,7 @@ function removeFromCart(itemId) {
 
 function clearCart(orderId) {
     if (confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) {
-        fetch('src/clear_cart.php', {
+        fetch('src/client/clear_cart.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

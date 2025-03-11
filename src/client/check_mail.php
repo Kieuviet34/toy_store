@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-include '../inc/database.php';
+include '../../inc/database.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 $email = $data['email'] ?? '';

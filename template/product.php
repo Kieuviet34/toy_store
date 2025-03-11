@@ -281,7 +281,7 @@ function openFullscreen() {
 }
 
 function addToCart(productId) {
-    fetch('src/add_to_cart.php', {
+    fetch('src/client/add_to_cart.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

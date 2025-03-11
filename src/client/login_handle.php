@@ -1,5 +1,5 @@
 <?php
-include("../inc/database.php");
+include("../../inc/database.php");
 session_start(); 
 
 header("Content-type: application/json");

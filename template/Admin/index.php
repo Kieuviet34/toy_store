@@ -199,23 +199,23 @@ $totalCategories = $rowCategories['total_categories'];
                 if (in_array($action, $specialActions)) {
                     // Xử lý các action đặc biệt
                     if ($action == 'update_product') {
-                        include 'src/update_product.php';
+                        include 'src/admin/update_product.php';
                     } elseif ($action == 'update_order') {
-                        include 'src/update_order.php';
+                        include 'src/admin/update_order.php';
                     } elseif ($action == 'update_customer') {
-                        include 'src/update_customer.php';
+                        include 'src/admin/update_customer.php';
                     } elseif ($action == 'update_staff') {
-                        include 'src/update_staff.php';
+                        include 'src/admin/update_staff.php';
                     } elseif ($action == 'update_category') {
-                        include 'src/update_category.php';
+                        include 'src/admin/update_category.php';
                     } elseif ($action == 'add_product') {
-                        include 'addproduct.php';
+                        include 'src/admin/addproduct.php';
                     } elseif ($action == 'add_staff') {
-                        include 'addstaff.php';
+                        include 'src/admin/addstaff.php';
                     } elseif ($action == 'add_customer') {
-                        include 'addcustomer.php';
+                        include 'src/admin/addcustomer.php';
                     } elseif ($action == 'add_category') {
-                        include 'addcat.php';
+                        include 'src/admin/addcat.php';
                     }
                 } else {
                 ?>
@@ -292,7 +292,7 @@ $totalCategories = $rowCategories['total_categories'];
                     if (confirm("Bạn có chắc chắn muốn xóa?")) {
                         var type = this.getAttribute('data-type');
                         var id = this.getAttribute('data-id');
-                        fetch("template/Admin/admindelete.php?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id))
+                        fetch("src/admin/admindelete.php?type=" + encodeURIComponent(type) + "&id=" + encodeURIComponent(id))
                             .then(response => response.json())
                             .then(data => {
                                 if (data.status === "success") {

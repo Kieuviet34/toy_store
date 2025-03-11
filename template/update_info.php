@@ -68,7 +68,7 @@ $user = $result->fetch_assoc();
             street: document.getElementById('street').value
         };
 
-        fetch('src/update_user_info.php', {
+        fetch('src/client/update_user_info.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

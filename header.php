@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="template/css/checkout.css">
     <link rel="stylesheet" href=template/css/shop.css>
     <link rel="stylesheet" href=template/css/info.css>
+    <link rel="stylesheet" href=template/css/thanks.css>
     <link rel="stylesheet" href="template/assets/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="template/css/header.css">
     <link rel="stylesheet" href="template/css/product.css">
@@ -136,7 +137,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
         return;
     }
 
-    fetch('src/search.php', {
+    fetch('src/client/search.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

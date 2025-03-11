@@ -1,5 +1,5 @@
 <?php
-include '../inc/database.php';
+include '../../inc/database.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 $order_id = $data['order_id'];

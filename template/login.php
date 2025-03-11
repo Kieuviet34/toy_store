@@ -55,7 +55,7 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
     const password = document.getElementById("password").value;
     const loginData = { username, password };
 
-    fetch("src/login_handle.php", {
+    fetch("src/client/login_handle.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

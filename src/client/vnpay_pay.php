@@ -11,7 +11,7 @@
 <body>
     <?php 
     require_once("config.php"); 
-    include '../inc/database.php';
+    include '../../inc/database.php';
 
     $order_id = isset($_GET['order_id']) ? $_GET['order_id'] : null;
     if (!$order_id) {
