@@ -23,6 +23,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
                 <th>Email</th>
                 <th>SĐT</th>
                 <th>Địa chỉ</th>
+                <th>Username</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -36,6 +37,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
                     echo "<td>" . htmlspecialchars($customer['email']) . "</td>";
                     echo "<td>" . htmlspecialchars($customer['phone']) . "</td>";
                     echo "<td>" . htmlspecialchars($customer['city']) . "</td>";
+                    echo "<td>" . htmlspecialchars($customer['customer_username']) . "</td>";
                     echo "<td>
                             <a href='index.php?page=admin&action=update_customer&id=" . $customer['customer_id'] . "' class='btn btn-sm btn-warning'>
                                 <span data-feather='edit'></span> Sửa

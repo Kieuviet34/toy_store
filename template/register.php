@@ -28,14 +28,14 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" id="username" aria-label="" aria-describedby="basic-addon2" required>
+                <input type="text" name="username" class="form-control" id="username" required>
               </div>
               <!-- Contact Info Row -->
               <div class="mb-3">
                 <label class="form-label">Email</label>
                 <div class="input-group mb-3">
-                  <input type="text" name="email" class="form-control" id="email" aria-label="" aria-describedby="basic-addon2" required>
-                  <span class="input-group-text" id="basic-addon2">@</span>
+                  <input type="text" name="email" class="form-control" id="email" required>
+                  <span class="input-group-text">@</span>
                 </div>
               </div>
               <div class="mb-3">
@@ -52,7 +52,7 @@
               <!-- City/Zip Row -->
               <div class="row mb-4">
                 <div class="col-md-6">
-                  <label class="form-label">Thành Phố</label>
+                  <label class="form-label">Thành phố</label>
                   <input type="text" name="city" class="form-control" id="city" required>
                 </div>
                 <div class="col-md-6">
@@ -62,22 +62,22 @@
               </div>
 
               <!-- Password Section -->
-                <div class="col-md">
+              <div class="row mb-3">
+                <div class="col-md-6">
                   <label class="form-label">Mật khẩu</label>
                   <input type="password" name="password" id="password" class="form-control" required>
                 </div>
-                <div class="col-md">
-                  <label class="form-label">Xác nhận lại mật khẩu</label>
+                <div class="col-md-6">
+                  <label class="form-label">Xác nhận mật khẩu</label>
                   <input type="password" name="confirm_password" id="confirm_pass" class="form-control" required>
                 </div>
-              <br>
-              <div class="form-check">
+              </div>
+              <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                 <label class="form-check-label" for="flexCheckDefault">
                     Hiện mật khẩu
                 </label>
               </div>
-              <br>
               <!-- Submit Button -->
               <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary btn-lg">Tạo tài khoản</button>
@@ -89,12 +89,24 @@
     </div>
 </div>
 
+<!-- Modal thông báo đăng ký thành công -->
+<div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-labelledby="registerSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: green;"></i>
+        <h4 class="mt-3">Tạo tài khoản thành công!</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   document.getElementById("registerForm").addEventListener("submit", e => {
     e.preventDefault();
     const first_name = document.getElementById("fname").value;
     const last_name  = document.getElementById("lname").value;
-    const username  = document.getElementById("username").value;
+    const username   = document.getElementById("username").value;
     const email      = document.getElementById("email").value;
     const phone      = document.getElementById("phone").value;
     const address    = document.getElementById("address").value;
@@ -129,11 +141,13 @@
       body: JSON.stringify(data)
     })
     .then(response => response.json())
-    
     .then(data => {
       if(data.success){
-        alert("Tạo tài khoản thành công");
-        window.location.href = "index.php?page=login";
+        var modal = new bootstrap.Modal(document.getElementById('registerSuccessModal'));
+        modal.show();
+        setTimeout(() => {
+            window.location.href = "index.php?page=login";
+        }, 2000);
       } else {
         alert(data.error);
       }
@@ -149,5 +163,5 @@
     passwordFields.forEach(field => {
       field.type = this.checked ? "text" : "password";
     });
-  })
+  });
 </script>

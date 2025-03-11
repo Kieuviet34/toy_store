@@ -10,7 +10,7 @@
                         <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png" class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px" alt="profile">
                     </div>
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="Username" aria-describedby="emailHelp" placeholder="Tài khoản (Username)">
+                        <input type="text" class="form-control" id="Username" placeholder="Tài khoản (Username)">
                     </div>
                     <div class="mb-3">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
@@ -34,8 +34,21 @@
         </div>
     </div>
 </div>
+
+<!-- Modal đăng nhập thành công -->
+<div class="modal fade" id="loginSuccessModal" tabindex="-1" aria-labelledby="loginSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: green;"></i>
+        <h4 class="mt-3">Đăng nhập thành công!</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-  document.getElementById("loginForm").addEventListener("submit", function(e) {
+document.getElementById("loginForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const username = document.getElementById("Username").value;
@@ -55,21 +68,15 @@
         alertContainer.innerHTML = "";
 
         if (data.success) {
-            const successAlert = document.createElement("div");
-            successAlert.className = "alert alert-success alert-dismissible fade show";
-            successAlert.role = "alert";
-            successAlert.innerHTML = "Đăng nhập thành công";
-            alertContainer.appendChild(successAlert);
-
+            // Nếu đăng nhập thành công, hiển thị modal với icon tick
+            var modal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
+            modal.show();
             setTimeout(() => {
                 window.location.href = "index.php?page=home";
             }, 2000);
         } else if (data.admin) {
-            const adminAlert = document.createElement("div");
-            adminAlert.className = "alert alert-success alert-dismissible fade show";
-            adminAlert.role = "alert";
-            adminAlert.innerHTML = "Admin đăng nhập thành công";
-            alertContainer.appendChild(adminAlert);
+            var modal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
+            modal.show();
             setTimeout(() => {
                 window.location.href = "index.php?page=admin";
             }, 2000);
@@ -105,10 +112,9 @@
         }, 2000);
     });
 });
+
 document.getElementById("flexCheckDefault").addEventListener("change", function(){
-    const passwordFields = document.querySelectorAll("input[name='password']");
-    passwordFields.forEach(field => {
-      field.type = this.checked ? "text" : "password";
-    });
-  })
+    const passwordField = document.getElementById("password");
+    passwordField.type = this.checked ? "text" : "password";
+});
 </script>

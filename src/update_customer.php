@@ -28,19 +28,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone']);
     $city = trim($_POST['city']);
     $street = trim($_POST['street']);
+    // Sửa tên trường thành "customer_username" theo form
+    $username = trim($_POST['customer_username']);
 
     if (empty($f_name) || empty($l_name) || empty($email) || empty($phone) || empty($city) || empty($street)) {
         $error = "Vui lòng điền đầy đủ tất cả các trường.";
     } else {
         $update_query = "
             UPDATE customers 
-            SET f_name = ?, l_name = ?, email = ?, phone = ?, city = ?, street = ? 
+            SET f_name = ?, l_name = ?, email = ?, phone = ?, city = ?, street = ?, customer_username = ? 
             WHERE customer_id = ?";
         $stmt = $conn->prepare($update_query);
-        $stmt->bind_param('ssssssi', $f_name, $l_name, $email, $phone, $city, $street, $customer_id);
+        $stmt->bind_param('sssssssi', $f_name, $l_name, $email, $phone, $city, $street, $username, $customer_id);
 
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            header('Location: index.php?page=admin#customers');
+            echo '<script>
+                window.location.href = "index.php?page=admin#customers";
+            </script>';
             exit;
         } else {
             $error = "Không thể cập nhật khách hàng: " . $stmt->error;
@@ -78,6 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="mb-3">
             <label for="street" class="form-label">Địa chỉ</label>
             <input type="text" class="form-control" id="street" name="street" value="<?php echo htmlspecialchars($customer['street']); ?>" required>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <!-- Sửa name thành customer_username -->
+            <input type="text" class="form-control" id="username" name="customer_username" value="<?php echo htmlspecialchars($customer['customer_username']); ?>" required>
         </div>
         <div class="d-flex justify-content-end gap-2">
             <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Cập nhật</button>

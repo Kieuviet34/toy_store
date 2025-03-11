@@ -15,6 +15,7 @@ $name = isset($data['name']) ? trim($data['name']) : '';
 $phone = isset($data['phone']) ? trim($data['phone']) : '';
 $email = isset($data['email']) ? trim($data['email']) : '';
 $address = isset($data['address']) ? trim($data['address']) : '';
+$username = isset($data['username']) ? trim($data['username']) : '';
 $name_parts = explode(' ', $name);
 $l_name = array_pop($name_parts);
 $f_name = implode(' ', $name_parts);
@@ -24,9 +25,9 @@ if ($customer_id <= 0 || !$name || !$phone || !$email || !$address) {
     exit;
 }
 
-$query = "UPDATE customers SET f_name = ?, l_name = ?, email = ?, phone = ?, street = ? WHERE customer_id = ?";
+$query = "UPDATE customers SET f_name = ?, l_name = ?, email = ?, phone = ?, street = ?, customer_username = ? WHERE customer_id = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('sssssi', $f_name, $l_name, $email, $phone, $address, $customer_id);
+$stmt->bind_param('ssssssi', $f_name, $l_name, $email, $phone, $address,$username, $customer_id);
 
 if ($stmt->execute() && $stmt->affected_rows > 0) {
     $_SESSION['user']['f_name'] = $f_name;
@@ -34,6 +35,7 @@ if ($stmt->execute() && $stmt->affected_rows > 0) {
     $_SESSION['user']['email'] = $email;
     $_SESSION['user']['phone'] = $phone;
     $_SESSION['user']['street'] = $address;
+    $_SESSION['user']['customer_username'] = $username;
     echo json_encode(['success' => true]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Không thể cập nhật thông tin: ' . $stmt->error]);
