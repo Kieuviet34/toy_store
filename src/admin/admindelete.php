@@ -25,6 +25,9 @@ if (isset($_GET['type']) && isset($_GET['id'])) {
         case 'category':
             $stmt = $conn->prepare("DELETE FROM categories WHERE cat_id = ?");
             break;
+        case 'brands':
+            $stmt = $conn->prepare("DELETE FROM brands WHERE brand_id = ?");
+            break;
         default:
             echo json_encode(["status" => "error", "error" => "Invalid type."]);
             exit;

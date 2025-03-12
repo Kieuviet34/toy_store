@@ -4,42 +4,68 @@
 <div class="row">
     <div class="col-md-3">
         <div class="card text-white bg-primary mb-3">
+            <a href="index.php?page=admin&action=orders#orders">
             <div class="card-body">
                 <h5 class="card-title">Đơn hàng</h5>
                 <p class="card-text"><?php echo number_format($totalOrders, 0, ',', '.'); ?></p>
             </div>
+            </a>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-white bg-success mb-3">
+            <a href="index.php?page=admin&action=customers#customers">
             <div class="card-body">
                 <h5 class="card-title">Khách hàng</h5>
                 <p class="card-text"><?php echo number_format($totalCustomers, 0, ',', '.'); ?></p>
             </div>
+            </a>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-white bg-warning mb-3">
+            <a href="index.php?page=admin&action=staff#staff">
             <div class="card-body">
                 <h5 class="card-title">Nhân viên</h5>
                 <p class="card-text"><?php echo number_format($totalStaffs, 0, ',', '.'); ?></p>
             </div>
+            </a>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-white bg-danger mb-3">
+            <a href="index.php?page=admin&action=products#products">
             <div class="card-body">
                 <h5 class="card-title">Sản phẩm</h5>
                 <p class="card-text"><?php echo number_format($totalProducts, 0, ',', '.'); ?></p>
             </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-secondary mb-3">
+            <a href="index.php?page=admin&action=brands#brands">
+            <div class="card-body">
+                <h5 class="card-title">Hãng</h5>
+                <p class="card-text"><?php echo number_format($totalBrands, 0, ',', '.'); ?></p>
+            </div>
+            </a>
         </div>
     </div>
     <div class="col-md-3">
         <div class="card text-white bg-info mb-3">
+            <a href="index.php?page=admin&action=categories#categories">
             <div class="card-body">
                 <h5 class="card-title">Danh mục</h5>
                 <p class="card-text"><?php echo number_format($totalCategories, 0, ',', '.'); ?></p>
             </div>
+            </a>
         </div>
     </div>
 </div>
+<style>
+    a{
+        text-decoration: none;
+        color: white;
+    }
+</style>

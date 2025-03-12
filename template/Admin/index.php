@@ -31,6 +31,11 @@ $resultProducts = $conn->query($queryTotalProducts);
 $rowProducts = $resultProducts->fetch_assoc();
 $totalProducts = $rowProducts['total_products'];
 
+$queryTotalBrands = "SELECT COUNT(*) as total_brands FROM brands";
+$resultBrands = $conn->query($queryTotalBrands);
+$rowBrands = $resultBrands->fetch_assoc();
+$totalBrands = $rowBrands['total_brands'];
+
 $queryTotalCategories = "SELECT COUNT(*) as total_categories FROM categories";
 $resultCategories = $conn->query($queryTotalCategories);
 $rowCategories = $resultCategories->fetch_assoc();
@@ -171,6 +176,12 @@ $totalCategories = $rowCategories['total_categories'];
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link <?php echo ($action == 'brands') ? 'active' : ''; ?>" href="index.php?page=admin&action=brands#brands">
+                                <span data-feather="box"></span>
+                                Hãng sản xuất
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link <?php echo ($action == 'categories') ? 'active' : ''; ?>" href="index.php?page=admin&action=categories#categories">
                                 <span data-feather="list"></span>
                                 Danh mục
@@ -194,6 +205,8 @@ $totalCategories = $rowCategories['total_categories'];
                     'add_staff',
                     'add_customer',
                     'add_category',
+                    'add_brand',
+                    'update_brand',
                     'mass_receiving'
                 ];
 
@@ -217,9 +230,12 @@ $totalCategories = $rowCategories['total_categories'];
                         include 'src/admin/addcustomer.php';
                     } elseif ($action == 'add_category') {
                         include 'src/admin/addcat.php';
-                    }elseif ($action == 'mass_receiving')
-                    {
+                    }elseif ($action == 'mass_receiving'){
                         include 'src/admin/mass_receiving.php';
+                    }elseif($action == 'add_brand'){
+                        include 'src/admin/addbrand.php';
+                    }elseif($action == 'update_brand'){
+                        include 'src/admin/update_brand.php';
                     }
                 } else {
                 ?>
@@ -252,6 +268,10 @@ $totalCategories = $rowCategories['total_categories'];
                         <!-- Categories Tab -->
                         <div class="tab-pane fade <?php echo ($action == 'categories') ? 'show active' : ''; ?>" id="categories">
                             <?php include 'template/Admin/categories.php'; ?>
+                        </div>
+                        <!-- Brands tab -->
+                        <div class="tab-pane fade <?php echo ($action == 'brands') ? 'show active' : ''; ?>" id="brands">
+                            <?php include 'template/Admin/brands.php'; ?>
                         </div>
                     </div><!-- end tab-content -->
                 <?php

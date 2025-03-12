@@ -1,20 +1,17 @@
 <?php
 include 'inc/database.php';
 
-// Lấy brand_id từ URL (ví dụ: ?brand_id=3)
 $brand_id = isset($_GET['brand_id']) ? (int)$_GET['brand_id'] : 0;
 if ($brand_id <= 0) {
     echo "Hãng sản xuất không hợp lệ.";
     exit;
 }
 
-// PHÂN TRANG
 $limit = 12;
 $currentPage = isset($_GET['p']) ? (int)$_GET['p'] : 1;
 $currentPage = max(1, $currentPage);
 $startAt = $limit * ($currentPage - 1);
 
-// Truy vấn tổng số sản phẩm của hãng
 $totalQuery = "SELECT COUNT(*) as total FROM products WHERE is_deleted = 0 AND brand_id = ?";
 $stmt = $conn->prepare($totalQuery);
 $stmt->bind_param('i', $brand_id);
@@ -24,7 +21,6 @@ $totalProducts = $totalResult['total'];
 $totalPages = ceil($totalProducts / $limit);
 $stmt->close();
 
-// Truy vấn sản phẩm của hãng với phân trang
 $query = "SELECT p.prod_id, p.prod_img, p.prod_name, p.list_price, 
                  b.brand_name, c.cat_name 
           FROM products p
@@ -39,7 +35,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 
-// Lấy tên hãng để hiển thị tiêu đề
 $brandNameQuery = "SELECT brand_name FROM brands WHERE brand_id = ?";
 $stmt = $conn->prepare($brandNameQuery);
 $stmt->bind_param("i", $brand_id);

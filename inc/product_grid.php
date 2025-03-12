@@ -315,6 +315,7 @@ $resultBrands = $conn->query($brandsQuery);
     gap: 10px;
     overflow-x: auto;
     padding: 10px;
+    justify-content: center;
 }
 .brand-card {
     flex: 0 0 auto;

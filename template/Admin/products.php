@@ -45,12 +45,14 @@ $resultProductsList = $conn->query($queryProductsList);
                     echo "<td>" . htmlspecialchars($product['model_year']) . "</td>";
                     echo "<td>" . number_format($product['list_price'], 0, ',', '.') . "₫</td>";
                     echo "<td>
+                            <div style='display:flex;'>
                             <a href='index.php?page=admin&action=update_product&prod_id=" . $product['prod_id'] . "' class='btn btn-sm btn-warning'>
                                 <span data-feather='edit'></span> Sửa
                             </a>
                             <button class='btn btn-sm btn-danger btn-delete' data-type='product' data-id='" . $product['prod_id'] . "'>
                                 <span data-feather='trash-2'></span> Xóa
                             </button>
+                            </div>
                           </td>";
                     echo "</tr>";
                 }
