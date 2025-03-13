@@ -1,6 +1,6 @@
 <?php
 require_once("src/client/config.php"); 
-include 'inc/database.php'; 
+include 'inc/database.php';
 
 // Lấy dữ liệu từ URL (GET)
 $vnp_SecureHash = $_GET['vnp_SecureHash'];
@@ -18,9 +18,9 @@ $i = 0;
 $hashData = "";
 foreach ($inputData as $key => $value) {
     if ($i == 1) {
-        $hashData = $hashData . '&' . urlencode($key) . "=" . urlencode($value);
+        $hashData .= '&' . urlencode($key) . "=" . urlencode($value);
     } else {
-        $hashData = $hashData . urlencode($key) . "=" . urlencode($value);
+        $hashData .= urlencode($key) . "=" . urlencode($value);
         $i = 1;
     }
 }
@@ -28,7 +28,11 @@ foreach ($inputData as $key => $value) {
 // Tạo checksum để kiểm tra tính hợp lệ
 $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
 
-// Xử lý logic khi thanh toán thành công
+// Khởi tạo các biến thông báo
+$message = "";
+$subMessage = "";
+$alertClass = "";
+
 if ($secureHash == $vnp_SecureHash) {
     if ($_GET['vnp_ResponseCode'] == '00') {
         // Thanh toán thành công
@@ -43,35 +47,66 @@ if ($secureHash == $vnp_SecureHash) {
         $stmt->execute();
         $res = $stmt->get_result();
         $order = $res->fetch_assoc();
+        $stmt->close();
 
-        if ($order != NULL) {
-            if ($order['order_status'] == 1) {
+        if ($order != NULL && $order['order_status'] == 1) {
+            // Bắt đầu transaction
+            $conn->begin_transaction();
+            try {
+                // INSERT giao dịch vào bảng transactions
                 $insert_transaction = "INSERT INTO transactions (order_id, customer_id, amount, payment_method, payment_id, payment_status, transaction_status, created_at) 
                                        VALUES (?, ?, ?, 'vnpay', ?, '00', 'success', NOW())";
                 $stmt = $conn->prepare($insert_transaction);
-                $stmt->bind_param('iids', $orderId, $order['customer_id'], $vnp_Amount, $vnpTranId);
-                $stmt->execute();
+                if (!$stmt) {
+                    throw new Exception("Prepare insert transaction error: " . $conn->error);
+                }
+                // Lưu ý: sử dụng định dạng 'iids' => order_id (int), customer_id (int), amount (double), payment_id (string)
+                $stmt->bind_param("iids", $orderId, $order['customer_id'], $vnp_Amount, $vnpTranId);
+                if (!$stmt->execute()) {
+                    throw new Exception("Insert transaction error: " . $stmt->error);
+                }
+                $stmt->close();
 
+                // UPDATE trạng thái đơn hàng thành 2 (thanh toán thành công)
                 $update_order = "UPDATE orders SET order_status = 2 WHERE order_id = ?";
                 $stmt = $conn->prepare($update_order);
+                if (!$stmt) {
+                    throw new Exception("Prepare update order error: " . $conn->error);
+                }
                 $stmt->bind_param('i', $orderId);
-                $stmt->execute();
-            }
-        }
+                if (!$stmt->execute()) {
+                    throw new Exception("Update order error: " . $stmt->error);
+                }
+                $stmt->close();
 
-        $message = "Cảm ơn bạn đã thanh toán thành công!";
-        $subMessage = "Đơn hàng của bạn đã được xử lý thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
-        $alertClass = "alert-success";
+                // Commit transaction
+                $conn->commit();
+                
+                $message = "Cảm ơn bạn đã thanh toán thành công!";
+                $subMessage = "Đơn hàng của bạn đã được xử lý thành công. Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.";
+                $alertClass = "alert-success";
+            } catch (Exception $e) {
+                $conn->rollback();
+                $message = "Lỗi khi xử lý giao dịch";
+                $subMessage = $e->getMessage();
+                $alertClass = "alert-danger";
+            }
+        } else {
+            // Đơn hàng không hợp lệ hoặc đã được xử lý trước đó
+            $message = "Giao dịch không được xử lý";
+            $subMessage = "Đơn hàng không hợp lệ hoặc đã được xử lý.";
+            $alertClass = "alert-warning";
+        }
     } else {
         // Thanh toán thất bại
         $message = "Thanh toán thất bại";
-        $subMessage = "Giao dịch của bạn không thành công. Vui lòng thử lại hoặc liên hệ với chúng tôi để được hỗ trợ.";
+        $subMessage = "Giao dịch của bạn không thành công. Vui lòng thử lại hoặc liên hệ hỗ trợ.";
         $alertClass = "alert-danger";
     }
 } else {
     // Chữ ký không hợp lệ
     $message = "Lỗi: Chữ ký không hợp lệ";
-    $subMessage = "Dữ liệu giao dịch có thể đã bị thay đổi. Vui lòng liên hệ hỗ trợ để được giải quyết.";
+    $subMessage = "Dữ liệu giao dịch có thể đã bị thay đổi. Vui lòng liên hệ hỗ trợ.";
     $alertClass = "alert-warning";
 }
 ?>

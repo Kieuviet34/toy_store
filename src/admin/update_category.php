@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="modal-content">
             <div class="modal-body text-center">
                 <i class="bi bi-check-circle-fill" style="font-size: 3rem; color: green;"></i>
-                <h4 class="mt-3">✅ Cập nhật thành công!</h4>
+                <h4 class="mt-3">Cập nhật thành công!</h4>
             </div>
         </div>
     </div>

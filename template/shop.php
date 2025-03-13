@@ -10,7 +10,7 @@ $filter_price_max = isset($_GET['price_max']) && $_GET['price_max'] !== '' ? (fl
 
 ?>
 
-<div class="filter-container">
+<div class="filter-container" style="margin-left: 14px">
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             Bộ lọc

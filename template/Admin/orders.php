@@ -17,9 +17,9 @@ $resultOrdersList = $conn->query($queryOrdersList);
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Quản lý đơn hàng</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrderModal">
-            <span data-feather="plus"></span> Thêm đơn hàng
-        </button>
+        <a href="src/admin/export_orders_excel.php" class="btn btn-primary">
+            <span data-feather="file-text"></span> Xuất báo cáo Excel
+        </a>
     </div>
 </div>
 <div class="mb-3">
@@ -54,9 +54,9 @@ $resultOrdersList = $conn->query($queryOrdersList);
                     }
                     echo "</td>";
                     echo "<td>
-                            <a href='index.php?page=admin&action=update_order&id=" . $order['order_id'] . "' class='btn btn-sm btn-warning'>
-                                <span data-feather='edit'></span> Sửa
-                            </a>
+                            <button class='btn btn-sm btn-info btn-view' data-id='" . $order['order_id'] . "' data-bs-toggle='modal' data-bs-target='#viewOrderModal'>
+                                <span data-feather='eye'></span> Xem đơn hàng
+                            </button>
                             <button class='btn btn-sm btn-danger btn-delete' data-type='order' data-id='" . $order['order_id'] . "'>
                                 <span data-feather='trash-2'></span> Xóa
                             </button>
@@ -70,3 +70,34 @@ $resultOrdersList = $conn->query($queryOrdersList);
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewOrderModalLabel">Chi tiết đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="orderDetailsContent">
+                <div class="text-center">Đang tải thông tin...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.btn-view').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var orderId = this.getAttribute('data-id');
+            fetch('src/admin/get_order_details.php?id=' + orderId)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('orderDetailsContent').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('orderDetailsContent').innerHTML = '<p class=\"text-danger\">Lỗi tải thông tin đơn hàng.</p>';
+                });
+        });
+    });
+</script>

@@ -1,5 +1,4 @@
 <?php
-
 if (!isset($_SESSION['user']) && !isset($_SESSION['admin'])) {
     header("Location: login.php");
     exit;
@@ -34,6 +33,10 @@ $user = $result->fetch_assoc();
     <h2>Cập Nhật Thông Tin</h2>
     <form id="updateInfoForm">
         <div class="mb-3">
+            <label for="customer_username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="customer_username" name="customer_username" value="<?php echo htmlspecialchars($user['customer_username'] ?? ''); ?>" required>
+        </div>
+        <div class="mb-3">
             <label for="f_name" class="form-label">Họ</label>
             <input type="text" class="form-control" id="f_name" name="f_name" value="<?php echo htmlspecialchars($user['f_name'] ?? ''); ?>" required>
         </div>
@@ -54,6 +57,7 @@ $user = $result->fetch_assoc();
             <input type="text" class="form-control" id="street" name="street" value="<?php echo htmlspecialchars($user['street'] ?? ''); ?>">
         </div>
         <button type="submit" class="btn btn-primary w-100">Lưu thay đổi</button>
+        <button type="button" class="btn btn-secondary w-100 mt-2" onclick="window.location.href='index.php?page=change_password'">Thay đổi mật khẩu</button>
     </form>
 </div>
 
@@ -61,6 +65,7 @@ $user = $result->fetch_assoc();
     document.getElementById('updateInfoForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = {
+            customer_username: document.getElementById('customer_username').value,
             f_name: document.getElementById('f_name').value,
             l_name: document.getElementById('l_name').value,
             email: document.getElementById('email').value,

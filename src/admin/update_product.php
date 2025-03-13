@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="prod_img" class="col-sm-3 col-form-label">Ảnh sản phẩm</label>
                     <div class="col-sm-9">
                         <?php if ($product['prod_img']): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($product['prod_img']); ?>" alt="Ảnh sản phẩm hiện tại" class="current-img mb-2">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($product['prod_img']); ?>" alt="Ảnh sản phẩm hiện tại" class="current-img mb-2" height="150px">
                         <?php endif; ?>
                         <input type="file" class="form-control" id="prod_img" name="prod_img" accept="image/jpeg,image/png,image/gif">
                         <small class="form-text text-muted">Định dạng: JPG, PNG, GIF. Kích thước tối đa: 5MB.</small>
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Cập nhật</button>
-                    <a href="index.php?page=admin#products" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
+                    <a href="index.php?page=admin&action=products#products" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
                 </div>
             </form>
         </div>

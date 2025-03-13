@@ -221,10 +221,10 @@ $result_related = $stmt_related->get_result();
             <i class="bi bi-cart d-inline-block mx-1" style="position: relative; top: -2px;"></i>
             THÊM VÀO GIỎ HÀNG
         </button>
-        <a href="index.php?page=cart"><button type="button" class="btn btn-success">
+        <button type="button" class="btn btn-success" onclick="buyNow(<?php echo $product['prod_id']; ?>)">
             <i class="bi bi-wallet2" style="position: relative; top: -2px;"></i>
             MUA NGAY
-        </button></a>
+        </button>
     </div>
 </div>
 <div class="product-related">
@@ -310,4 +310,28 @@ function addToCart(productId) {
         alert('Đã xảy ra lỗi khi thêm sản phẩm.');
     });
 }
+
+function buyNow(productId) {
+    fetch('src/client/add_to_cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prod_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = 'index.php?page=cart';
+        } else {
+            alert('Có lỗi xảy ra: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi khi thêm sản phẩm.');
+    });
+}
+
+
 </script>
