@@ -95,7 +95,7 @@
         </div>
       </div>
     </div>
-    <div class="px-3 py-2 border-bottom mb-3">
+    <div class="px-3 py-2 border-bottom mb-3 postion-sticky top-0" >
       <div class="container d-flex flex-wrap justify-content-center position-relative">
         <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto position-relative">
           <input type="search" class="form-control" id="searchInput" placeholder="Tìm kiếm..." aria-label="Search">

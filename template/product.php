@@ -289,49 +289,87 @@ function openFullscreen() {
     document.body.appendChild(fullscreenDiv);
 }
 
-function addToCart(productId) {
-    fetch('src/client/add_to_cart.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prod_id: productId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Sản phẩm đã được thêm vào giỏ hàng!');
-        } else {
-            alert('Có lỗi xảy ra: ' + data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Đã xảy ra lỗi khi thêm sản phẩm.');
-    });
+
+function showAlert(message, type) {
+    const alertDiv = document.createElement("div");
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.role = "alert";
+    alertDiv.innerHTML = message + 
+      '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    
+    
+    alertDiv.style.position = "fixed";
+    alertDiv.style.top = "20px";
+    alertDiv.style.left = "35%";
+    alertDiv.style.zIndex = "1050";
+    
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+      alertDiv.classList.remove("show");
+      alertDiv.classList.add("hide");
+      setTimeout(() => { 
+        document.body.removeChild(alertDiv); 
+      }, 500);
+    }, 3000);
 }
 
-function buyNow(productId) {
-    fetch('src/client/add_to_cart.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ prod_id: productId })
+
+  function showError(message){
+    showAlert(message, "danger");
+  }
+
+  function showSuccess(message) {
+    showAlert(message, "success");
+  }
+
+  function addToCart(productId) {
+    fetch("src/client/add_to_cart.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prod_id: productId })
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            window.location.href = 'index.php?page=cart';
-        } else {
-            alert('Có lỗi xảy ra: ' + data.error);
-        }
+      if (data.success) {
+        showSuccess("Sản phẩm đã được thêm vào giỏ hàng!");
+      } else {
+        showError("Có lỗi xảy ra: " + data.error);
+      }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Đã xảy ra lỗi khi thêm sản phẩm.');
+      console.error("Error:", error);
+      showError("Đã xảy ra lỗi khi thêm sản phẩm.");
     });
-}
+  }
+
+  function buyNow(productId) {
+    fetch("src/client/add_to_cart.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prod_id: productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showSuccess("Sản phẩm đã được thêm vào giỏ hàng!");
+        setTimeout(() => { 
+          window.location.href = "index.php?page=cart"; 
+        }, 1500);
+      } else {
+        showError("Có lỗi xảy ra: " + data.error);
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      showError("Đã xảy ra lỗi khi thêm sản phẩm.");
+    });
+  }
+</script>
 
 
 </script>

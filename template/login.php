@@ -24,12 +24,13 @@
                     <div class="text-center">
                         <button type="submit" class="btn btn-dark px-5 mb-5 w-100">Đăng nhập</button>
                     </div>
+                    <div id="alert-container"></div>
                     <div id="emailHelp" class="form-text text-center mb-5 text-dark">
                         Bạn không có tài khoản? <a href="index.php?page=register" class="text-dark fw-bold">Đăng ký tài khoản ngay!</a>
                         <br>
                         <a href="index.php?page=forgot_password" class="text-dark fw-bold">Quên mật khẩu?</a>
                     </div>
-                    <div id="alert-container"></div>
+                    
                 </form>
             </div>
         </div>
