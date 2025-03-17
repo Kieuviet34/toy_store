@@ -33,7 +33,7 @@ nếu có lỗi thì mở php.ini uncomment những dòng sau (bỏ dấu ; ở 
 ```
 ## Database Setup
 
-Để tạo table, chèn file create_table.sql trong `database/migration` vào mysql hoặc phpadmin
+Để tạo table, chèn file create_table.sql trong `database/migration` vào MySQL hoặc phpadmin
 
 ## Running the Application
 
