@@ -128,16 +128,28 @@ $totalCategories = $rowCategories['total_categories'];
 <body>
     <!-- Header -->
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="index.php?page=admin&action=dashboard#dashboard">AllainStore Admin</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="index.php?page=admin&action=dashboard#dashboard">
+            AllainStore Admin
+        </a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-nav">
-            <div class="nav-item text-nowrap">
-                <a class="nav-link px-3" href="index.php?page=logout">Sign out</a>
+        <div class="navbar-nav ms-auto">
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle px-3" href="#" id="navbarDropdown" role="button" 
+                data-bs-toggle="dropdown" aria-expanded="false">
+                    Tài khoản
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" style="position: absolute; top: 100%;">
+                    <li><a class="dropdown-item" href="index.php?page=admin&action=profile">Thông tin tài khoản</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="index.php?page=logout">Sign out</a></li>
+                </ul>
             </div>
         </div>
     </header>
+
 
     <div class="container-fluid">
         <div class="row">
@@ -207,7 +219,8 @@ $totalCategories = $rowCategories['total_categories'];
                     'add_category',
                     'add_brand',
                     'update_brand',
-                    'mass_receiving'
+                    'mass_receiving',
+                    'profile'
                 ];
 
                 if (in_array($action, $specialActions)) {
@@ -236,6 +249,8 @@ $totalCategories = $rowCategories['total_categories'];
                         include 'src/admin/addbrand.php';
                     }elseif($action == 'update_brand'){
                         include 'src/admin/update_brand.php';
+                    }elseif($action == 'profile'){
+                        include 'src/admin/profile.php';
                     }
                 } else {
                 ?>
