@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="brand_id" class="col-sm-3 col-form-label">Hãng</label>
                     <div class="col-sm-9">
                         <select class="form-select" id="brand_id" name="brand_id" required>
+                            <option value="">Chọn hãng</option>
                             <?php while ($brand = $brands_result->fetch_assoc()): ?>
                                 <option value="<?php echo $brand['brand_id']; ?>">
                                     <?php echo htmlspecialchars($brand['brand_name']); ?>
@@ -87,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="cat_id" class="col-sm-3 col-form-label">Danh mục</label>
                     <div class="col-sm-9">
                         <select class="form-select" id="cat_id" name="cat_id" required>
+                            <option value="">Chọn danh mục</option>
                             <?php while ($category = $categories_result->fetch_assoc()): ?>
                                 <option value="<?php echo $category['cat_id']; ?>">
                                     <?php echo htmlspecialchars($category['cat_name']); ?>

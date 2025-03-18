@@ -12,7 +12,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm khách hàng...">
+    <input type="text" class="form-control" id="CustomersearchInput" placeholder="Tìm kiếm khách hàng...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
@@ -27,7 +27,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody id="TableBody">
+        <tbody id="CusTableBody">
             <?php
             if ($resultCustomersList && $resultCustomersList->num_rows > 0) {
                 while ($customer = $resultCustomersList->fetch_assoc()) {
@@ -56,8 +56,8 @@ $resultCustomersList = $conn->query($queryCustomersList);
     </table>
 </div>
 <script>
-    const CustomersearchInput = document.getElementById('searchInput');
-    const CustomerTableBody = document.getElementById('TableBody');
+    const CustomersearchInput = document.getElementById('CustomersearchInput');
+    const CustomerTableBody = document.getElementById('CusTableBody');
 
     CustomersearchInput.addEventListener('input', function() {
         const query = this.value.trim();
