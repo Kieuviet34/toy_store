@@ -92,22 +92,19 @@
         </div>
     </div>
 
-<!-- Dùng chart.js để vẽ biểu đồ -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </div>
 <script>
-    // Lấy dữ liệu từ PHP (JSON)
-    const labels = <?php echo $labelsJson; ?>;      // Mảng ngày
-    const dataSet = <?php echo $datasetJson; ?>;    // Mảng doanh thu
+    const labels = <?php echo $labelsJson; ?>;      
+    const dataSet = <?php echo $datasetJson; ?>;   
 
-    // Cấu hình cho biểu đồ
     const data = {
         labels: labels,
         datasets: [{
             label: 'Doanh thu (VND)',
             data: dataSet,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',   // Màu cột/bar
-            borderColor: 'rgba(54, 162, 235, 1)',         // Màu viền
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',   
+            borderColor: 'rgba(54, 162, 235, 1)',      
             borderWidth: 2
         }]
     };
@@ -121,9 +118,7 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        // Format tiền tệ
                         callback: function(value) {
-                            // Tùy cách format, ví dụ 1,000,000
                             return value.toLocaleString() + '₫';
                         }
                     }
@@ -141,7 +136,6 @@
         }
     };
 
-    // Khởi tạo biểu đồ
     const ctx = document.getElementById('revenueChart').getContext('2d');
     new Chart(ctx, config);
 </script>

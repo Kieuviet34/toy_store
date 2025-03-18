@@ -23,7 +23,6 @@ $totalProducts = $conn->query("SELECT COUNT(*) FROM products WHERE is_deleted = 
 $totalPages = ceil($totalProducts / $limit);
 
 // --- PHẦN BEST-SELLING PRODUCTS (Sản phẩm bán chạy) ---
-// Sử dụng tham số GET bestSellingPg nếu có, để phân trang riêng cho slider bán chạy
 $bestSellingLimit = 5;
 $bestSellingCurrentPage = isset($_GET['bestSellingPg']) ? (int)$_GET['bestSellingPg'] : 1;
 $bestSellingCurrentPage = max(1, $bestSellingCurrentPage);
@@ -312,20 +311,41 @@ $resultBrands = $conn->query($brandsQuery);
 }
 .brand-slider-wrapper {
     display: flex;
-    gap: 10px;
-    overflow-x: auto;
+    overflow-x: auto; /* Cho phép cuộn ngang */
+    white-space: nowrap; /* Đảm bảo các brand nằm trên một hàng */
     padding: 10px;
-    justify-content: center;
+    justify-content: flex-start; /* Bắt đầu từ bên trái thay vì căn giữa */
+    scrollbar-width: thin; /* Thanh cuộn mỏng hơn cho Firefox */
+    scrollbar-color: #ddd #fff; /* Màu thanh cuộn cho Firefox */
 }
+
+/* Tùy chỉnh thanh cuộn cho WebKit (Chrome, Safari) */
+.brand-slider-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+.brand-slider-wrapper::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 4px;
+}
+.brand-slider-wrapper::-webkit-scrollbar-track {
+    background-color: #fff;
+}
+
 .brand-card {
-    flex: 0 0 auto;
+    display: inline-block; 
+    flex: 0 0 auto; 
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     text-align: center;
-    min-width: 100px;
+    min-width: 100px; 
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s, color 0.3s;
+    margin-right: 10px; 
+}
+
+.brand-card:last-child {
+    margin-right: 0;
 }
 
 .brand-card:hover {
