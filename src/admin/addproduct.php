@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('ssiiid', $prod_name, $prod_img, $brand_id, $cat_id, $model_year, $list_price);
             if ($stmt->execute()) {
                 echo '<div class="alert alert-success" role="alert">Thêm sản phẩm thành công!</div>';
-                echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin#products"; }, 2000);</script>';
+                echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin&action=products#products"; }, 2000);</script>';
                 exit;
             } else {
                 $error = "Không thể thêm sản phẩm: " . $stmt->error;
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Thêm</button>
-                    <a href="index.php?page=admin#products" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
+                    <a href="index.php?page=admin&action=products#products" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
                 </div>
             </form>
         </div>

@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="d-flex justify-content-end gap-2">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Thêm</button>
-                    <a href="index.php?page=admin#brands" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
+                    <a href="index.php?page=admin&action=brands#brands" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
                 </div>
             </form>
         </div>
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <script>
         setTimeout(function() {
-            window.location.href = "index.php?page=admin#brands";
+            window.location.href = "index.php?page=admin&action=brands#brands";
         }, 2000);
     </script>
 <?php endif; ?>

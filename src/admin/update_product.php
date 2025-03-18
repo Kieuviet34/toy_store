@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('siiidsi', $prod_name, $brand_id, $cat_id, $model_year, $list_price, $prod_img, $prod_id);
             if ($stmt->execute() && $stmt->affected_rows > 0) {
                 echo '<div class="alert alert-success" role="alert">Cập nhật sản phẩm thành công!</div>';
-                echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin#products"; }, 2000);</script>';
+                echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin&action=products#products"; }, 2000);</script>';
                 exit;
             } else {
                 $error = "Không thể cập nhật sản phẩm: " . $stmt->error;

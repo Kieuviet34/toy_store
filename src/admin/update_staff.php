@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $conn->commit();
             echo '<div class="alert alert-success" role="alert">Cập nhật nhân viên thành công!</div>';
-            echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin#staff"; }, 1500);</script>';
+            echo '<script>setTimeout(function(){ window.location.href = "index.php?page=admin&action=staff#staff"; }, 1500);</script>';
             exit;
         } catch (Exception $e) {
             $conn->rollback();
@@ -216,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <button type="button" class="btn btn-primary" id="submitBtn">
                             <i class="bi bi-save me-2"></i>Cập nhật
                         </button>
-                        <a href="index.php?page=admin#staff" class="btn btn-secondary">
+                        <a href="index.php?page=admin&action=staff#staff" class="btn btn-secondary">
                             <i class="bi bi-arrow-left me-2"></i>Quay lại
                         </a>
                     </div>

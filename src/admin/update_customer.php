@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="d-flex justify-content-end gap-2">
             <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Cập nhật</button>
-            <a href="index.php?page=admin#customers" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
+            <a href="index.php?page=admin&action=customers#customers" class="btn btn-secondary"><i class="bi bi-arrow-left me-2"></i>Quay lại</a>
         </div>
     </form>
 </div>
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   var successModal = new bootstrap.Modal(document.getElementById('updateSuccessModal'));
   successModal.show();
   setTimeout(function() {
-    window.location.href = "index.php?page=admin#customers";
+    window.location.href = "index.php?page=admin&action=customers#customers";
   }, 2000);
 </script>
 <?php endif; ?>
