@@ -12,7 +12,7 @@ $resultCategoriesList = $conn->query($queryCategoriesList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Tìm kiếm danh mục...">
+    <input type="text" class="form-control" id="CatSearchInput" placeholder="Tìm kiếm danh mục...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
@@ -23,7 +23,7 @@ $resultCategoriesList = $conn->query($queryCategoriesList);
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="CatTableBody">
             <?php
             if ($resultCategoriesList && $resultCategoriesList->num_rows > 0) {
                 while ($category = $resultCategoriesList->fetch_assoc()) {
@@ -47,3 +47,30 @@ $resultCategoriesList = $conn->query($queryCategoriesList);
         </tbody>
     </table>
 </div>
+<script>
+    const CatsearchInput = document.getElementById('CatSearchInput');
+    const CatTableBody = document.getElementById('CatTableBody');
+
+    CatsearchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+            fetch('src/admin/cat_search.php?q=')
+            .then(response => response.text())
+            .then(html => {
+                CatTableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Error:', err));
+            return;
+        }
+
+        fetch('src/admin/cat_search.php?q=' + encodeURIComponent(query))
+        .then(response => response.text())
+        .then(html => {
+            CatTableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
