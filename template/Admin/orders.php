@@ -18,9 +18,10 @@ $resultOrdersList = $conn->query($queryOrdersList);
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Quản lý đơn hàng</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="src/admin/export_orders_excel.php" class="btn btn-primary">
-            <span data-feather="file-text"></span> Xuất báo cáo Excel
-        </a>
+        <!-- Nút xuất báo cáo Excel sử dụng JS SheetJS -->
+        <button class="btn btn-primary" onclick="exportOrdersToExcel()">
+            <span data-feather=\"file-text\"></span> Xuất báo cáo Excel
+        </button>
     </div>
 </div>
 <div class="mb-3">
@@ -126,5 +127,20 @@ $resultOrdersList = $conn->query($queryOrdersList);
             console.error('Error:', error);
         });
     });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+function exportOrdersToExcel() {
+    fetch('src/admin/export_orders_excel.php')
+        .then(response => response.json())
+        .then(data => {
+            var ws = XLSX.utils.json_to_sheet(data);
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Orders");
+            XLSX.writeFile(wb, "orders_report_" + new Date().toISOString().replace(/[-:]/g, '').slice(0,14) + ".xlsx");
+        })
+        .catch(err => console.error('Error exporting orders:', err));
+}
 </script>
 
