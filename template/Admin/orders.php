@@ -2,14 +2,15 @@
 $queryOrdersList = "
     SELECT 
         o.order_id, 
-        o.customer_id, 
+        CONCAT(c.f_name, ' ', c.l_name) AS customer_name,
         o.order_date, 
         o.order_status, 
         COALESCE(SUM(oi.list_price * oi.quantity * (1 - oi.discount)), 0) AS total_amount
     FROM orders o
     LEFT JOIN order_items oi ON o.order_id = oi.order_id
+    LEFT JOIN customers c ON o.customer_id = c.customer_id
     WHERE o.is_deleted = 0
-    GROUP BY o.order_id, o.customer_id, o.order_date, o.order_status
+    GROUP BY o.order_id, c.f_name, c.l_name, o.order_date, o.order_status
     ORDER BY o.order_date ASC";
 $resultOrdersList = $conn->query($queryOrdersList);
 ?>
@@ -23,27 +24,27 @@ $resultOrdersList = $conn->query($queryOrdersList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Tìm kiếm đơn hàng...">
+    <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm đơn hàng...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>Mã đơn</th>
-                <th>Mã Khách hàng</th>
+                <th>Tên Khách hàng</th>
                 <th>Ngày đặt</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="TableBody">
             <?php
             if ($resultOrdersList && $resultOrdersList->num_rows > 0) {
                 while ($order = $resultOrdersList->fetch_assoc()) {
                     echo "<tr>";
                     echo "<td>#" . htmlspecialchars($order['order_id']) . "</td>";
-                    echo "<td>" . htmlspecialchars($order['customer_id']) . "</td>";
+                    echo "<td>" . htmlspecialchars($order['customer_name']) . "</td>";
                     echo "<td>" . htmlspecialchars($order['order_date']) . "</td>";
                     echo "<td>" . number_format($order['total_amount'], 0, ',', '.') . "₫</td>";
                     echo "<td>";
@@ -100,4 +101,30 @@ $resultOrdersList = $conn->query($queryOrdersList);
                 });
         });
     });
+    const ordersearchInput = document.getElementById('searchInput');
+    const orderTableBody = document.getElementById('TableBody');
+
+    ordersearchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+            fetch('src/admin/order_search.php?q=')
+            .then(response => response.text())
+            .then(html => {
+                orderTableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Error:', err));
+            return;
+        }
+
+        fetch('src/admin/order_search.php?q=' + encodeURIComponent(query))
+        .then(response => response.text())
+        .then(html => {
+            orderTableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
 </script>
+

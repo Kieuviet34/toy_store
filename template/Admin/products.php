@@ -20,7 +20,7 @@ $resultProductsList = $conn->query($queryProductsList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+    <input type="text" class="form-control" id="ProdsearchInput" placeholder="Tìm kiếm sản phẩm...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
@@ -34,7 +34,7 @@ $resultProductsList = $conn->query($queryProductsList);
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="ProdTableBody">
             <?php
             if ($resultProductsList && $resultProductsList->num_rows > 0) {
                 while ($product = $resultProductsList->fetch_assoc()) {
@@ -63,3 +63,30 @@ $resultProductsList = $conn->query($queryProductsList);
         </tbody>
     </table>
 </div>
+<script>
+    const searchInput = document.getElementById('ProdsearchInput');
+    const productTableBody = document.getElementById('ProdTableBody');
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+            fetch('src/admin/product_search.php?q=')
+            .then(response => response.text())
+            .then(html => {
+                productTableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Error:', err));
+            return;
+        }
+
+        fetch('src/admin/product_search.php?q=' + encodeURIComponent(query))
+        .then(response => response.text())
+        .then(html => {
+            productTableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>

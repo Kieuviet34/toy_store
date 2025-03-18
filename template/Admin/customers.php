@@ -12,7 +12,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Tìm kiếm khách hàng...">
+    <input type="text" class="form-control" id="searchInput" placeholder="Tìm kiếm khách hàng...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
@@ -27,7 +27,7 @@ $resultCustomersList = $conn->query($queryCustomersList);
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="TableBody">
             <?php
             if ($resultCustomersList && $resultCustomersList->num_rows > 0) {
                 while ($customer = $resultCustomersList->fetch_assoc()) {
@@ -55,3 +55,30 @@ $resultCustomersList = $conn->query($queryCustomersList);
         </tbody>
     </table>
 </div>
+<script>
+    const CustomersearchInput = document.getElementById('searchInput');
+    const CustomerTableBody = document.getElementById('TableBody');
+
+    CustomersearchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+            fetch('src/admin/customer_search.php?q=')
+            .then(response => response.text())
+            .then(html => {
+                productTableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Error:', err));
+            return;
+        }
+
+        fetch('src/admin/customer_search.php?q=' + encodeURIComponent(query))
+        .then(response => response.text())
+        .then(html => {
+            CustomerTableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>

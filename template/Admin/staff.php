@@ -19,7 +19,7 @@ $resultStaffList = $conn->query($queryStaffList);
     </div>
 </div>
 <div class="mb-3">
-    <input type="text" class="form-control" placeholder="Tìm kiếm nhân viên...">
+    <input type="text" class="form-control" id="StaffSearchInput" placeholder="Tìm kiếm nhân viên...">
 </div>
 <div class="table-responsive">
     <table class="table table-striped table-hover">
@@ -33,7 +33,7 @@ $resultStaffList = $conn->query($queryStaffList);
                 <th>Thao tác</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="StaffTableBody">
             <?php
             if ($resultStaffList && $resultStaffList->num_rows > 0) {
                 while ($staff = $resultStaffList->fetch_assoc()) {
@@ -66,3 +66,30 @@ $resultStaffList = $conn->query($queryStaffList);
         </tbody>
     </table>
 </div>
+<script>
+    const StaffsearchInput = document.getElementById('StaffSearchInput');
+    const StaffTableBody = document.getElementById('StaffTableBody');
+
+    StaffsearchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+
+        if (query.length === 0) {
+            fetch('src/admin/staff_search.php?q=')
+            .then(response => response.text())
+            .then(html => {
+                StaffTableBody.innerHTML = html;
+            })
+            .catch(err => console.error('Error:', err));
+            return;
+        }
+
+        fetch('src/admin/staff_search.php?q=' + encodeURIComponent(query))
+        .then(response => response.text())
+        .then(html => {
+            StaffTableBody.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
