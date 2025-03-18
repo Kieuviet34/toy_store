@@ -16,11 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $email    = $_POST['email'];
     $phone    = $_POST['phone'];
-    $password = $_POST['password']; // Lấy mật khẩu từ input ẩn (nếu có thay đổi)
+    $password = $_POST['password']; 
 
     $errors = [];
 
-    // Nếu có mật khẩu mới được nhập thì validate
     if (!empty($password)) {
         if (strlen($password) < 8) {
             $errors[] = "Mật khẩu phải có ít nhất 8 ký tự";
@@ -39,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($errors)) {
         $error = implode("\n", $errors);
     } else {
-        // Nếu mật khẩu mới được nhập thì cập nhật, ngược lại bỏ qua trường password
         if (!empty($password)) {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE staffs SET 
@@ -60,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $adminInfo['staff_id']
             );
         } else {
-            // Không cập nhật mật khẩu nếu không có giá trị mới
             $stmt = $conn->prepare("UPDATE staffs SET 
                 staff_f_name = ?,
                 staff_l_name = ?,
@@ -135,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="col-md-6">
                 <label class="form-label">Mật khẩu mới</label>
-                <!-- Button mở modal thay đổi mật khẩu --> 
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePassModal">
                     Thay đổi mật khẩu
                 </button>
@@ -146,7 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </button>
             </div>
         </div>
-        <!-- Input ẩn để lưu mật khẩu mới từ modal, sẽ được gửi qua form nếu có thay đổi --> 
         <input type="hidden" name="password" id="hiddenPassword">
     </form>
 </div>
@@ -189,7 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         input.type = input.type === 'password' ? 'text' : 'password';
     }
 
-    // Xử lý form modal thay đổi mật khẩu
     document.getElementById('changePassForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const newPass = document.getElementById('new_password_modal').value;
@@ -201,16 +195,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             messageDiv.innerHTML = '<div class="alert alert-warning">Mật khẩu không khớp!</div>';
             return;
         }
-        // Nếu hợp lệ, cập nhật giá trị mật khẩu mới vào input ẩn trong form chính
         document.getElementById('hiddenPassword').value = newPass;
         
-        // Đóng modal thay đổi mật khẩu
         var modalEl = document.getElementById('changePassModal');
         var modal = bootstrap.Modal.getInstance(modalEl);
         modal.hide();
     });
     
-    // Modal thành công tự động ẩn sau 2 giây và chuyển hướng trang (nếu cập nhật thành công)
     <?php if ($success): ?>
     setTimeout(() => {
         let successModal = document.getElementById('successModal');
@@ -219,7 +210,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }, 2000);
     <?php endif; ?>
     
-    // Modal lỗi tự động ẩn sau 2 giây (nếu có lỗi)
     <?php if ($error): ?>
     setTimeout(() => {
         let errorModal = document.getElementById('errorModal');
