@@ -7,18 +7,20 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
 }
 
 $adminInfo = $_SESSION['staff'];
-
 $success = false;
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $f_name = $_POST['f_name'];
-    $l_name = $_POST['l_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $password = $_POST['password'];
+    $f_name   = $_POST['f_name'];
+    $l_name   = $_POST['l_name'];
+    $username = $_POST['username'];
+    $email    = $_POST['email'];
+    $phone    = $_POST['phone'];
+    $password = $_POST['password']; // Lấy mật khẩu từ input ẩn (nếu có thay đổi)
 
     $errors = [];
+
+    // Nếu có mật khẩu mới được nhập thì validate
     if (!empty($password)) {
         if (strlen($password) < 8) {
             $errors[] = "Mật khẩu phải có ít nhất 8 ký tự";
@@ -35,33 +37,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (!empty($errors)) {
-        $error = implode('\n', $errors);
+        $error = implode("\n", $errors);
     } else {
-        $hashed_password = !empty($password) ? password_hash($password, PASSWORD_DEFAULT) : $adminInfo['staff_password'];
-
-        $stmt = $conn->prepare("UPDATE staffs SET 
-            staff_f_name = ?,
-            staff_l_name = ?,
-            email = ?,
-            phone = ?,
-            staff_password = ?
-            WHERE staff_id = ?");
-
-        $stmt->bind_param("sssssi", 
-            $f_name,
-            $l_name,
-            $email,
-            $phone,
-            $hashed_password,
-            $adminInfo['staff_id']
-        );
+        // Nếu mật khẩu mới được nhập thì cập nhật, ngược lại bỏ qua trường password
+        if (!empty($password)) {
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("UPDATE staffs SET 
+                staff_f_name = ?,
+                staff_l_name = ?,
+                staff_username = ?,
+                email = ?,
+                phone = ?,
+                staff_password = ?
+                WHERE staff_id = ?");
+            $stmt->bind_param("ssssssi", 
+                $f_name,
+                $l_name,
+                $username,
+                $email,
+                $phone,
+                $hashed_password,
+                $adminInfo['staff_id']
+            );
+        } else {
+            // Không cập nhật mật khẩu nếu không có giá trị mới
+            $stmt = $conn->prepare("UPDATE staffs SET 
+                staff_f_name = ?,
+                staff_l_name = ?,
+                staff_username = ?,
+                email = ?,
+                phone = ?
+                WHERE staff_id = ?");
+            $stmt->bind_param("sssssi", 
+                $f_name,
+                $l_name,
+                $username,
+                $email,
+                $phone,
+                $adminInfo['staff_id']
+            );
+        }
 
         if ($stmt->execute()) {
             $_SESSION['staff'] = array_merge($_SESSION['staff'], [
-                'f_name' => $f_name,
-                'l_name' => $l_name,
-                'email' => $email,
-                'phone' => $phone
+                'f_name'   => $f_name,
+                'l_name'   => $l_name,
+                'username' => $username,
+                'email'    => $email,
+                'phone'    => $phone
             ]);
             $success = true;
         } else {
@@ -98,33 +121,115 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label class="form-label">Họ</label>
                 <input type="text" class="form-control" name="l_name" value="<?= htmlspecialchars($adminInfo['l_name']) ?>" required>
             </div>
-
-            <div class="col-12">
+            <div class="col-md-6">
                 <label class="form-label">Email</label>
                 <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($adminInfo['email']) ?>" required>
             </div>
-
+            <div class="col-md-6">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" name="username" value="<?= htmlspecialchars($adminInfo['username']) ?>" required>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Điện thoại</label>
                 <input type="tel" class="form-control" name="phone" value="<?= htmlspecialchars($adminInfo['phone']) ?>" required>
             </div>
-
             <div class="col-md-6">
-                <label class="form-label">Mật khẩu mới (để trống nếu không đổi)</label>
-                <input type="password" class="form-control" name="password">
+                <label class="form-label">Mật khẩu mới</label>
+                <!-- Button mở modal thay đổi mật khẩu --> 
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePassModal">
+                    Thay đổi mật khẩu
+                </button>
             </div>
-
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-save me-2"></i>Cập nhật
                 </button>
             </div>
         </div>
+        <!-- Input ẩn để lưu mật khẩu mới từ modal, sẽ được gửi qua form nếu có thay đổi --> 
+        <input type="hidden" name="password" id="hiddenPassword">
     </form>
 </div>
 
+<!-- Modal thay đổi mật khẩu -->
+<div class="modal fade" id="changePassModal" tabindex="-1" aria-labelledby="changePassModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePassModalLabel">Thay đổi mật khẩu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="changePassForm">
+          <div class="mb-3 input-group">
+            <input type="password" class="form-control" id="new_password_modal" placeholder="Mật khẩu mới" required>
+            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('new_password_modal')">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div class="mb-3 input-group">
+            <input type="password" class="form-control" id="confirm_password_modal" placeholder="Xác nhận mật khẩu mới" required>
+            <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password_modal')">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          <div id="modalPassMessage"></div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function togglePassword(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // Xử lý form modal thay đổi mật khẩu
+    document.getElementById('changePassForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newPass = document.getElementById('new_password_modal').value;
+        const confirmPass = document.getElementById('confirm_password_modal').value;
+        const messageDiv = document.getElementById('modalPassMessage');
+        messageDiv.innerHTML = '';
+        
+        if (newPass !== confirmPass) {
+            messageDiv.innerHTML = '<div class="alert alert-warning">Mật khẩu không khớp!</div>';
+            return;
+        }
+        // Nếu hợp lệ, cập nhật giá trị mật khẩu mới vào input ẩn trong form chính
+        document.getElementById('hiddenPassword').value = newPass;
+        
+        // Đóng modal thay đổi mật khẩu
+        var modalEl = document.getElementById('changePassModal');
+        var modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+    });
+    
+    // Modal thành công tự động ẩn sau 2 giây và chuyển hướng trang (nếu cập nhật thành công)
+    <?php if ($success): ?>
+    setTimeout(() => {
+        let successModal = document.getElementById('successModal');
+        if(successModal){ successModal.style.display = 'none'; }
+        window.location.href = "index.php?page=admin&action=dashboard#dashboard";
+    }, 2000);
+    <?php endif; ?>
+    
+    // Modal lỗi tự động ẩn sau 2 giây (nếu có lỗi)
+    <?php if ($error): ?>
+    setTimeout(() => {
+        let errorModal = document.getElementById('errorModal');
+        if(errorModal){ errorModal.style.display = 'none'; }
+    }, 2000);
+    <?php endif; ?>
+</script>
+
 <?php if ($success): ?>
-  <div class="modal fade show modal-success" id="successModal" tabindex="-1" style="display: block;">
+<div class="modal fade show modal-success" id="successModal" tabindex="-1" style="display: block;">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-body text-center py-5">
@@ -133,18 +238,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </div>
     </div>
-  </div>
-  <script>
-    setTimeout(() => {
-      let successModal = document.getElementById('successModal');
-      if(successModal){
-        successModal.style.display = 'none';
-      }
-      window.location.href = "index.php?page=admin&action=dashboard#dashboard";
-    }, 2000);
-  </script>
+</div>
 <?php elseif ($error): ?>
-  <div class="modal fade show modal-error" id="errorModal" tabindex="-1" style="display: block;">
+<div class="modal fade show modal-error" id="errorModal" tabindex="-1" style="display: block;">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-body text-center py-5">
@@ -153,13 +249,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
       </div>
     </div>
-  </div>
-  <script>
-    setTimeout(() => {
-      let errorModal = document.getElementById('errorModal');
-      if(errorModal){
-        errorModal.style.display = 'none';
-      }
-    }, 2000);
-  </script>
+</div>
 <?php endif; ?>
