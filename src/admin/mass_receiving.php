@@ -19,7 +19,6 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == UPLOAD_ERR_OK)
         $model_year = (int)$row[4];        // Năm sản xuất
         $list_price = (float)$row[5];      // Giá niêm yết
 
-        // Kiểm tra dữ liệu hợp lệ
         if (empty($prod_name) || empty($prod_img_path) || empty($brand_name) || empty($cat_name) || $model_year <= 0 || $list_price <= 0) {
             continue; 
         }
@@ -44,7 +43,6 @@ if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] == UPLOAD_ERR_OK)
         }
         $cat_id = $cat_result->fetch_assoc()['cat_id'];
 
-        // Đọc dữ liệu hình ảnh từ đường dẫn
         $prod_img = file_get_contents($prod_img_path);
         if ($prod_img === false) {
             continue; 

@@ -24,7 +24,7 @@ $customer_id = $_SESSION['user']['customer_id'];
 $conn->begin_transaction();
 
 try {
-    // Cập nhật trạng thái đơn hàng (ví dụ: status = 2 cho thanh toán thành công)
+    // Cập nhật trạng thái đơn hàng 
     $updateQuery = "UPDATE orders SET order_status = ? WHERE order_id = ? AND customer_id = ? AND is_deleted = 0";
     $stmt = $conn->prepare($updateQuery);
     $stmt->bind_param("iii", $status, $order_id, $customer_id);

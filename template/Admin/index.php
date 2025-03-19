@@ -1,16 +1,13 @@
 <?php
 include 'inc/database.php';
 
-// Kiểm tra quyền truy cập admin
 if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     header('Location: index.php?page=login');
     exit;
 }
 
-// Xử lý tham số action, mặc định là 'dashboard'
 $action = isset($_GET['action']) ? $_GET['action'] : 'dashboard';
 
-// Các truy vấn tổng quan cho dashboard
 $queryTotalOrders = "SELECT COUNT(*) as total_orders FROM orders WHERE is_deleted = 0";
 $resultOrders = $conn->query($queryTotalOrders);
 $rowOrders = $resultOrders->fetch_assoc();

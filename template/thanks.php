@@ -60,7 +60,6 @@ if ($secureHash == $vnp_SecureHash) {
                 if (!$stmt) {
                     throw new Exception("Prepare insert transaction error: " . $conn->error);
                 }
-                // Lưu ý: sử dụng định dạng 'iids' => order_id (int), customer_id (int), amount (double), payment_id (string)
                 $stmt->bind_param("iids", $orderId, $order['customer_id'], $vnp_Amount, $vnpTranId);
                 if (!$stmt->execute()) {
                     throw new Exception("Insert transaction error: " . $stmt->error);

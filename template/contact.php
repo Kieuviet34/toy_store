@@ -59,7 +59,6 @@
 </div>
 
 <script>
-  // Khi click vào thẻ thành viên, điều hướng đến link Facebook được gán trong data-link
   document.querySelectorAll('.team-member').forEach(function(card) {
       card.style.cursor = 'pointer';
       card.addEventListener('click', function() {

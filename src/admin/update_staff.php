@@ -1,7 +1,6 @@
 <?php
 include 'inc/database.php';
 
-// Kiểm tra quyền admin
 if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     header('Location: index.php?page=login');
     exit;
@@ -13,7 +12,6 @@ if ($staff_id <= 0) {
     exit;
 }
 
-// Truy vấn thông tin nhân viên
 $query = "SELECT s.*, GROUP_CONCAT(sr.role_id) as role_ids 
           FROM staffs s 
           LEFT JOIN staff_role sr ON s.staff_id = sr.staff_id 
@@ -38,11 +36,9 @@ while($row = $current_roles->fetch_assoc()) {
     $role_names[] = strtolower($row['role_name']);
 }
 
-// Lấy danh sách vai trò
 $roles_query = "SELECT role_id, role_name FROM roles";
 $roles_result = $conn->query($roles_query);
 
-// Xử lý form submit
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $staff_f_name = trim($_POST['staff_f_name']);
@@ -53,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_username = trim($_POST['staff_username'] ?? '');
     $admin_password = trim($_POST['staff_password'] ?? '');
 
-    // Kiểm tra role admin
     $is_admin = false;
     if (!empty($roles)) {
         $role_check = $conn->prepare("SELECT role_name FROM roles WHERE role_id = ?");
@@ -63,12 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $is_admin = (strtolower($role_name) === 'admin');
     }
 
-    // Validate dữ liệu cơ bản
     if (empty($staff_f_name) || empty($staff_l_name) || empty($email)) {
         $error = "Vui lòng điền đầy đủ thông tin cơ bản.";
     }
-    
-    // Validate thông tin admin
     if ($is_admin) {
         if (empty($admin_username) || empty($admin_password)) {
             $error = "Vui lòng nhập đầy đủ thông tin quản trị viên.";
@@ -115,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            // Cập nhật vai trò
             $delete_query = "DELETE FROM staff_role WHERE staff_id = ?";
             $stmt_delete = $conn->prepare($delete_query);
             $stmt_delete->bind_param('i', $staff_id);

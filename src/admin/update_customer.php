@@ -1,14 +1,12 @@
 <?php
 include 'inc/database.php';
 
-// Lấy customer_id từ URL
 $customer_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($customer_id <= 0) {
     echo "Khách hàng không hợp lệ.";
     exit;
 }
 
-// Lấy thông tin khách hàng hiện tại
 $query = "SELECT * FROM customers WHERE customer_id = ? AND is_deleted = 0";
 $stmt = $conn->prepare($query);
 $stmt->bind_param('i', $customer_id);
@@ -22,10 +20,8 @@ if ($result->num_rows == 0) {
 
 $customer = $result->fetch_assoc();
 
-// Biến để đánh dấu thành công
 $updateSuccess = false;
 
-// Xử lý cập nhật khi form được gửi
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $f_name = trim($_POST['f_name']);
     $l_name = trim($_POST['l_name']);
@@ -33,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone']);
     $city = trim($_POST['city']);
     $street = trim($_POST['street']);
-    // Sửa tên trường thành "customer_username" theo form
     $username = trim($_POST['customer_username']);
 
     if (empty($f_name) || empty($l_name) || empty($email) || empty($phone) || empty($city) || empty($street)) {

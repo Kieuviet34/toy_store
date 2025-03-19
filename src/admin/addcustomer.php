@@ -18,14 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
-    // Kiểm tra xem tất cả các trường có được điền đầy đủ không
     if (empty($f_name) || empty($l_name) || empty($email) || empty($phone) || empty($city) || empty($street) || empty($username) || empty($password)) {
         $error = "Vui lòng điền đầy đủ tất cả các trường.";
     } else {
-        // Mã hóa password bằng hàm password_hash
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Câu lệnh INSERT với các trường mới
         $insert_query = "INSERT INTO customers (f_name, l_name, email, phone, city, street, customer_username, customer_password, is_deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)";
         $stmt = $conn->prepare($insert_query);
         $stmt->bind_param('ssssssss', $f_name, $l_name, $email, $phone, $city, $street, $username, $hashed_password);

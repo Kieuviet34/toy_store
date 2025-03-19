@@ -78,11 +78,9 @@ $user_id = $_SESSION['user']['customer_id'];
         })
         .then(response => response.json())
         .then(data => {
-            // Hiển thị thông báo trong modal
             document.getElementById('modalMessage').textContent = data.message;
             const modal = new bootstrap.Modal(document.getElementById('successModal'));
             modal.show();
-            // Nếu thành công, chuyển hướng sau 2 giây
             if (data.success) {
                 setTimeout(() => window.location.href = 'index.php?page=info', 2000);
             }

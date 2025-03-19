@@ -4,7 +4,6 @@ include '../../inc/database.php';
 
 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
 
-// Truy vấn cơ bản
 $sql = "
     SELECT 
         o.order_id, 

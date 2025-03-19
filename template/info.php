@@ -6,7 +6,6 @@ if (!isset($_SESSION['user']) && !isset($_SESSION['admin'])) {
 
 include 'inc/database.php';
 
-// Nếu là admin, hiển thị thông báo và không cần truy vấn database
 if (isset($_SESSION['admin']) && $_SESSION['admin'] === true) {
     $is_admin = true;
     $user = [

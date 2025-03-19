@@ -70,7 +70,6 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
         alertContainer.innerHTML = "";
 
         if (data.success) {
-            // Nếu đăng nhập thành công, hiển thị modal với icon tick
             var modal = new bootstrap.Modal(document.getElementById('loginSuccessModal'));
             modal.show();
             setTimeout(() => {
