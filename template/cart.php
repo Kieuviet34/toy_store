@@ -17,7 +17,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo '<div class="container mt-5"><h1 class="display-4 text-center">Giỏ Hàng</h1><p class="text-center">Giỏ hàng của bạn đang trống.</p></div>';
+    echo '<div class="container mt-5">
+    <div class="check-order-history">
+        <button class="btn btn-dark" onclick="redirectToHistory()">Xem lịch sử đặt hàng</button>
+    </div>
+    <h1 class="display-4 text-center">Giỏ Hàng</h1><p class="text-center">Giỏ hàng của bạn đang trống.</p></div>';
     exit;
 }
 
@@ -38,6 +42,9 @@ $item_count = $items->num_rows;
 ?>
 
 <div class="container mt-5">
+    <div class="check-order-history">
+        <button class="btn btn-dark" onclick="redirectToHistory()">Xem lịch sử đặt hàng</button>
+    </div>
     <h1 class="display-4 text-center">Giỏ Hàng</h1>
     
     <table class="table table-bordered mt-4">
@@ -151,5 +158,8 @@ function proceedToCheckout(itemCount) {
     } else {
         alert('Giỏ hàng của bạn đang trống, vui lòng thêm sản phẩm.');
     }
+}
+function redirectToHistory(){
+    window.location.href = 'index.php?page=view_history';
 }
 </script>
