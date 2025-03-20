@@ -12,6 +12,16 @@
             <img src="template/img/banner2.jpg" alt="" >
             </a>
         </div>
+        <div class="item">
+            <a href="index.php?page=product&id=2">
+            <img src="template/img/re-zero-kara-hajimeru-isekai-seikatsu-rem-artist-masterpiece-winter-maid-image-ver-taito.jpg" alt="" >
+            </a>
+        </div>
+        <div class="item">
+            <a href="index.php?page=product&id=3">
+            <img src="template/img/one-piece-edward-newgate-portrait-of-pirates-maximum-megahouse.jpeg" alt="" >
+            </a>
+        </div>
         
 </div>
     <!-- Phần hiển thị sản phẩm -->
@@ -56,7 +66,7 @@
         loop:true,
         margin:10,
         autoplay:true,
-        autoplayTimeout:1000,
+        autoplayTimeout:2000,
         autoplayHoverPause:true
     });
 </script>

@@ -319,7 +319,6 @@ $resultBrands = $conn->query($brandsQuery);
     scrollbar-color: #ddd #fff; /* Màu thanh cuộn cho Firefox */
 }
 
-/* Tùy chỉnh thanh cuộn cho WebKit (Chrome, Safari) */
 .brand-slider-wrapper::-webkit-scrollbar {
     height: 8px;
 }
